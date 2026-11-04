@@ -1,0 +1,12 @@
+{
+  "name": "hello-pseudocode-portugol",
+  "version": "1.0.0",
+  "description": "Pseudocode (Portugol, VisuAlg dialect): Hello, World! run with the Delegua interpreter",
+  "private": true,
+  "scripts": {
+    "start": "delegua --dialeto visualg ola-mundo.alg"
+  },
+  "devDependencies": {
+    "@designliquido/delegua-node": "1.25.0"
+  }
+}

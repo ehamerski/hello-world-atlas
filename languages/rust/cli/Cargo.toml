@@ -1,0 +1,17 @@
+# Cargo.toml - the manifest of this package (a "crate" in Rust words).
+# Cargo reads it to know the program's name, the Rust edition and the
+# dependencies. Format: https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+# The name of the package and of the executable: target/release/hello-cli.
+name = "hello-cli"
+version = "0.1.0"
+# The edition picks the language rules (keywords, defaults) for this crate.
+# 2024 is the newest edition; it needs Rust 1.85 or newer.
+edition = "2024"
+# The oldest Rust this package promises to build with.
+rust-version = "1.85"
+# Not a library for crates.io: `cargo publish` refuses to upload it.
+publish = false
+
+# No [dependencies]: println! is part of Rust's standard library.

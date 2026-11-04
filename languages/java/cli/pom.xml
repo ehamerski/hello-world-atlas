@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pom.xml - Java cli: the Maven "Project Object Model".
+
+  Maven reads this file to know WHAT to build (the project's name and
+  version), HOW (Java version, plugins) and what it depends on (nothing,
+  here). Run "mvn package" (or ./build.sh) and Maven compiles
+  src/main/java/**/*.java into target/classes and packs it into
+  target/hello-cli.jar.
+  Reference: https://maven.apache.org/guides/introduction/introduction-to-the-pom.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- The project's "coordinates": groupId (who, as a reversed domain
+         name), artifactId (what) and version. example.com is reserved for
+         examples, so it belongs to nobody. -->
+    <groupId>com.example</groupId>
+    <artifactId>hello-cli</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <!-- Compile for Java 21: javac checks the code against the Java 21
+             language and API, and the bytecode runs on any JVM 21 or newer. -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <!-- Read the source files as UTF-8 on every operating system. -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <!-- target/hello-cli.jar instead of target/hello-cli-1.0.0.jar,
+             so run.sh does not depend on the version number. -->
+        <finalName>hello-cli</finalName>
+        <plugins>
+            <!-- Plugin versions are pinned so every student gets the same build. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+            </plugin>
+            <plugin>
+                <!-- Writes Main-Class into the jar's META-INF/MANIFEST.MF, so
+                     "java -jar target/hello-cli.jar" knows which class to start. -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.example.hello.Hello</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

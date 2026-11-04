@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pom.xml - Java desktop-swing: the Maven "Project Object Model".
+
+  Same as ../cli/pom.xml, with no dependencies at all: Swing is part of
+  the JDK (the java.desktop module), so Maven has nothing to download
+  except its own plugins. Compare ../desktop/pom.xml, which needs JavaFX.
+  "mvn package" (or ./build.sh) produces:
+    target/hello-swing.jar   our compiled code, runnable with "java -jar"
+  Reference: https://maven.apache.org/guides/introduction/introduction-to-the-pom.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- The project's coordinates (see ../cli/pom.xml). -->
+    <groupId>com.example</groupId>
+    <artifactId>hello-swing</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <!-- Compile for Java 21 (LTS). -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <finalName>hello-swing</finalName>
+        <plugins>
+            <!-- Plugin versions are pinned, the same as in the other Java folders. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+            </plugin>
+            <plugin>
+                <!-- Writes Main-Class into the jar's manifest, so
+                     "java -jar target/hello-swing.jar" knows which class to
+                     start. No module path is needed: Swing is already in the JDK. -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.example.hello.HelloSwing</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

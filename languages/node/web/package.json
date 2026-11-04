@@ -1,0 +1,17 @@
+{
+  "name": "hello-node-web",
+  "version": "1.0.0",
+  "description": "Node.js web: an Express server that answers Hello, World!",
+  "private": true,
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

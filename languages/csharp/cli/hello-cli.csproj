@@ -1,0 +1,22 @@
+<!--
+  hello-cli.csproj - C# cli: the project file. MSBuild (run by "dotnet build")
+  reads it to know what to compile and how. It plays the role of Java's
+  pom.xml or C++'s CMakeLists.txt, but most settings have defaults, so it is
+  short: every .cs file in this folder is compiled automatically.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Exe: build a program with an entry point (not a library). -->
+    <OutputType>Exe</OutputType>
+    <!-- net10.0 = .NET 10, the current LTS release. It sets the C# version
+         too: .NET 10 uses C# 14 by default. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Adds common "using" lines (System, System.IO, ...) to every file, so
+         Program.cs can write Console instead of System.Console. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- The compiler warns when a value that may be null is used unchecked. -->
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

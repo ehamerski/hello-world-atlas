@@ -1,0 +1,49 @@
+# languages/python/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Python"
+year: 1991
+year_note: "implementation started December 1989; Python 0.9.0 posted to USENET 1991-02-20"
+designers:
+  - "Guido van Rossum"
+paradigms:
+  - "multi-paradigm"
+  - "object-oriented"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "ABC"
+    title: "General Python FAQ. Python Software Foundation"
+    url: "https://docs.python.org/3/faq/general.html"
+    quote: "I had extensive experience with implementing an interpreted language in the ABC group at CWI, and from working with this group I had learned a lot about language design. This is the origin of many Python features, including the use of indentation for statement grouping and the inclusion of very-high-level data types"
+  - language: "Modula-3"
+    title: "General Python FAQ. Python Software Foundation"
+    url: "https://docs.python.org/3/faq/general.html"
+    quote: "Modula-3 is the origin of the syntax and semantics used for exceptions, and some other Python features."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "CPython"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "tkinter (standard library)"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Flask"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "General Python FAQ. Python Software Foundation"
+    url: "https://docs.python.org/3/faq/general.html"
+  - title: "A Brief Timeline of Python. Guido van Rossum, The History of Python (blog), 2009"
+    url: "https://python-history.blogspot.com/2009/01/brief-timeline-of-python.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Python is named after a comedy series, which may explain why its Hello World is one line long and wastes nobody's time."
+  dictionary:
+    - term: "Python"
+      definition: "a language in which whitespace is syntax, so even the empty parts of a program have to be correct."

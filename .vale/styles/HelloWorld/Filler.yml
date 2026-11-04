@@ -1,0 +1,23 @@
+# style-guide.md, section 1: no filler or marketing words.
+extends: existence
+message: "Remove '%s': it adds no information (style guide, section 1)."
+level: warning
+ignorecase: true
+tokens:
+  - simply
+  - just
+  - easy
+  - easily
+  - obviously
+  - of course
+  - basically
+  - very
+  - really
+  - amazing
+  - powerful
+  - blazing
+  - cutting-edge
+  - seamless
+  - seamlessly
+exceptions:
+  - just-in-time

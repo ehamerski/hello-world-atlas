@@ -1,0 +1,23 @@
+# scripts/public-paths.txt - the paths that make up the published repository.
+#
+# scripts/export-public.sh copies exactly these paths (and nothing else) into
+# the public repository, and scripts/check-product.sh checks the same paths.
+# It is an allow-list: a file outside these paths is never published, so a
+# new top-level file or folder must be added here on purpose.
+# One git pathspec per line; a folder ends with "/". Lines starting with "#"
+# and blank lines are ignored.
+# Pathspec syntax: https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
+
+languages/
+docs/
+i18n/
+site/
+scripts/
+.github/workflows/
+README.md
+LICENSE
+CONTRIBUTING.md
+CITATION.cff
+.gitignore
+.vale.ini
+.vale/

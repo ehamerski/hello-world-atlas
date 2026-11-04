@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pom.xml - Java desktop: the Maven "Project Object Model".
+
+  Same idea as ../cli/pom.xml, plus one dependency: JavaFX, the GUI
+  toolkit. Since Java 11, JavaFX is no longer part of the JDK; it is a
+  library (OpenJFX) that Maven downloads from Maven Central.
+  "mvn package" (or ./build.sh) produces:
+    target/hello-desktop.jar   our compiled code
+    target/lib/*.jar           the JavaFX jars, copied there for run.sh
+  Reference: https://openjfx.io/openjfx-docs/
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- The project's coordinates (see ../cli/pom.xml). -->
+    <groupId>com.example</groupId>
+    <artifactId>hello-desktop</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <!-- Compile for Java 21 (LTS). -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- JavaFX 21 is the long-term support line that matches Java 21. -->
+        <javafx.version>21.0.13</javafx.version>
+    </properties>
+
+    <dependencies>
+        <!-- javafx-controls brings the widgets (Label, Button, ...) and, as
+             its own dependencies, javafx-graphics (windows, drawing) and
+             javafx-base. JavaFX contains native code, so Maven picks the
+             jars built for your operating system and CPU automatically. -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>hello-desktop</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.1</version>
+            </plugin>
+            <plugin>
+                <!-- During "package", copy the JavaFX jars from Maven's cache
+                     (~/.m2) into target/lib, so run.sh can hand them to the
+                     JVM with "module-path target/lib". -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.11.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-javafx</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

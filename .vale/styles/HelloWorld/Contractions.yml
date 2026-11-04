@@ -1,0 +1,10 @@
+# style-guide.md, section 1: no contractions in formal prose.
+extends: existence
+message: "Write '%s' in full (style guide, section 1)."
+level: warning
+ignorecase: true
+tokens:
+  - "\\w+n't"
+  - "(?:it|that|there|what|here|who)'s"
+  - "\\w+'(?:re|ve|ll|d)"
+  - "\\bI'm"

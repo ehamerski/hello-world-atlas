@@ -1,0 +1,39 @@
+# languages/pascal/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Pascal"
+year: 1970
+year_note: "developed 1968–1970; report \"The Programming Language Pascal\" dated November 1970"
+designers:
+  - "Niklaus Wirth"
+paradigms:
+  - "imperative"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "ALGOL 60"
+    title: "Recollections about the Development of Pascal. Niklaus Wirth, HOPL-II, ACM, 1993 (copy hosted at pascal.hansotten.com)"
+    url: "http://pascal.hansotten.com/uploads/wirth/recollections.pdf"
+    quote: "In many instances, a decision had to be taken whether to solve a case in a clear-cut fashion, or to remain compatible with ALGOL."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Free Pascal (ISO 7185 mode)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Lazarus LCL (`lazbuild`)"
+    run: "window"
+    status: "verified"
+sources:
+  - title: "Niklaus Wirth, The Programming Language Pascal, ETH Zürich, November 1970 (second edition July 1971). ETH Research Collection, DOI 10.3929/ethz-a-004150844"
+    url: "https://www.research-collection.ethz.ch/server/api/core/bitstreams/8bd8f312-3c90-4bc5-9081-63943ff3902a/content"
+  - title: "Niklaus Wirth (Computer Pioneers). IEEE Computer Society History"
+    url: "https://history.computer.org/pioneers/wirth.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "A Pascal program ends with `end.`, full stop included, like a well-written sentence."
+  dictionary:
+    - term: "Pascal"
+      definition: "a teaching language and a unit of pressure. Students have measured one with the other."

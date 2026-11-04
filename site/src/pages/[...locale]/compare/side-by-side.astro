@@ -1,0 +1,94 @@
+---
+// site/src/pages/[...locale]/compare/side-by-side.astro - the comparator:
+// two to four implementations in columns, one concept per row (toolchain,
+// entry point, output statement, build and run steps, the program itself).
+// The data is src/generated/implementations.json, written by
+// scripts/generate.mjs from the source files and scripts of each folder
+// (see scripts/source-code.mjs for how comments and entry points are found).
+//
+// Every implementation's column is rendered at build time into a
+// <template>; the script below only copies the chosen ones into the table.
+// Without JavaScript the default columns are shown.
+// Custom pages in Starlight: https://starlight.astro.build/guides/pages/#custom-pages
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import FallbackContentNotice from '@astrojs/starlight/components/FallbackContentNotice.astro';
+import ComparatorCell from '../../../components/ComparatorCell.astro';
+import { LOCALES, format } from '../../../../i18n.mjs';
+import implsByLocale from '../../../generated/implementations.json';
+import uiByLocale from '../../../generated/ui.json';
+
+export function getStaticPaths() {
+  return LOCALES.map((l) => ({ params: { locale: l.dir || undefined }, props: { tag: l.tag } }));
+}
+
+const { tag } = Astro.props;
+const impls = implsByLocale[tag as keyof typeof implsByLocale];
+const { strings: ui, translated } = uiByLocale[tag as keyof typeof uiByLocale];
+const byId = new Map(impls.map((i) => [i.id, i]));
+// The first columns: three command-line programs from different eras.
+const DEFAULTS = ['c/cli', 'python/cli', 'java/cli', ''];
+const ROWS = ['toolchain', 'status', 'file', 'entry', 'output', 'build', 'run', 'code'] as const;
+const title = (i: (typeof impls)[number]) => `${i.language} · ${i.label}`;
+// Rendered in the table itself, so the page works without JavaScript.
+const shown = DEFAULTS.filter(Boolean).map((id) => byId.get(id)!);
+---
+
+<StarlightPage frontmatter={{ title: ui['compare.title'], description: ui['compare.description'] }} lang={translated ? tag : 'en'}>
+  {!translated && <FallbackContentNotice />}
+  <p>{ui['compare.intro']}</p>
+  <noscript><p>{ui['compare.noScript']}</p></noscript>
+  <form class="comparator-controls" id="comparator-form">
+    {DEFAULTS.map((selected, n) => (
+      <label>{format(ui['compare.pick'], { n: n + 1 })}
+        <select name={`impl${n}`}>
+          {n >= 2 && <option value="">{ui['compare.none']}</option>}
+          {impls.map((i) => <option value={i.id} selected={i.id === selected}>{title(i)}</option>)}
+        </select>
+      </label>
+    ))}
+  </form>
+
+  <div class="comparator-wrap not-content">
+    <table class="comparator" id="comparator">
+      <caption class="academic-caption">{ui['compare.title']}</caption>
+      <thead><tr data-row="head"><th scope="col">{ui['compare.concept']}</th>
+        {shown.map((i) => <ComparatorCell impl={i} row="head" ui={ui} />)}</tr></thead>
+      <tbody>
+        {ROWS.map((row) => (
+          <tr data-row={row}><th scope="row">{ui[`compare.${row}`]}</th>
+            {shown.map((i) => <ComparatorCell impl={i} row={row} ui={ui} />)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {impls.map((i) => (
+    <template data-impl={i.id}>
+      {['head', ...ROWS].map((row) => <ComparatorCell impl={i} row={row} ui={ui} />)}
+    </template>
+  ))}
+</StarlightPage>
+
+<script is:inline>
+  // Copy the chosen implementations' cells from their <template> into the
+  // table, in the order of the menus. Written without a framework on
+  // purpose: the page must stay readable as plain HTML.
+  (() => {
+    const form = document.getElementById('comparator-form');
+    const table = document.getElementById('comparator');
+    function render() {
+      const ids = [...new FormData(form).values()].filter(Boolean);
+      const unique = [...new Set(ids)];
+      for (const tr of table.querySelectorAll('tr[data-row]')) {
+        while (tr.children.length > 1) tr.lastElementChild.remove();
+        for (const id of unique) {
+          const tpl = document.querySelector(`template[data-impl="${CSS.escape(id)}"]`);
+          const cell = tpl && tpl.content.querySelector(`[data-row="${tr.dataset.row}"]`);
+          if (cell) tr.appendChild(cell.cloneNode(true));
+        }
+      }
+    }
+    form.addEventListener('change', render);
+    render();
+  })();
+</script>

@@ -1,0 +1,26 @@
+# Cargo.toml - the manifest of this package: name, Rust edition, and the
+# crates (libraries) it depends on. Cargo downloads them from crates.io and
+# records the exact versions in Cargo.lock.
+# Format: https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+# The name of the package and of the executable: target/release/hello-web.
+name = "hello-web"
+version = "0.1.0"
+# The edition picks the language rules for this crate (see ../cli).
+edition = "2024"
+# The oldest Rust this package promises to build with. Rust 1.85 is the
+# first with edition 2024; tokio 1.54 also needs 1.85 and axum 0.8 needs 1.80.
+rust-version = "1.85"
+publish = false
+
+[dependencies]
+# Axum: the web framework (routing, handlers, HTML responses).
+# "0.8" means any 0.8.x release, never 0.9 (Cargo's default "caret" rule).
+axum = "0.8"
+# Tokio: the asynchronous runtime that runs the server. Rust has no
+# built-in runtime for async code, so one is a dependency. Features turn
+# on only the parts this program uses: the multi-threaded scheduler
+# ("rt-multi-thread"), the #[tokio::main] attribute ("macros"), and TCP
+# sockets ("net").
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net"] }

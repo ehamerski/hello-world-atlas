@@ -1,0 +1,22 @@
+# Cargo.toml - the manifest of this package: name, Rust edition, and the
+# crates (libraries) it depends on. Cargo downloads them from crates.io and
+# records the exact versions in Cargo.lock.
+# Format: https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+# The name of the package and of the executable: target/release/hello-desktop.
+name = "hello-desktop"
+version = "0.1.0"
+# The edition picks the language rules for this crate (see ../cli).
+edition = "2024"
+# The oldest Rust this package builds with: eframe 0.37 declares 1.95.
+rust-version = "1.95"
+publish = false
+
+[dependencies]
+# eframe: the official framework of the egui GUI library. It opens the
+# native window and draws egui into it with wgpu, a graphics library that
+# uses each system's own graphics API (Metal on macOS). "0.37" means any 0.37.x
+# release, never 0.38 (Cargo's default "caret" rule; before 1.0, the second
+# number is the one that may break your code).
+eframe = "0.37"

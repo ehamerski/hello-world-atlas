@@ -1,0 +1,19 @@
+<!doctype html>
+<!--
+  index.html - C# web-angular (frontend): the only HTML page of the app.
+  It is almost empty on purpose: Angular replaces <app-root> with the App
+  component (src/app/app.ts) in the browser. Compare ../../web, where the
+  ASP.NET Core server sends the finished HTML itself.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hello, World!</title>
+  <!-- base href: where the app's URLs start; Angular needs it. -->
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

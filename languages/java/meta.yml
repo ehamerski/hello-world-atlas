@@ -1,0 +1,63 @@
+# languages/java/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Java"
+year: 1995
+year_note: "Green Project began at Sun in 1991 (language first called Oak); announced 1995-05-23; Java 1.0 released 1996-01-23"
+designers:
+  - "James Gosling"
+paradigms:
+  - "object-oriented"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C++"
+    slug: "cpp"
+    title: "The Java Language Specification, Java SE 21 Edition, Chapter 1: Introduction. Oracle"
+    url: "https://docs.oracle.com/javase/specs/jls/se21/html/jls-1.html"
+    quote: "The Java programming language is related to C and C++ but is organized rather differently, with a number of aspects of C and C++ omitted and a few ideas from other languages included."
+  - language: "C"
+    slug: "c"
+    title: "The Java Language Specification, Java SE 21 Edition, Chapter 1: Introduction. Oracle"
+    url: "https://docs.oracle.com/javase/specs/jls/se21/html/jls-1.html"
+    quote: "The Java programming language is related to C and C++ but is organized rather differently, with a number of aspects of C and C++ omitted and a few ideas from other languages included."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "JDK 21, Maven"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    label: "JavaFX"
+    toolchain: "JavaFX, Maven"
+    run: "window"
+    status: "verified"
+  - folder: "desktop-swing"
+    kind: "desktop"
+    label: "Swing"
+    toolchain: "Swing (JDK), Maven"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Spring Boot, Maven"
+    run: "http://localhost:8080/"
+    status: "verified"
+  - folder: "web-react"
+    kind: "web-frontend"
+    label: "React"
+    toolchain: "Spring Boot API + React (Vite)"
+    run: "http://localhost:4173/ (API :8080)"
+    status: "verified"
+sources:
+  - title: "Java Technology: The Early Years. Jon Byous, Sun Microsystems, 1998 (Internet Archive copy)"
+    url: "https://web.archive.org/web/20051230031802/http://java.sun.com/features/1998/05/birthday.html"
+  - title: "JavaSoft ships Java 1.0 (Sun Microsystems press release, 1996-01-23, archived in the java-interest mailing list). MIT"
+    url: "https://diswww.mit.edu/charon.mit.edu/java-interest/5056"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Java's Hello World needs a class, a public static method and an array of arguments it never reads. It arrives dressed for a meeting that turned out to be a coffee."
+  dictionary:
+    - term: "Java"
+      definition: "an island, a coffee, and a language; only one of the three needs `public static void main`."

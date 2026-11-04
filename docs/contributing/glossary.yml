@@ -1,0 +1,267 @@
+# docs/contributing/glossary.yml - the technical terms used in this repository.
+#
+# WHAT: one entry per term, with its approved English spelling, a short
+#   definition, and its approved translation in each site locale.
+# WHY: one concept gets one term everywhere (see style-guide.md, section 3),
+#   and translators reuse the same translation on every page.
+#
+# Fields of each entry:
+#   term              the approved English spelling (the master).
+#   definition        one sentence, in English, as used in this repository.
+#   do_not_translate  true: the term stays in English in every locale
+#                     (names, commands, terms that the industry keeps in
+#                     English). Its translations then repeat the term.
+#   translations      one key per locale (BCP 47 tag, e.g. pt-BR).
+#                     null = not decided yet; the translator proposes one
+#                     and the native-speaker reviewer approves it.
+#   avoid             optional: spellings or synonyms not to use in English.
+#
+# Adding a locale: add its tag under `translations` of every entry.
+
+terms:
+  - term: Hello World
+    definition: The smallest complete program in a language, which prints or shows the text "Hello, World!".
+    do_not_translate: true
+    translations: { pt-BR: Hello World }
+    avoid: [hello-world, Hello-World, hello world program]
+
+  - term: implementation
+    definition: One program of this repository, that is, one language in one category, in its own folder.
+    do_not_translate: false
+    translations: { pt-BR: implementação }
+
+  - term: category
+    definition: The kind of program an implementation is, one of cli, desktop, web, web-react, web-angular and web-vue.
+    do_not_translate: false
+    translations: { pt-BR: categoria }
+
+  - term: command line
+    definition: The text interface of a terminal, in which the user types commands; written "command-line" as an adjective.
+    do_not_translate: false
+    translations: { pt-BR: linha de comando }
+    avoid: [commandline, command-line (as a noun)]
+
+  - term: CLI
+    definition: Command-line interface; also the name of the category of programs that run in a terminal.
+    do_not_translate: true
+    translations: { pt-BR: CLI }
+
+  - term: desktop application
+    definition: A program that opens a window in the graphical environment of the operating system.
+    do_not_translate: false
+    translations: { pt-BR: aplicação desktop }
+
+  - term: GUI
+    definition: Graphical user interface.
+    do_not_translate: true
+    translations: { pt-BR: GUI }
+
+  - term: web application
+    definition: A program made of a server that answers HTTP requests and a browser that shows the result.
+    do_not_translate: false
+    translations: { pt-BR: aplicação web }
+
+  - term: front end
+    definition: The part of a web application that runs in the browser; written "front-end" as an adjective.
+    do_not_translate: false
+    translations: { pt-BR: front-end }
+    avoid: [frontend, FE]
+
+  - term: back end
+    definition: The part of a web application that runs on the server; written "back-end" as an adjective.
+    do_not_translate: false
+    translations: { pt-BR: back-end }
+    avoid: [backend, BE]
+
+  - term: web server
+    definition: A program that listens on a network port and answers HTTP requests.
+    do_not_translate: false
+    translations: { pt-BR: servidor web }
+
+  - term: localhost
+    definition: The host name of the computer the reader is using, as seen by its own programs.
+    do_not_translate: true
+    translations: { pt-BR: localhost }
+
+  - term: port
+    definition: The number that identifies one network service on a host, for example 8080.
+    do_not_translate: false
+    translations: { pt-BR: porta }
+
+  - term: toolchain
+    definition: The set of programs needed to build and run an implementation, such as a compiler, a linker and a build tool.
+    do_not_translate: false
+    translations: { pt-BR: toolchain }
+    avoid: [tool chain, tool set]
+
+  - term: compiler
+    definition: A program that translates source code into another form, usually machine code or bytecode, before it runs.
+    do_not_translate: false
+    translations: { pt-BR: compilador }
+
+  - term: interpreter
+    definition: A program that reads source code and runs it directly, without a separate build step.
+    do_not_translate: false
+    translations: { pt-BR: interpretador }
+
+  - term: runtime
+    definition: The software that a program needs while it runs, such as a virtual machine or a standard library.
+    do_not_translate: true
+    translations: { pt-BR: runtime }
+
+  - term: virtual machine
+    definition: A program that runs bytecode, for example the JVM for Java or the CLR for C#.
+    do_not_translate: false
+    translations: { pt-BR: máquina virtual }
+
+  - term: bytecode
+    definition: The instruction format of a virtual machine, produced by a compiler.
+    do_not_translate: true
+    translations: { pt-BR: bytecode }
+
+  - term: source code
+    definition: The text of a program as a person writes it.
+    do_not_translate: false
+    translations: { pt-BR: código-fonte }
+
+  - term: build
+    definition: (verb) To turn source code into a program that can run; (noun) the result of that step.
+    do_not_translate: false
+    translations: { pt-BR: compilar / build }
+
+  - term: package manager
+    definition: A program that installs software and its dependencies, for example Homebrew, apt or npm.
+    do_not_translate: false
+    translations: { pt-BR: gerenciador de pacotes }
+
+  - term: dependency
+    definition: A library or tool that a program needs in order to build or run.
+    do_not_translate: false
+    translations: { pt-BR: dependência }
+
+  - term: framework
+    definition: A library that defines the structure of a program and calls the code written for it.
+    do_not_translate: true
+    translations: { pt-BR: framework }
+
+  - term: library
+    definition: Reusable code that a program calls.
+    do_not_translate: false
+    translations: { pt-BR: biblioteca }
+
+  - term: standard library
+    definition: The library that ships with a language or its compiler.
+    do_not_translate: false
+    translations: { pt-BR: biblioteca padrão }
+
+  - term: entry point
+    definition: The function or statement where a program starts to run, for example main in C.
+    do_not_translate: false
+    translations: { pt-BR: ponto de entrada }
+
+  - term: standard output
+    definition: The stream to which a program writes its normal output; abbreviated stdout in code.
+    do_not_translate: false
+    translations: { pt-BR: saída padrão }
+
+  - term: paradigm
+    definition: A style of programming defined by how a program is structured, for example imperative, object-oriented, functional or logic.
+    do_not_translate: false
+    translations: { pt-BR: paradigma }
+
+  - term: imperative programming
+    definition: A paradigm in which a program is a sequence of statements that change the program state.
+    do_not_translate: false
+    translations: { pt-BR: programação imperativa }
+
+  - term: procedural programming
+    definition: Imperative programming organized into procedures (functions or subroutines).
+    do_not_translate: false
+    translations: { pt-BR: programação procedural }
+
+  - term: object-oriented programming
+    definition: A paradigm in which a program is organized as objects that combine data and the operations on it; abbreviated OOP.
+    do_not_translate: false
+    translations: { pt-BR: programação orientada a objetos }
+
+  - term: functional programming
+    definition: A paradigm in which a program is built from the application and composition of functions.
+    do_not_translate: false
+    translations: { pt-BR: programação funcional }
+
+  - term: logic programming
+    definition: A paradigm in which a program is a set of facts and rules, and running it means answering a query.
+    do_not_translate: false
+    translations: { pt-BR: programação lógica }
+
+  - term: multi-paradigm
+    definition: Said of a language that supports more than one paradigm.
+    do_not_translate: false
+    translations: { pt-BR: multiparadigma }
+
+  - term: pseudocode
+    definition: An informal notation for algorithms, close to natural language, used in teaching.
+    do_not_translate: false
+    translations: { pt-BR: pseudocódigo }
+
+  - term: assembly language
+    definition: A low-level language whose statements map closely to the instructions of one processor architecture.
+    do_not_translate: false
+    translations: { pt-BR: linguagem de montagem (assembly) }
+
+  - term: script
+    definition: A small program run by an interpreter; in this repository, the install.sh, build.sh and run.sh files.
+    do_not_translate: true
+    translations: { pt-BR: script }
+
+  - term: shell
+    definition: The command interpreter of a terminal, for example sh, bash or zsh.
+    do_not_translate: true
+    translations: { pt-BR: shell }
+
+  - term: terminal
+    definition: The window or program in which the reader types commands.
+    do_not_translate: false
+    translations: { pt-BR: terminal }
+
+  - term: repository
+    definition: A folder tracked by Git, including its history; this project as a whole.
+    do_not_translate: false
+    translations: { pt-BR: repositório }
+    avoid: [repo (in prose)]
+
+  - term: README
+    definition: The Markdown file that introduces a folder.
+    do_not_translate: true
+    translations: { pt-BR: README }
+
+  - term: milestone
+    definition: A dated event in the history of a language, such as a first release or a standard.
+    do_not_translate: false
+    translations: { pt-BR: marco }
+
+  - term: macOS
+    definition: The operating system of Apple computers.
+    do_not_translate: true
+    translations: { pt-BR: macOS }
+    avoid: [MacOS, Mac OS, MAC]
+
+  - term: Apple Silicon
+    definition: The ARM-based processors that Apple designs for the Mac (M1 and later).
+    do_not_translate: true
+    translations: { pt-BR: Apple Silicon }
+
+  - term: Intel
+    definition: Here, a Mac with an Intel x86-64 processor; "macOS Intel" is the platform on which the programs are verified.
+    do_not_translate: true
+    translations: { pt-BR: Intel }
+
+  - term: verified
+    definition: Said of an implementation whose scripts were run on a platform and printed the expected output.
+    do_not_translate: false
+    translations: { pt-BR: verificado }
+
+  - term: screenshot
+    definition: An image of the screen, used to show the window or the web page of an implementation.
+    do_not_translate: false
+    translations: { pt-BR: captura de tela }

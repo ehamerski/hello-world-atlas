@@ -1,0 +1,15 @@
+# alire.toml - the Alire manifest of this crate (an Alire "crate" is a
+# project or library). alr reads it to know the crate's name, which
+# executables it builds and which toolchain/settings to use.
+# Format: https://alire.ada.dev/docs/#alire-manifest  (TOML, https://toml.io)
+name = "hello"
+description = "Hello World command-line program in Ada"
+version = "0.1.0"
+licenses = "MIT"
+
+# The programs this crate builds; "alr run" runs this one.
+executables = ["hello"]
+
+# Compile as Ada 2022, the current edition of the standard (ISO/IEC 8652:2023).
+[build-switches]
+"*".ada_version = "Ada2022"

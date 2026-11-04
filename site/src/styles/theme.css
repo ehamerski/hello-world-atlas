@@ -1,0 +1,171 @@
+/* site/src/styles/theme.css - the visual identity of the site: fonts,
+   colors, captions, references and the printed page.
+   Starlight's theme variables: https://starlight.astro.build/guides/css-and-tailwind/#theming
+   Starlight's own print rules are in @astrojs/starlight/style/print.css;
+   the rules at the end of this file only add to them. */
+
+/* ------------------------------------------------------------- fonts
+   Self-hosted through Fontsource (imported in astro.config.mjs), so the
+   site loads no font from a third-party server:
+   https://starlight.astro.build/guides/customization/#use-fonts-from-fontsource
+   - Source Serif 4: headings, the usual typeface of printed papers;
+   - Source Sans 3: body text, easy to read on screen at small sizes;
+   - JetBrains Mono: code, with Latin, Greek, Cyrillic and box-drawing
+     glyphs, so the comments and outputs of every language render.
+   All three are under the SIL Open Font License 1.1. */
+:root {
+  --sl-font: 'Source Sans 3 Variable';
+  --sl-font-mono: 'JetBrains Mono Variable';
+  --academic-font-serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+}
+
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
+h1#_top,
+.hero h1,
+.card h2,
+.site-title {
+  font-family: var(--academic-font-serif);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+/* ------------------------------------------------------------- colors
+   One restrained accent (a dark "Oxford" blue) on neutral grays. Every
+   text color keeps a contrast ratio of at least 4.5:1 with its background
+   (WCAG 2.2 success criterion 1.4.3):
+   https://www.w3.org/TR/WCAG22/#contrast-minimum
+   Dark mode is Starlight's :root; light mode is [data-theme='light']. */
+:root {
+  --sl-hue-accent: 213;
+  --sl-color-accent-low: hsl(var(--sl-hue-accent), 35%, 18%);
+  --sl-color-accent: hsl(var(--sl-hue-accent), 55%, 66%);
+  --sl-color-accent-high: hsl(var(--sl-hue-accent), 70%, 87%);
+  --sl-color-white: hsl(40, 20%, 96%);
+  --sl-color-gray-1: hsl(215, 12%, 90%);
+  --sl-color-gray-2: hsl(215, 8%, 78%);
+  --sl-color-gray-3: hsl(215, 6%, 64%);
+  --sl-color-gray-4: hsl(215, 6%, 42%);
+  --sl-color-gray-5: hsl(215, 9%, 26%);
+  --sl-color-gray-6: hsl(215, 13%, 15%);
+  --sl-color-black: hsl(215, 15%, 10%);
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: hsl(var(--sl-hue-accent), 45%, 91%);
+  --sl-color-accent: hsl(var(--sl-hue-accent), 60%, 34%);
+  --sl-color-accent-high: hsl(var(--sl-hue-accent), 65%, 22%);
+  --sl-color-white: hsl(215, 25%, 12%);
+  --sl-color-gray-1: hsl(215, 18%, 18%);
+  --sl-color-gray-2: hsl(215, 12%, 26%);
+  --sl-color-gray-3: hsl(215, 8%, 38%);
+  --sl-color-gray-4: hsl(215, 6%, 52%);
+  --sl-color-gray-5: hsl(215, 10%, 80%);
+  --sl-color-gray-6: hsl(40, 18%, 93%);
+  --sl-color-gray-7: hsl(40, 25%, 97%);
+  /* A warm "paper" white rather than pure #fff. */
+  --sl-color-black: hsl(40, 33%, 99%);
+}
+
+/* ------------------------------------------------------- captions
+   Numbered by plugins/rehype-academic.mjs. */
+.sl-markdown-content caption,
+.sl-markdown-content figcaption,
+.academic-caption {
+  caption-side: top;
+  text-align: start;
+  padding-block-end: 0.4rem;
+  font-family: var(--academic-font-serif);
+  font-size: var(--sl-text-sm);
+  font-style: italic;
+  color: var(--sl-color-gray-2);
+}
+.sl-markdown-content figure.figure {
+  margin-block: 1.5rem;
+}
+.sl-markdown-content figure.figure figcaption {
+  padding-block: 0.4rem 0;
+}
+
+/* ----------------------------------------------------- references
+   A "Sources" list looks like a bibliography: [1], [2], ... with a
+   hanging indent, in a slightly smaller size. */
+.sl-markdown-content ol.references {
+  list-style: none;
+  counter-reset: reference;
+  padding-inline-start: 0;
+  font-size: var(--sl-text-sm);
+}
+.sl-markdown-content ol.references > li {
+  counter-increment: reference;
+  position: relative;
+  padding-inline-start: 2.75rem;
+}
+.sl-markdown-content ol.references > li::before {
+  content: '[' counter(reference) ']';
+  position: absolute;
+  inset-inline-start: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--sl-color-gray-3);
+}
+.sl-markdown-content :is(ol, ul).references a {
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------- the footer
+   The "Off the record" link (src/components/Footer.astro). */
+.footer-extra {
+  margin-block: 1rem 0;
+  text-align: center;
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+}
+.footer-extra a {
+  color: var(--sl-color-gray-2);
+}
+
+/* ------------------------------------------------- the printed page */
+@media print {
+  /* Paper is white: print the light colors whatever the screen theme is.
+     (Same values as [data-theme='light'] above; the rules of this file
+     are not in a cascade layer, so they win over Starlight's print.css.) */
+  :root,
+  :root[data-theme='light'] {
+    --sl-color-accent-low: hsl(var(--sl-hue-accent), 45%, 91%);
+    --sl-color-accent: hsl(var(--sl-hue-accent), 60%, 30%);
+    --sl-color-accent-high: hsl(var(--sl-hue-accent), 65%, 22%);
+    --sl-color-white: hsl(215, 25%, 8%);
+    --sl-color-gray-1: hsl(215, 18%, 14%);
+    --sl-color-gray-2: hsl(215, 12%, 22%);
+    --sl-color-gray-3: hsl(215, 8%, 34%);
+    --sl-color-gray-4: hsl(215, 6%, 52%);
+    --sl-color-gray-5: hsl(215, 10%, 80%);
+    --sl-color-gray-6: hsl(0, 0%, 94%);
+    --sl-color-gray-7: hsl(0, 0%, 97%);
+    --sl-color-black: hsl(0, 0%, 100%);
+  }
+  body {
+    font-size: 11pt;
+  }
+  /* Screen-only controls. */
+  .download-zip,
+  .filters,
+  .sl-anchor-link,
+  .footer-extra,
+  starlight-theme-select,
+  starlight-lang-select,
+  .comparator-controls,
+  site-search {
+    display: none !important;
+  }
+  /* A printed link cannot be clicked: show where it goes. A reference
+     list already shows its URLs, so it is skipped. */
+  .sl-markdown-content a[href^='http']:not(:where(.references a, .not-content a))::after {
+    content: ' <' attr(href) '>';
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+  .sl-markdown-content table,
+  .sl-markdown-content figure {
+    break-inside: avoid;
+  }
+}

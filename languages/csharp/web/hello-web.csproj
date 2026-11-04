@@ -1,0 +1,20 @@
+<!--
+  hello-web.csproj - C# web: the project file read by MSBuild ("dotnet build").
+  The only difference from ../cli/hello-cli.csproj is the SDK name:
+  Microsoft.NET.Sdk.Web adds ASP.NET Core. ASP.NET Core is a "shared
+  framework" that comes with the .NET SDK, like the base class library, so
+  nothing is downloaded from NuGet (compare Java's Spring Boot, which Maven
+  downloads).
+-->
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- No OutputType: the Web SDK builds an executable by default. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- The Web SDK's implicit usings also include the ASP.NET Core
+         namespaces, so WebApplication and Results need no "using" line. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

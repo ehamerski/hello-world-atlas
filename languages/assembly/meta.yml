@@ -1,0 +1,29 @@
+# languages/assembly/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Assembly (x86-64)"
+year: 1949
+year_note: "assembly in general: EDSAC Initial Orders, first assembler in use (1949-05-06); x86 family from the Intel 8086 (1978); x86-64 from AMD (2003)"
+designers:
+  - "David Wheeler"
+paradigms:
+  - "imperative"
+  - "low-level"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "NASM + `cc` (macOS x86-64)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "EDSAC 99: a brief history of EDSAC (1949-05-06; Initial Orders; Wilkes, Wheeler and Gill, 1951). University of Cambridge Computer Laboratory"
+    url: "https://www.cl.cam.ac.uk/events/EDSAC99/history.html"
+  - title: "1978: The 8086 ushers in the x86 era. Intel Timeline"
+    url: "https://timeline.intel.com/1978/the-8086-ushers-in-the-x86-era"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "The Hello World of this repository has 18 lines of instructions and directives and 73 lines of comments explaining them. The ratio is not an accident; it is the language."
+  dictionary:
+    - term: "Assembly"
+      definition: "what a compiled program becomes in the end, and what few people want to read in the end."

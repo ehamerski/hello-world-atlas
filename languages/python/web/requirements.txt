@@ -1,0 +1,5 @@
+# Packages this web app needs. install.sh runs:
+#   .venv/bin/python -m pip install -r requirements.txt
+# The version is pinned (==) so every reader gets the same Flask version.
+# pip installs Flask's own dependencies (Werkzeug, Jinja, ...) automatically.
+Flask==3.1.3

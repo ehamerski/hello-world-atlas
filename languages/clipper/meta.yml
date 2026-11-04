@@ -1,0 +1,33 @@
+# languages/clipper/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Clipper"
+year: 1985
+year_note: "first release named \"Winter 85\" (a dBASE compiler by Nantucket); the story of its founders is from a third-party history"
+designers:
+  - "Brian Russell"
+  - "Barry ReBell"
+paradigms:
+  - "imperative"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "dBase"
+    title: "The CA-Clipper Story. Greg Holmes, The Holmes Page (a third-party history, not a vendor document)"
+    url: "https://ghservices.com/gregh/clipper/story.htm"
+    quote: "They were expressing their annoyance at the fact that Ashton-Tate had not created a compiler for the dBase language."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Harbour"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "The CA-Clipper Story. Greg Holmes, The Holmes Page (a third-party history, not a vendor document)"
+    url: "https://ghservices.com/gregh/clipper/story.htm"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Clipper prints with `??`, so every Hello World arrives sounding slightly unsure of itself."
+  dictionary:
+    - term: "Clipper"
+      definition: "a compiler for dBASE programs that became a language of its own, the way a nickname ends up on a passport."

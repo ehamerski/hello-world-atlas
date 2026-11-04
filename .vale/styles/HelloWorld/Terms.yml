@@ -1,0 +1,22 @@
+# style-guide.md, section 3, and docs/contributing/glossary.yml.
+extends: substitution
+message: "Use '%s' instead of '%s' (glossary)."
+level: warning
+ignorecase: false
+swap:
+  '\bfrontend\b': front end
+  '\bFrontend\b': Front end
+  '\bbackend\b': back end
+  '\bBackend\b': Back end
+  'Mac OS(?! X)': macOS
+  '\bMacOS\b': macOS
+  '\bMacOs\b': macOS
+  '\bNodeJS\b|\bNodejs\b|\bNode\.JS\b': Node.js
+  '\bJavascript\b': JavaScript
+  '\bTypescript\b': TypeScript
+  '\bGithub\b': GitHub
+  '\bcommandline\b': command line
+  '\bhe or she\b|\bhe/she\b': they
+  '\bwhitelist\b': allowlist
+  '\bblacklist\b': denylist
+  '\bhello-world\b|\bHello-World\b': Hello World

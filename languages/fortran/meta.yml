@@ -1,0 +1,29 @@
+# languages/fortran/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Fortran"
+year: 1957
+year_note: "Backus team funded 1953; preliminary report 1954-11-10; first compiler shipped April 1957 for the IBM 704"
+designers:
+  - "John Backus"
+paradigms:
+  - "imperative"
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "gfortran"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "Fortran. IBM Heritage"
+    url: "https://www.ibm.com/history/fortran"
+  - title: "History of FORTRAN and FORTRAN II. Computer History Museum, Software Preservation Group"
+    url: "https://softwarepreservation.computerhistory.org/FORTRAN/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Fortran prints a greeting with the patient air of a language that would rather be multiplying matrices."
+  dictionary:
+    - term: "Fortran"
+      definition: "FORmula TRANslation. Nearly seventy years later, it is still translating formulas, and still faster at it than the reader expects."

@@ -1,0 +1,27 @@
+---
+// site/src/components/ComparatorCell.astro - one cell of the comparator
+// table (src/pages/[...locale]/compare/side-by-side.astro): the value of
+// one concept (`row`) for one implementation (`impl`).
+import { Code } from '@astrojs/starlight/components';
+import { format } from '../../i18n.mjs';
+
+interface Props { impl: any; row: string; ui: Record<string, string> }
+const { impl: i, row, ui } = Astro.props;
+const line = (n: number) => format(ui['compare.lineN'], { n });
+// meta.yml writes commands in Markdown backticks: `-std=c89`. Odd parts of
+// the split are inside backticks.
+const toolchain = String(i.toolchain).split('`');
+---
+
+{row === 'head' && <th scope="col" data-row="head"><a href={i.url}>{i.language} · {i.label}</a></th>}
+{row === 'toolchain' && <td data-row={row}>{toolchain.map((part, n) => (n % 2 ? <code>{part}</code> : part))}</td>}
+{row === 'status' && <td data-row={row}>{i.status}</td>}
+{row === 'file' && <td data-row={row}>{i.file ? <code>{i.file}</code> : '—'}</td>}
+{row === 'entry' && <td data-row={row}>{
+  i.entry?.text ? <><code>{i.entry.text}</code> ({line(i.entry.n)})</>
+  : i.entry?.fromTop ? ui['compare.entryTop'] : ui['compare.entryUnknown']
+}</td>}
+{row === 'output' && <td data-row={row}>{i.output.length ? i.output.map((o: any) => <div><code>{o.text}</code> ({line(o.n)})</div>) : '—'}</td>}
+{row === 'build' && <td data-row={row}>{i.build.length ? <ol>{i.build.map((s: string) => <li>{s}</li>)}</ol> : ui['compare.noBuild']}</td>}
+{row === 'run' && <td data-row={row}>{i.run.length ? <ol>{i.run.map((s: string) => <li>{s}</li>)}</ol> : '—'}</td>}
+{row === 'code' && <td data-row={row}>{i.code ? <Code code={i.code} lang={i.lang ?? 'txt'} /> : '—'}</td>}

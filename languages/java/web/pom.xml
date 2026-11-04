@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  pom.xml - Java web: the Maven "Project Object Model" of a Spring Boot app.
+
+  Compared with ../cli/pom.xml, two things are new:
+  - <parent>: the project inherits Spring Boot's settings, including the
+    tested versions of every library and plugin, so the dependencies below
+    need no <version>.
+  - spring-boot-maven-plugin: repackages target/hello-web.jar into an
+    "executable jar" that contains our code, Spring and the embedded Tomcat
+    web server, so "java -jar target/hello-web.jar" is all it takes to run.
+  Reference: https://docs.spring.io/spring-boot/tutorial/first-application/index.html
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.2</version>
+        <relativePath/> <!-- look the parent up in Maven Central, not in ../ -->
+    </parent>
+
+    <!-- The project's coordinates (see ../cli/pom.xml). -->
+    <groupId>com.example</groupId>
+    <artifactId>hello-web</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <!-- Spring Boot's parent reads java.version and compiles for it. -->
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- A "starter" is a ready-made set of dependencies: Spring MVC
+             (controllers, @GetMapping) and the embedded Tomcat server. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>hello-web</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

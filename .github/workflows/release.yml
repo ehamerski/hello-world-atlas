@@ -1,0 +1,49 @@
+# .github/workflows/release.yml - attach the download ZIPs to a GitHub release.
+#
+# WHAT: for a tag vX.Y.Z, runs scripts/package-downloads.sh at that tag (one
+#   ZIP per implementation + SHA256SUMS, only committed files, no build
+#   output) and creates a GitHub release with them attached. The release is
+#   a draft, so a person reads it before anyone else can see it.
+#
+# WHEN: when a tag v* is pushed, or by hand with a tag name. Tags are only
+#   created for releases, so this runs rarely.
+#
+# References:
+#   Tag filters: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onpushbranchestagsbranches-ignoretags-ignore
+#   gh release create: https://cli.github.com/manual/gh_release_create
+#   GITHUB_TOKEN permissions: https://docs.github.com/en/actions/reference/security/secure-use#use-the-principle-of-least-privilege
+
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to package (e.g. v2.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write   # create the release and upload the ZIPs
+
+jobs:
+  zips:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+      - name: Package every implementation
+        run: REF="$TAG" scripts/package-downloads.sh dist/downloads
+      - name: Create a draft release with the ZIPs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" dist/downloads/*.zip dist/downloads/SHA256SUMS \
+            --draft --verify-tag --title "$TAG" \
+            --notes "One ZIP per implementation. Unzip, then run install.sh, build.sh, and run.sh in the folder. Check the downloads with: sha256sum -c SHA256SUMS"

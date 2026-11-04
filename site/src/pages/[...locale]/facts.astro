@@ -1,0 +1,142 @@
+---
+// site/src/pages/[...locale]/facts.astro - "Measured facts": line counts,
+// files, dependencies, script steps, build output and run time of every
+// implementation, with the method and the machine they were measured on.
+// The numbers are site/data/facts.json, written by
+// site/scripts/measure-facts.mjs (committed, so the site build does not
+// have to install twenty toolchains). The charts are plain SVG drawn here at
+// build time; the table below them holds the same numbers for readers who
+// cannot see the charts.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import FallbackContentNotice from '@astrojs/starlight/components/FallbackContentNotice.astro';
+import { LOCALES, format } from '../../../i18n.mjs';
+import facts from '../../../data/facts.json';
+import implsByLocale from '../../generated/implementations.json';
+import uiByLocale from '../../generated/ui.json';
+
+export function getStaticPaths() {
+  return LOCALES.map((l) => ({ params: { locale: l.dir || undefined }, props: { tag: l.tag } }));
+}
+
+const { tag } = Astro.props;
+const { strings: ui, translated } = uiByLocale[tag as keyof typeof uiByLocale];
+const impls = implsByLocale[tag as keyof typeof implsByLocale];
+type Facts = { kind: string; codeLines: number | null; commentLines: number | null; files: number; deps: number; steps: number; buildBytes: number | null; runMs: number | null };
+const data = facts.impls as Record<string, Facts>;
+const rows = impls.map((i) => ({ ...i, f: data[i.id] })).filter((r) => r.f);
+const cli = rows.filter((r) => r.f.kind === 'cli' && r.f.codeLines != null);
+const nf = new Intl.NumberFormat(tag);
+const num = (v: number | null) => (v == null ? '–' : nf.format(v));
+
+// `code` in a string from site-ui.yml becomes <code>code</code>.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const inline = (s: string) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+
+// Horizontal bar charts: one row per implementation, a label on the left,
+// the value at the end of the bar. Bars are thin and the grid recessive;
+// the value is printed, so the chart does not depend on color alone.
+const W = 720, LABEL = 170, ROW = 22, BAR = 14, PAD = 24;
+const plotW = W - LABEL - 70;
+const linesMax = Math.max(...cli.map((r) => r.f.codeLines! + r.f.commentLines!));
+const timed = cli.filter((r) => r.f.runMs != null).sort((a, b) => a.f.runMs! - b.f.runMs!);
+const timeMax = Math.max(1, ...timed.map((r) => r.f.runMs!));
+const linesH = PAD + cli.length * ROW;
+const timeH = PAD + timed.length * ROW;
+const x = (v: number, max: number) => (v / max) * plotW;
+// The chart label: the language, and the variant when it is not "cli".
+const short = (r: (typeof rows)[number]) => (r.label === 'cli' ? r.language : `${r.language} (${r.label})`);
+---
+
+<StarlightPage frontmatter={{ title: ui['facts.title'], description: ui['facts.description'] }}
+  headings={[{ depth: 2, slug: 'method', text: ui['facts.method'] }, { depth: 2, slug: 'machine', text: ui['facts.machine'] }]} lang={translated ? tag : 'en'}>
+  {!translated && <FallbackContentNotice />}
+  <p set:html={inline(ui['facts.intro'])} />
+
+  <h2 id="method">{ui['facts.method']}</h2>
+  <ul>
+    {['Lines', 'Files', 'Deps', 'Steps', 'Build', 'Time'].map((k) => <li set:html={inline(format(ui[`facts.method${k}`], { runs: facts.runs }))} />)}
+  </ul>
+
+  <h2 id="machine">{ui['facts.machine']}</h2>
+  <dl class="machine">
+    <dt>{ui['facts.os']}</dt><dd>{facts.machine.os}</dd>
+    <dt>{ui['facts.cpu']}</dt><dd>{facts.machine.cpu}</dd>
+    <dt>{ui['facts.memory']}</dt><dd>{facts.machine.memory}</dd>
+    <dt>{ui['facts.node']}</dt><dd>{facts.machine.node}</dd>
+  </dl>
+  <p>{format(ui['facts.measuredOn'], { date: facts.measuredOn })}</p>
+
+  <figure class="figure not-content">
+    <figcaption id="fig-lines">{ui['caption.figure']} 1. {ui['facts.chartLines']}</figcaption>
+    <p class="legend" aria-hidden="true"><span class="a">{ui['facts.legendCode']}</span><span class="b">{ui['facts.legendComment']}</span></p>
+    <svg class="chart" viewBox={`0 0 ${W} ${linesH}`} role="img" aria-labelledby="fig-lines">
+      {cli.map((r, i) => {
+        const y = PAD / 2 + i * ROW;
+        const a = x(r.f.codeLines!, linesMax);
+        const b = x(r.f.commentLines!, linesMax);
+        return (
+          <g>
+            <title>{`${r.language} · ${r.label}: ${num(r.f.codeLines)} ${ui['facts.legendCode']}, ${num(r.f.commentLines)} ${ui['facts.legendComment']}`}</title>
+            <text x={LABEL - 8} y={y + BAR - 3} text-anchor="end">{short(r)}</text>
+            <rect class="bar-a" x={LABEL} y={y} width={Math.max(a, 1)} height={BAR} rx="2" />
+            <rect class="bar-b" x={LABEL + a + 2} y={y} width={Math.max(b - 2, 1)} height={BAR} rx="2" />
+            <text x={LABEL + a + b + 6} y={y + BAR - 3}>{num(r.f.codeLines)} + {num(r.f.commentLines)}</text>
+          </g>
+        );
+      })}
+    </svg>
+  </figure>
+
+  {timed.length > 0 && (
+    <figure class="figure not-content">
+      <figcaption id="fig-time">{ui['caption.figure']} 2. {ui['facts.chartTime']}</figcaption>
+      <svg class="chart" viewBox={`0 0 ${W} ${timeH}`} role="img" aria-labelledby="fig-time">
+        {timed.map((r, i) => {
+          const y = PAD / 2 + i * ROW;
+          const w = x(r.f.runMs!, timeMax);
+          return (
+            <g>
+              <title>{`${r.language} · ${r.label}: ${format(ui['facts.ms'], { v: num(r.f.runMs) })}`}</title>
+              <text x={LABEL - 8} y={y + BAR - 3} text-anchor="end">{short(r)}</text>
+              <rect class="bar-a" x={LABEL} y={y} width={Math.max(w, 1)} height={BAR} rx="2" />
+              <text x={LABEL + w + 6} y={y + BAR - 3}>{format(ui['facts.ms'], { v: num(r.f.runMs) })}</text>
+            </g>
+          );
+        })}
+      </svg>
+    </figure>
+  )}
+
+  <div class="table-scroll not-content">
+    <table class="data-table">
+      <caption class="academic-caption">{ui['caption.table']} 1. {ui['facts.title']}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{ui['facts.implementation']}</th>
+          <th scope="col" class="num">{ui['facts.codeLines']}</th>
+          <th scope="col" class="num">{ui['facts.commentLines']}</th>
+          <th scope="col" class="num">{ui['facts.files']}</th>
+          <th scope="col" class="num">{ui['facts.deps']}</th>
+          <th scope="col" class="num">{ui['facts.steps']}</th>
+          <th scope="col" class="num">{ui['facts.output']}</th>
+          <th scope="col" class="num">{ui['facts.time']}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <th scope="row"><a href={r.url}>{r.language} · {r.label}</a></th>
+            <td class="num">{num(r.f.codeLines)}</td>
+            <td class="num">{num(r.f.commentLines)}</td>
+            <td class="num">{num(r.f.files)}</td>
+            <td class="num">{num(r.f.deps)}</td>
+            <td class="num">{num(r.f.steps)}</td>
+            <td class="num">{r.f.buildBytes == null ? '–' : format(ui['facts.kib'], { v: nf.format(Math.round(r.f.buildBytes / 1024)) })}</td>
+            <td class="num">{r.f.runMs == null ? '–' : format(ui['facts.ms'], { v: num(r.f.runMs) })}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p><small>– = {ui['facts.notMeasured']}</small></p>
+</StarlightPage>

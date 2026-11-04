@@ -1,0 +1,12 @@
+---
+// site/src/components/Hero.astro - Starlight's Hero (the Home banner), plus
+// the "not available in your language yet" notice when a locale shows the
+// English Home page. Starlight shows that notice on every other page itself
+// (components/Page.astro), but not on pages with a hero.
+// Overriding a component: https://starlight.astro.build/guides/overriding-components/
+import Default from '@astrojs/starlight/components/Hero.astro';
+import FallbackContentNotice from '@astrojs/starlight/components/FallbackContentNotice.astro';
+---
+
+{Astro.locals.starlightRoute.isFallback && <FallbackContentNotice />}
+<Default><slot /></Default>

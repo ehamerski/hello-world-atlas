@@ -1,0 +1,25 @@
+cabal-version:   3.0
+-- hello-web.cabal - the package description that Cabal reads.
+-- It says what to build (one executable), from which source file, and
+-- which libraries (packages from Hackage) it needs. Compare Cargo.toml in
+-- ../../rust/web or pom.xml in ../../java/web.
+-- Format: https://cabal.readthedocs.io/en/stable/cabal-package-description-file.html
+name:            hello-web
+version:         0.1.0.0
+synopsis:        Hello, World! web server with Scotty
+license:         NONE
+build-type:      Simple
+
+executable hello-web
+    -- The file with "main", inside hs-source-dirs.
+    main-is:          Main.hs
+    hs-source-dirs:   app
+    -- Version ranges: "^>= 0.30" means ">= 0.30 && < 0.31", the versions
+    -- that the Haskell Package Versioning Policy says are compatible.
+    build-depends:    base   >= 4.14 && < 5,
+                      scotty ^>= 0.30,
+                      warp   >= 3.3 && < 3.5
+    default-language: Haskell2010
+    -- -Wall: all the usual warnings. -threaded: link GHC's multi-threaded
+    -- runtime, so Warp can serve many requests in parallel.
+    ghc-options:      -Wall -threaded

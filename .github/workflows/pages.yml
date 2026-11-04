@@ -1,0 +1,73 @@
+# .github/workflows/pages.yml - build the website and, if asked, publish it
+# to GitHub Pages.
+#
+# WHAT: runs scripts/build-site.sh (pages generated from languages/ and docs/,
+#   one download ZIP per implementation, link check) with SITE_BASE set to the
+#   repository's Pages path, and uploads site/dist/ as a Pages artifact.
+#   The deploy job runs only when the "deploy" checkbox is selected.
+#
+# WHEN: only by hand (Actions tab > "pages" > Run workflow). Publishing is
+#   public and hard to undo, so a maintainer starts it on purpose.
+#   Without Pages enabled in the repository settings the deploy job fails;
+#   the build job still proves the site builds on Linux. A `push:` trigger
+#   on main would publish every change automatically.
+#
+# References:
+#   Publishing with a custom workflow: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
+#   Astro on GitHub Pages (base path): https://docs.astro.build/en/guides/deploy/github/
+#   actions/upload-pages-artifact: https://github.com/actions/upload-pages-artifact
+#   actions/deploy-pages:          https://github.com/actions/deploy-pages
+
+name: pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Publish to GitHub Pages after the build (the site becomes public)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# One publish at a time; a newer run does not cancel one that is deploying.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+      - name: Build the site
+        env:
+          # A project site is served under /<repository name>/.
+          SITE_BASE: /${{ github.event.repository.name }}/
+          # The origin, for canonical links and the sitemap.
+          SITE_URL: https://${{ github.repository_owner }}.github.io
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}/blob/${{ github.ref_name }}
+        run: scripts/build-site.sh
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/dist
+
+  deploy:
+    if: ${{ inputs.deploy }}
+    needs: build
+    runs-on: ubuntu-24.04
+    # Only this job may write to Pages.
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

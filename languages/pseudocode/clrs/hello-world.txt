@@ -1,0 +1,16 @@
+// hello-world.txt - Hello World in the pseudocode style of the textbook
+// "Introduction to Algorithms" by Cormen, Leiserson, Rivest and Stein (CLRS).
+// It is plain text because no program runs this notation: it is meant to
+// be read. In the book it is typeset; here SMALL CAPS become UPPER CASE.
+//
+// // starts a comment, as in C++ or Java (the 2nd edition drew a
+// triangle instead). The procedure name is written in small caps with
+// hyphens between words, followed by its parameters in parentheses; this
+// one takes none. Its body is the indented, numbered lines below it, and
+// indentation alone shows which lines belong to the procedure (there is
+// no "end" and no braces).
+// "print" writes its text; unlike C or Java, nothing is imported and there
+// is no main: a procedure is simply a named list of steps.
+
+HELLO-WORLD()
+1  print "Hello, World!"

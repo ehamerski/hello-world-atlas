@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<!-- index.html - the page that Electron shows inside the window.
+     It is ordinary HTML, the same kind of file a web browser loads: the
+     window's content is drawn by Chromium, the browser engine built into
+     Electron. Compare ../web, where a server sends HTML to your browser. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- Content Security Policy: this page may only load files from its own
+         folder ('self'). The Electron tutorial and security guide recommend
+         it, because a window that loads code from anywhere is a risk. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+    <!-- The window's title bar shows the page's <title>. -->
+    <title>Hello, World!</title>
+  </head>
+  <body>
+    <h1 id="greeting">Hello, World!</h1>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+# languages/node/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Node.js (JavaScript)"
+year: 2009
+year_note: "Node.js (the runtime) first commits 2009-02-16; JavaScript (the language) created 1995 by Brendan Eich at Netscape"
+designers:
+  - "Ryan Dahl"
+paradigms:
+  - "multi-paradigm"
+  - "event-driven"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C"
+    slug: "c"
+    title: "ECMAScript 2015 Language Specification (Introduction). Ecma International, 6th edition"
+    url: "https://262.ecma-international.org/6.0/"
+    quote: "Some of the facilities of ECMAScript are similar to those used in other programming languages; in particular C, Java™, Self, and Scheme as described in:"
+  - language: "Java"
+    slug: "java"
+    title: "ECMAScript 2015 Language Specification (Introduction). Ecma International, 6th edition"
+    url: "https://262.ecma-international.org/6.0/"
+    quote: "Some of the facilities of ECMAScript are similar to those used in other programming languages; in particular C, Java™, Self, and Scheme as described in:"
+  - language: "Scheme"
+    title: "ECMAScript 2015 Language Specification (Introduction). Ecma International, 6th edition"
+    url: "https://262.ecma-international.org/6.0/"
+    quote: "Some of the facilities of ECMAScript are similar to those used in other programming languages; in particular C, Java™, Self, and Scheme as described in:"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Node.js"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Electron"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Express"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "Commit 9d7895c (\"add dependencies\"), 2009-02-16, and the commit history of nodejs/node. GitHub"
+    url: "https://github.com/nodejs/node/commit/9d7895c567e8f38abfff35da1b6d6d6a0a06f9aa"
+  - title: "ECMAScript Language Specification (Introduction; Overview). Ecma TC39"
+    url: "https://tc39.es/ecma262/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "JavaScript grew up in the web browser. Node.js let it out, and the first thing it did was greet a terminal."
+  dictionary:
+    - term: "Node.js"
+      definition: "a runtime in which the first Hello World needs no dependencies, and the second one needs four hundred."

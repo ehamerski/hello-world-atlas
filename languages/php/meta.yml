@@ -1,0 +1,45 @@
+# languages/php/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "PHP"
+year: 1995
+year_note: "created 1994 as CGI binaries in C; publicly announced 1995-06-08 as PHP Tools 1.0"
+designers:
+  - "Rasmus Lerdorf"
+paradigms:
+  - "imperative"
+  - "object-oriented"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C"
+    slug: "c"
+    title: "History of PHP. The PHP Group"
+    url: "https://www.php.net/manual/en/history.php.php"
+    quote: "The language was deliberately designed to resemble C in structure, making it an easy adoption for developers familiar with C, Perl, and similar languages."
+  - language: "Perl"
+    title: "History of PHP. The PHP Group"
+    url: "https://www.php.net/manual/en/history.php.php"
+    quote: "It had Perl-like variables, automatic interpretation of form variables, and HTML embedded syntax."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "`php` CLI"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "PHP built-in server (`php -S`)"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "History of PHP. The PHP Group"
+    url: "https://www.php.net/manual/en/history.php.php"
+  - title: "Announce: Personal Home Page Tools (PHP Tools). Rasmus Lerdorf, comp.infosystems.www.authoring.cgi, 1995-06-08"
+    url: "https://groups.google.com/g/comp.infosystems.www.authoring.cgi/c/PyJ25gZ6z7A/m/M9FkTUVDfcwJ"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Text outside the `<?php` tags is sent as it is, so a PHP Hello World can be a page with no PHP in it at all."
+  dictionary:
+    - term: "PHP"
+      definition: "a recursive acronym, \"PHP: Hypertext Preprocessor\", so its name is the first program in it that never ends."

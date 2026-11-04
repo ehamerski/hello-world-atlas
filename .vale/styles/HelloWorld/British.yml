@@ -1,0 +1,39 @@
+# style-guide.md, section 2: US English.
+extends: substitution
+message: "Use US spelling '%s' instead of '%s' (style guide, section 2)."
+level: warning
+ignorecase: true
+swap:
+  colour: color
+  colours: colors
+  behaviour: behavior
+  behaviours: behaviors
+  favour: favor
+  favourite: favorite
+  honour: honor
+  labour: labor
+  neighbour: neighbor
+  catalogue: catalog
+  catalogues: catalogs
+  dialogue box: dialog box
+  licence: license
+  licences: licenses
+  programme: program
+  programmes: programs
+  centre: center
+  metre: meter
+  analyse: analyze
+  analysed: analyzed
+  analysing: analyzing
+  practise: practice
+  practised: practiced
+  defence: defense
+  grey: gray
+  travelling: traveling
+  modelling: modeling
+  labelled: labeled
+  labelling: labeling
+  cancelled: canceled
+  fulfil: fulfill
+  enrol: enroll
+  '\b(organ|recogn|real|initial|optim|custom|standard|summar|priorit|minim|maxim|serial|normal|util|apolog|emphas|final|special|visual|categor|synchron|author|central|character|critic|memor)is(e|ed|es|ing|ation|ations)\b': '$1iz$2'

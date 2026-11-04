@@ -1,0 +1,51 @@
+# languages/rust/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Rust"
+year: 2015
+year_note: "started 2006 as Graydon Hoare's personal project; Mozilla investment from 2009; Rust 1.0 released 2015-05-15"
+designers:
+  - "Graydon Hoare"
+paradigms:
+  - "multi-paradigm"
+  - "systems"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C++"
+    slug: "cpp"
+    title: "Influences. The Rust Reference. The Rust Project"
+    url: "https://doc.rust-lang.org/reference/influences.html"
+    quote: "C++: references, RAII, smart pointers, move semantics, monomorphization, memory model"
+  - language: "Haskell"
+    slug: "haskell"
+    title: "Influences. The Rust Reference. The Rust Project"
+    url: "https://doc.rust-lang.org/reference/influences.html"
+    quote: "Haskell (GHC): typeclasses, type families"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Cargo"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "eframe / egui"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Axum"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "10 Years of Stable Rust: An Infrastructure Story. Graydon Hoare, Rust Foundation, 2025-05-15"
+    url: "https://rustfoundation.org/media/10-years-of-stable-rust-an-infrastructure-story/"
+  - title: "Announcing Rust 1.0. The Rust Core Team, 2015-05-15"
+    url: "https://blog.rust-lang.org/2015/05/15/Rust-1.0/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "`println!` ends with an exclamation mark because it is a macro, not because it is excited. It is, however, memory-safe, and a little excited."
+  dictionary:
+    - term: "Rust"
+      definition: "a language in which every value has an owner, and the borrow checker knows who it is."

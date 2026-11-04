@@ -1,0 +1,124 @@
+/* site/src/styles/site.css - the few styles the generated pages need.
+   Starlight's theme variables: https://starlight.astro.build/guides/css-and-tailwind/ */
+
+/* The "Download ZIP" link on language and implementation pages. */
+.download-zip {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--sl-color-accent);
+  color: var(--sl-color-black) !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+.download-zip:hover { background: var(--sl-color-accent-high); }
+
+/* Language cards and their filters (src/pages/[...locale]/languages/index.astro). */
+.filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
+.filters label { display: flex; flex-direction: column; font-size: var(--sl-text-sm); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1rem; }
+.card {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+.card:hover { border-color: var(--sl-color-accent); }
+.card h2 { margin: 0; font-size: var(--sl-text-xl); }
+.card p { margin: 0.25rem 0 0; font-size: var(--sl-text-sm); }
+.card[hidden] { display: none; }
+
+/* "Anatomy of Hello World" (scripts/generate.mjs, anatomySection): code on
+   the left, the comment that explains it on the right; stacked on narrow
+   screens. The steps are an ordered list, numbered like the steps of a
+   proof. */
+.anatomy { list-style: none; counter-reset: step; padding: 0; margin-block: 1rem; }
+.anatomy-step {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+.anatomy-code { min-width: 0; }
+.anatomy-note { font-size: var(--sl-text-sm); }
+.anatomy-note p, .anatomy-header p { margin: 0 0 0.5rem; }
+.anatomy-note pre, .anatomy-header pre {
+  margin: 0 0 0.5rem;
+  padding: 0.4rem 0.6rem;
+  overflow-x: auto;
+  font-size: var(--sl-text-xs);
+  background: var(--sl-color-gray-6);
+  border-radius: 0.25rem;
+}
+.anatomy-label {
+  font-family: var(--academic-font-serif);
+  font-style: italic;
+  color: var(--sl-color-gray-3);
+}
+.anatomy-step .anatomy-label::before { content: counter(step) '. '; font-style: normal; font-weight: 600; }
+.anatomy-header {
+  font-size: var(--sl-text-sm);
+  padding: 0.75rem 1rem;
+  border-inline-start: 3px solid var(--sl-color-accent);
+  background: var(--sl-color-gray-6);
+}
+@media (max-width: 50rem) {
+  .anatomy-step { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Side-by-side comparator (src/pages/[...locale]/compare/side-by-side.astro). */
+.comparator-controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
+.comparator-controls > * { margin: 0; }
+.comparator-controls label { display: flex; flex-direction: column; font-size: var(--sl-text-sm); }
+.comparator-wrap { overflow-x: auto; }
+.comparator { border-collapse: collapse; width: 100%; table-layout: fixed; }
+.comparator th, .comparator td {
+  vertical-align: top;
+  text-align: start;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+  font-size: var(--sl-text-sm);
+  min-width: 14rem;
+}
+.comparator th[scope='row'] { width: 10rem; min-width: 8rem; font-family: var(--academic-font-serif); }
+.comparator ol { margin: 0; padding-inline-start: 1.2rem; }
+.comparator code { overflow-wrap: anywhere; }
+/* A long code line scrolls inside its own cell instead of covering the next column. */
+.comparator td { overflow: hidden; }
+.comparator td .expressive-code { max-width: 100%; }
+
+/* Measured facts and Genealogy: data tables and SVG charts. */
+.data-table { border-collapse: collapse; width: 100%; font-size: var(--sl-text-sm); }
+.data-table th, .data-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--sl-color-gray-5); text-align: start; vertical-align: top; }
+.data-table td.num, .data-table th.num { text-align: end; font-variant-numeric: tabular-nums; }
+.table-scroll { overflow-x: auto; }
+.chart { width: 100%; height: auto; color: var(--sl-color-gray-2); }
+.chart text { fill: currentColor; font-family: var(--__sl-font); font-size: 12px; }
+.chart .grid { stroke: var(--sl-color-gray-5); stroke-width: 1; }
+.chart .bar-a { fill: var(--sl-color-accent); }
+.chart .bar-b { fill: var(--sl-color-gray-4); }
+.chart .edge { fill: none; stroke: var(--sl-color-gray-3); stroke-width: 1.25; }
+.chart .node { fill: var(--sl-color-accent); }
+.chart .node-label { fill: var(--sl-color-black); }
+.chart .arrow { fill: var(--sl-color-gray-3); }
+/* Keyboard users see which language node has the focus. */
+.chart a:focus-visible { outline: none; }
+.chart a:focus-visible .node, .chart a:hover .node { stroke: var(--sl-color-white); stroke-width: 2; }
+.legend { display: flex; gap: 1rem; font-size: var(--sl-text-sm); margin: 0.25rem 0 1rem; }
+.legend span::before { content: ''; display: inline-block; width: 0.8em; height: 0.8em; margin-inline-end: 0.35em; vertical-align: -0.05em; }
+.legend .a::before { background: var(--sl-color-accent); }
+.legend .b::before { background: var(--sl-color-gray-4); }
+
+/* The machine the facts were measured on: a two-column list. */
+.machine { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
+.machine dt { font-weight: 600; }
+.machine dt, .machine dd { margin: 0; }
+
+/* The search button shows the text "Search" and a Ctrl K / ⌘ K hint, but its
+   accessible name is only "Search", which fails WCAG 2.5.3 Label in Name
+   (axe-core rule label-content-name-mismatch). The hint is hidden; the
+   shortcut still works and is announced through aria-keyshortcuts. */
+button[data-open-modal] > kbd { display: none !important; }

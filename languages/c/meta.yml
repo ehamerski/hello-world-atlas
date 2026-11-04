@@ -1,0 +1,45 @@
+# languages/c/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "C (ANSI C)"
+year: 1972
+year_note: "C came into being in 1969–1973, with the most creative period in 1972; standardized as ANSI X3.159-1989 / ISO/IEC 9899:1990"
+designers:
+  - "Dennis Ritchie"
+paradigms:
+  - "imperative"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "BCPL"
+    title: "The Development of the C Language. Dennis M. Ritchie, Second History of Programming Languages conference (HOPL-II), ACM, 1993. Author's reprint, archived copy of bell-labs.com (2015-12-31)"
+    url: "https://web.archive.org/web/20151231162516/http://www.bell-labs.com/usr/dmr/www/chist.html"
+    quote: "Derived from the typeless language BCPL, it evolved a type structure;"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "system C compiler, `-std=c89`"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "GTK 4, `-std=c99`"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "GNU libmicrohttpd, `-std=c99`"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "The Development of the C Language. Dennis M. Ritchie, Second History of Programming Languages conference (HOPL-II), ACM, 1993. Author's reprint, archived copy of bell-labs.com (2015-12-31)"
+    url: "https://web.archive.org/web/20151231162516/http://www.bell-labs.com/usr/dmr/www/chist.html"
+  - title: "Language Standards Supported by GCC (C Language: C89/C90, C99, C11, C17, C23, C2Y). GCC, the GNU Compiler Collection"
+    url: "https://gcc.gnu.org/onlinedocs/gcc/Standards.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  label: "C"
+  line: "C trusts the programmer completely. `printf` prints whatever it is asked to print, including what nobody meant to ask."
+  dictionary:
+    - term: "C"
+      definition: "a language that gives the programmer enough rope, and the address of the rope."

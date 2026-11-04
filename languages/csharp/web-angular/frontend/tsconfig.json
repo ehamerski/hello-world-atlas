@@ -1,0 +1,32 @@
+/*
+  tsconfig.json - C# web-angular (frontend): settings for the TypeScript
+  compiler, which the Angular CLI runs on every .ts file in src/.
+  The Angular CLI's generator splits this into tsconfig.json and
+  tsconfig.app.json; one file is enough for this small app.
+  TypeScript options: https://www.typescriptlang.org/tsconfig
+  Angular options:    https://angular.dev/reference/configs/angular-compiler-options
+*/
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    /* Type-check strictly, like C#'s <Nullable>enable</Nullable>: a value
+       that may be null or undefined must be checked before use. */
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "types": []
+  },
+  "angularCompilerOptions": {
+    /* Type-check the HTML templates too, not only the TypeScript. */
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  },
+  "files": ["src/main.ts"]
+}

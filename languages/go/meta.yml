@@ -1,0 +1,59 @@
+# languages/go/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Go"
+year: 2009
+year_note: "design began 2007-09-21; public open source release 2009-11-10; Go 1 on 2012-03-28"
+designers:
+  - "Robert Griesemer"
+  - "Rob Pike"
+  - "Ken Thompson"
+paradigms:
+  - "imperative"
+  - "concurrent"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C"
+    slug: "c"
+    title: "Frequently Asked Questions (FAQ). The Go Authors"
+    url: "https://go.dev/doc/faq"
+    quote: "Go is mostly in the C family (basic syntax)"
+  - language: "Pascal"
+    slug: "pascal"
+    title: "Frequently Asked Questions (FAQ). The Go Authors"
+    url: "https://go.dev/doc/faq"
+    quote: "with significant input from the Pascal/Modula/Oberon family (declarations, packages)"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Go toolchain"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Fyne"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "`net/http` + `html/template` (standard library)"
+    run: "http://localhost:8080/"
+    status: "verified"
+  - folder: "web-vue"
+    kind: "web-frontend"
+    label: "Vue"
+    toolchain: "Go API + Vue (Vite)"
+    run: "http://localhost:4173/ (API :8080)"
+    status: "verified"
+sources:
+  - title: "Frequently Asked Questions (FAQ). The Go Authors"
+    url: "https://go.dev/doc/faq"
+  - title: "Hey! Ho! Let's Go!. Google Open Source Blog, 2009-11-10"
+    url: "https://opensource.googleblog.com/2009/11/hey-ho-lets-go.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "`gofmt` settles every argument about where the braces go by not taking questions."
+  dictionary:
+    - term: "Go"
+      definition: "a language in which every third line is `if err != nil`, so that no error goes unnoticed, and neither does the error handling."

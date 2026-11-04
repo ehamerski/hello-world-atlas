@@ -1,0 +1,83 @@
+---
+// site/src/pages/[...locale]/languages/index.astro - the language cards, with
+// filters by paradigm, era (decade of first appearance) and category.
+// The data comes from every languages/<lang>/meta.yml, through
+// src/generated/languages.json; the labels come from site/site-ui.yml (or its
+// translation), through src/generated/ui.json. Both are written by
+// scripts/generate.mjs, one entry per locale.
+// [...locale] makes one page per locale: /languages/ for English and
+// /<dir>/languages/ for the others. https://docs.astro.build/en/guides/routing/#rest-parameters
+// StarlightPage wraps a custom page in the site layout:
+// https://starlight.astro.build/guides/pages/#custom-pages
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import FallbackContentNotice from '@astrojs/starlight/components/FallbackContentNotice.astro';
+import { LOCALES, format } from '../../../../i18n.mjs';
+import languagesByLocale from '../../../generated/languages.json';
+import uiByLocale from '../../../generated/ui.json';
+
+export function getStaticPaths() {
+  return LOCALES.map((l) => ({ params: { locale: l.dir || undefined }, props: { tag: l.tag } }));
+}
+
+const { tag } = Astro.props;
+const languages = languagesByLocale[tag as keyof typeof languagesByLocale];
+const { strings: ui, translated } = uiByLocale[tag as keyof typeof uiByLocale];
+const sorted = (values: string[]) => [...new Set(values)].sort();
+const paradigms = sorted(languages.flatMap((l) => l.paradigms));
+const eras = sorted(languages.map((l) => l.era));
+const kinds = sorted(languages.flatMap((l) => l.kinds));
+---
+
+{/* Until the locale has a site-ui.yml the strings are English: say so in lang. */}
+<StarlightPage frontmatter={{ title: ui['cards.title'], description: ui['cards.description'] }} lang={translated ? tag : 'en'}>
+  {!translated && <FallbackContentNotice />}
+  <p>{format(ui['cards.intro'], { count: languages.length })}</p>
+  <form class="filters" id="filters">
+    <label>{ui['cards.paradigm']}
+      <select name="paradigm"><option value="">{ui['cards.all']}</option>{paradigms.map((p) => <option>{p}</option>)}</select>
+    </label>
+    <label>{ui['cards.era']}
+      <select name="era"><option value="">{ui['cards.all']}</option>{eras.map((e) => <option>{e}</option>)}</select>
+    </label>
+    <label>{ui['cards.category']}
+      <select name="kind"><option value="">{ui['cards.all']}</option>{kinds.map((k) => <option>{k}</option>)}</select>
+    </label>
+  </form>
+  <p id="count" aria-live="polite" data-template={ui['cards.shown']}></p>
+  <div class="cards not-content">
+    {languages.map((l) => (
+      <a class="card" href={l.url}
+         data-paradigm={l.paradigms.join('|')} data-era={l.era} data-kind={l.kinds.join('|')}>
+        <h2>{l.name}</h2>
+        <p>{l.year ?? ui['cards.noSingleYear']}{l.designers.length > 0 && ` · ${l.designers.join(', ')}`}</p>
+        <p>{l.paradigms.join(', ')}</p>
+        <p>{l.kinds.join(', ')} · {l.implementations} {ui[l.implementations > 1 ? 'cards.implementations' : 'cards.implementation']}</p>
+      </a>
+    ))}
+  </div>
+</StarlightPage>
+
+<script>
+  // Show only the cards that match every selected filter. Without
+  // JavaScript every card stays visible, so the page still works.
+  const form = document.getElementById('filters') as HTMLFormElement;
+  const count = document.getElementById('count')!;
+  const cards = [...document.querySelectorAll<HTMLElement>('.card')];
+  function apply() {
+    const data = new FormData(form);
+    let shown = 0;
+    for (const card of cards) {
+      const match = (['paradigm', 'era', 'kind'] as const).every((key) => {
+        const want = data.get(key);
+        return !want || card.dataset[key]!.split('|').includes(String(want));
+      });
+      card.hidden = !match;
+      if (match) shown++;
+    }
+    // The sentence comes from site-ui.yml (e.g. "{shown} of {total} shown").
+    count.textContent = count.dataset.template!
+      .replace('{shown}', String(shown)).replace('{total}', String(cards.length));
+  }
+  form.addEventListener('change', apply);
+  apply();
+</script>

@@ -1,0 +1,43 @@
+# languages/lisp/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Common Lisp"
+year: 1958
+year_note: "Lisp itself: implementation began fall 1958 (McCarthy's paper April 1960); Common Lisp: effort from 1981, CLtL 1984, ANSI X3.226-1994"
+designers:
+  - "John McCarthy"
+paradigms:
+  - "multi-paradigm"
+  - "functional"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Fortran"
+    slug: "fortran"
+    title: "History of Lisp: \"The implementation of LISP\". John McCarthy"
+    url: "https://www-formal.stanford.edu/jmc/history/lisp/node3.html"
+    quote: "The programs to be hand-compiled were written in an informal notation called M-expressions intended to resemble FORTRAN as much as possible."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "SBCL"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Hunchentoot (Quicklisp), SBCL"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "History of Lisp: \"The implementation of LISP\". John McCarthy"
+    url: "https://www-formal.stanford.edu/jmc/history/lisp/node3.html"
+  - title: "Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I (Communications of the ACM, April 1960). John McCarthy"
+    url: "https://www-formal.stanford.edu/jmc/recursive.pdf"
+  - title: "The Evolution of Lisp (HOPL II version). Guy L. Steele Jr. and Richard P. Gabriel"
+    url: "https://www.dreamsongs.com/Files/Hopl2.pdf"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "The Hello World ends in `))`, the Lisp way of saying \"and that is final\"."
+  dictionary:
+    - term: "Common Lisp"
+      definition: "a language in which code is data, data is code, and every file ends in `)))`."

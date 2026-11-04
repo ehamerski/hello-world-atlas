@@ -1,0 +1,38 @@
+# languages/prolog/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Prolog"
+year: 1972
+year_note: "Colmerauer–Kowalski collaboration and first system (Prolog 0, by Roussel) in 1972; Prolog I at the end of 1973; ISO/IEC 13211-1 in 1995"
+designers:
+  - "Alain Colmerauer"
+  - "Philippe Roussel"
+paradigms:
+  - "logic"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Q-systems"
+    title: "Fifty Years of Prolog and Beyond. Philipp Körner, Michael Leuschel, João Barbosa, Vítor Santos Costa, Verónica Dahl, Manuel V. Hermenegildo, Jose F. Morales, Jan Wielemaker, Daniel Diaz, Salvador Abreu, Giovanni Ciatto. Theory and Practice of Logic Programming, 2022 (arXiv:2201.10816)"
+    url: "https://arxiv.org/abs/2201.10816"
+    quote: "His aim of modifying Q-systems so that a complete question-answering system (rather than just the analyzer part of it) could be written in logic inspired him, amongst others, to create Prolog."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "SWI-Prolog"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "SWI-Prolog HTTP libraries"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "Fifty Years of Prolog and Beyond. Philipp Körner, Michael Leuschel, João Barbosa, Vítor Santos Costa, Verónica Dahl, Manuel V. Hermenegildo, Jose F. Morales, Jan Wielemaker, Daniel Diaz, Salvador Abreu, Giovanni Ciatto. Theory and Practice of Logic Programming, 2022 (arXiv:2201.10816)"
+    url: "https://arxiv.org/abs/2201.10816"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Ask Prolog to say hello at its prompt and it does, then answers `true.`, in case there was any doubt."
+  dictionary:
+    - term: "Prolog"
+      definition: "programming in logic: the program states what is true, and the computer works out the rest by first trying everything else."

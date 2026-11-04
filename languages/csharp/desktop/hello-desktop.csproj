@@ -1,0 +1,31 @@
+<!--
+  hello-desktop.csproj - C# desktop: the project file read by MSBuild
+  ("dotnet build"). Unlike ../cli and ../web, this project needs libraries
+  that do not come with .NET: Avalonia, a cross-platform UI toolkit. They
+  are listed as PackageReference items, and "dotnet restore" (run by
+  ./install.sh and again by "dotnet build") downloads them from NuGet, the
+  .NET package registry, the way Maven downloads Java libraries.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WinExe: a GUI program. On Windows it opens no console window;
+         on macOS and Linux it is the same as Exe. -->
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Exact versions, so every student builds with the same Avalonia. -->
+    <!-- The core: controls such as Window and TextBlock. -->
+    <PackageReference Include="Avalonia" Version="12.1.4" />
+    <!-- The desktop backends (macOS, Windows, Linux X11) and
+         UsePlatformDetect(), which picks the right one at run time. -->
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
+    <!-- The Fluent theme: without a theme, controls are not drawn. -->
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+  </ItemGroup>
+
+</Project>

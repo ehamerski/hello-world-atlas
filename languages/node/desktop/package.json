@@ -1,0 +1,14 @@
+{
+  "name": "hello-node-desktop",
+  "version": "1.0.0",
+  "description": "Node.js desktop: an Electron window that shows Hello, World!",
+  "private": true,
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^45.2.1"
+  }
+}

@@ -1,0 +1,59 @@
+# languages/csharp/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "C#"
+year: 2000
+year_note: "announced 2000-06-26; ECMA-334 December 2001; C# 1.0 released January 2002"
+designers:
+  - "Anders Hejlsberg"
+paradigms:
+  - "object-oriented"
+  - "functional"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Java"
+    slug: "java"
+    title: "The history of C#. Microsoft Learn"
+    url: "https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-version-history"
+    quote: "C# version 1.0, released with Visual Studio .NET 2002, looked a lot like Java."
+  - language: "C++"
+    slug: "cpp"
+    title: "Microsoft Introduces Highly Productive .NET Programming Language: C#. Microsoft News, 2000-06-26"
+    url: "https://news.microsoft.com/source/2000/06/26/microsoft-introduces-highly-productive-net-programming-language-c/"
+    quote: "With its Visual C++® development system heritage, C # will enable millions of C and C++ developers to use existing skills to rapidly build sophisticated XML-based .NET applications."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: ".NET 10 SDK"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Avalonia"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "ASP.NET Core"
+    run: "http://localhost:8080/"
+    status: "verified"
+  - folder: "web-angular"
+    kind: "web-frontend"
+    label: "Angular"
+    toolchain: "ASP.NET Core API + Angular"
+    run: "http://localhost:4200/ (API :8080)"
+    status: "verified"
+sources:
+  - title: "Microsoft Introduces Highly Productive .NET Programming Language: C#. Microsoft News, 2000-06-26"
+    url: "https://news.microsoft.com/source/2000/06/26/microsoft-introduces-highly-productive-net-programming-language-c/"
+  - title: "Microsoft's Anders Hejlsberg Receives Prestigious Excellence in Programming Award. Microsoft News, 2001-04-11"
+    url: "https://news.microsoft.com/source/2001/04/11/microsofts-anders-hejlsberg-receives-prestigious-excellence-in-programming-award/"
+  - title: "The history of C#. Microsoft Learn"
+    url: "https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-version-history"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Since top-level statements, a C# program can be a single line. The curly braces are still looking for new work."
+  dictionary:
+    - term: "C#"
+      definition: "a musical note one semitone above C, and a language with the same sense of direction."

@@ -1,0 +1,101 @@
+# Root .gitignore for every toolchain used in this repository.
+# Why: build output, dependencies, secrets, and IDE files must never be
+# committed. Each implementation may add its own .gitignore
+# for anything specific. Syntax: https://git-scm.com/docs/gitignore
+# Patterns are adapted from https://github.com/github/gitignore
+
+# --- Secrets and local environment (never commit, LGPD) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# --- Operating system and editor files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.iml
+*.swp
+*~
+.vs/
+
+# --- Logs and temporary files (verify-all.sh writes here) ---
+*.log
+.verify/
+tmp/
+
+# --- C / C++ / CMake ---
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+
+# --- Java (Maven / Gradle) ---
+target/
+*.class
+.gradle/
+
+# --- C# / .NET ---
+bin/
+obj/
+*.user
+
+# --- Go ---
+# Go builds into the implementation's bin/ (already ignored above).
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# --- Node.js / React / Angular / Vue ---
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+
+# --- Rust ---
+# Cargo builds into target/ (already ignored above).
+
+# --- PHP ---
+vendor/
+
+# --- Haskell (Cabal / Stack) ---
+dist-newstyle/
+.stack-work/
+*.hi
+
+# --- Common Lisp ---
+*.fasl
+
+# --- Pascal (Free Pascal / Lazarus) ---
+*.ppu
+# Lazarus puts units in lib/<cpu>-<os>/; a bare lib/ would hide real sources.
+**/lib/*-*/
+backup/
+*.compiled
+
+# --- COBOL / Fortran / Ada / BASIC / Harbour ---
+# Fortran module files (*.mod); Go's go.mod is kept.
+*.mod
+!go.mod
+*.ali
+alire/
+*.hrb

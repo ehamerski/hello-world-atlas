@@ -1,0 +1,15 @@
+<!--
+  hello-api.csproj - C# web-angular (backend): the project file read by
+  MSBuild ("dotnet build"). Same as ../../web/hello-web.csproj: the Web SDK
+  brings ASP.NET Core, which comes with the .NET SDK, so nothing is
+  downloaded from NuGet.
+-->
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,48 @@
+# languages/cpp/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "C++"
+year: 1985
+year_note: "work began in 1979 as \"C with Classes\"; named C++ in 1983; first commercial release (Cfront) in October 1985; ISO standard in 1998"
+designers:
+  - "Bjarne Stroustrup"
+paradigms:
+  - "multi-paradigm"
+  - "object-oriented"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C"
+    slug: "c"
+    title: "Bjarne Stroustrup's FAQ (What is the difference between C and C++?; Why did you invent C++?). Bjarne Stroustrup"
+    url: "https://www.stroustrup.com/bs_faq.html"
+    quote: "C++ is a direct descendant of C that retains almost all of C as a subset."
+  - language: "Simula"
+    title: "Bjarne Stroustrup's FAQ (What is the difference between C and C++?; Why did you invent C++?). Bjarne Stroustrup"
+    url: "https://www.stroustrup.com/bs_faq.html"
+    quote: "I wanted to write efficient systems programs in the styles encouraged by Simula67. To do that, I added facilities for better type checking, data abstraction, and object-oriented programming to C."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "CMake, C++20"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Qt 6 Widgets, CMake"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "cpp-httplib, CMake"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "Bjarne Stroustrup's FAQ (When was C++ invented?, Why did you invent C++?, Where did the name \"C++\" come from?, Is C++ an Object-Oriented language?, What is the difference between C and C++?). Bjarne Stroustrup"
+    url: "https://www.stroustrup.com/bs_faq.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "`std::cout << \"Hello, World!\"` shifts a greeting to the left, into the console. The bits do not mind."
+  dictionary:
+    - term: "C++"
+      definition: "the answer to the question \"What if C had one more of everything?\""

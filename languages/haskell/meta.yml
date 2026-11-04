@@ -1,0 +1,40 @@
+# languages/haskell/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Haskell"
+year: 1990
+year_note: "committee formed at FPCA '87 (September 1987); name chosen in January 1988; Haskell 1.0 Report (edited by Hudak and Wadler) published on 1990-04-01"
+designers:
+  - "Haskell committee"
+paradigms:
+  - "functional"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Lisp"
+    slug: "lisp"
+    title: "Haskell 2010 Language Report, Preface. haskell.org"
+    url: "https://www.haskell.org/onlinereport/haskell2010/haskellli2.html"
+    quote: "Although it is difficult to pinpoint the origin of many ideas, the following languages were particularly influential: Lisp (and its modern-day incarnations Common Lisp and Scheme); Landin’s ISWIM; APL;"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "GHC (via GHCup)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Scotty, Cabal"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "Haskell 2010 Language Report, Preface. haskell.org"
+    url: "https://www.haskell.org/onlinereport/haskell2010/haskellli2.html"
+  - title: "A History of Haskell: Being Lazy With Class. Paul Hudak, John Hughes, Simon Peyton Jones, Philip Wadler. HOPL-III, 2007. Microsoft Research"
+    url: "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/history.pdf"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Printing is a side effect, so Haskell asks Hello World to declare it in its type: `IO ()`."
+  dictionary:
+    - term: "Haskell"
+      definition: "a language so lazy that this definition is not evaluated until someone needs it."

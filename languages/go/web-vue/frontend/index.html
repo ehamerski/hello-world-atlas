@@ -1,0 +1,18 @@
+<!doctype html>
+<!--
+  index.html - Go web-vue (frontend): the only HTML page of the app.
+  It is almost empty on purpose: Vue fills <div id="app"> in the browser.
+  Compare ../../web, where the Go server sends the finished HTML itself.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello, World!</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- Vite loads the Vue code from here (and bundles it on build). -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

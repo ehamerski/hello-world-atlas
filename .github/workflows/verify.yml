@@ -1,0 +1,110 @@
+# .github/workflows/verify.yml - fast checks on a GitHub-hosted Ubuntu runner.
+#
+# WHAT: the cheap part of the local CI (scripts/verify-all.sh):
+#   1. scripts/gen-readme.py --check  - the generated READMEs match meta.yml;
+#   2. scripts/check-links.sh         - every relative Markdown link resolves;
+#   3. scripts/verify-all.sh on the command-line programs whose toolchain is
+#      already on the runner image (no installs, so it stays fast);
+#   4. scripts/build-site.sh          - the website builds and its links resolve;
+#   5. scripts/check-product.sh       - no work notes in the published files;
+#   6. scripts/check-prose.sh         - the published Markdown follows the
+#      style guide (Vale);
+#   7. scripts/check-translations.sh  - which translations are current,
+#      outdated, or missing. Warnings only: it never fails the run;
+#   8. no committed file matches .gitignore (build output, generated pages,
+#      download ZIPs, and dependencies are never committed).
+# The full verify-all.sh (desktop windows, old compilers) still runs on the
+# maintainer's Mac before each merge; it needs toolchains a runner lacks.
+#
+# WHEN: only by hand (Actions tab > "verify" > Run workflow), so every run is
+#   started on purpose. Add `push:` / `pull_request:` here to run it on every
+#   change.
+#
+# References:
+#   Workflow syntax: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+#   Manual runs:     https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow
+#   Runner image (preinstalled tools): https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
+#   Billing:         https://docs.github.com/en/billing/concepts/product-billing/github-actions
+
+name: verify
+
+on:
+  workflow_dispatch:
+
+# Read-only token: these checks change nothing in the repository.
+# https://docs.github.com/en/actions/reference/security/secure-use#use-the-principle-of-least-privilege
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      # gen-readme.py uses only the Python standard library.
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Generated READMEs are up to date
+        run: python3 scripts/gen-readme.py --check
+
+      - name: Markdown links resolve
+        run: scripts/check-links.sh
+
+      - name: No work notes in the published files
+        run: scripts/check-product.sh
+
+      # Vale is a single Go binary; the release archive is checked against
+      # the SHA-256 published with the release before it is unpacked.
+      # https://github.com/errata-ai/vale/releases/tag/v3.26.0
+      - name: Install Vale 3.26.0
+        run: |
+          curl -fsSLo vale.tar.gz https://github.com/errata-ai/vale/releases/download/v3.26.0/vale_3.26.0_Linux_64-bit.tar.gz
+          echo "22aa69a556558e4a9dfc63c17030777383d8d3c48dcdfad655fa98e839d666ed  vale.tar.gz" | sha256sum -c -
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf vale.tar.gz -C "$HOME/.local/bin" vale
+          rm vale.tar.gz
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Published Markdown follows the style guide
+        run: scripts/check-prose.sh
+
+      # Prints outdated translations as workflow warnings and always exits 0,
+      # so an English change is never blocked by a translation.
+      - name: Translations (warnings only)
+        run: scripts/check-translations.sh
+
+      # git ls-files -c -i --exclude-standard lists committed files that a
+      # .gitignore rule matches, that is, generated files that were committed.
+      # https://git-scm.com/docs/git-ls-files
+      - name: No generated file is committed
+        run: |
+          generated=$(git ls-files -c -i --exclude-standard)
+          if [ -n "$generated" ]; then
+            echo "These committed files are generated (they match .gitignore):"
+            echo "$generated"
+            exit 1
+          fi
+
+      # Command-line programs whose compilers/interpreters are on the image.
+      - name: verify-all (command-line subset)
+        run: scripts/verify-all.sh c/cli cpp/cli go/cli java/cli node/cli python/cli rust/cli
+
+      # Same Node.js major version as the maintainer's Mac (site/package.json
+      # "engines"); npm ci in build-site.sh uses site/package-lock.json.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+      - name: Website builds
+        run: scripts/build-site.sh
+
+      - name: Keep the logs of failed implementations
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: verify-logs
+          path: .verify/
+          retention-days: 7

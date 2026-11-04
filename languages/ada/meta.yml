@@ -1,0 +1,42 @@
+# languages/ada/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Ada"
+year: 1983
+year_note: "DoD program began 1974; Steelman requirements 1978; named Ada 1979; Ada 83 published as MIL-STD-1815 in 1983, ISO 8652:1987"
+designers:
+  - "Jean D. Ichbiah"
+paradigms:
+  - "imperative"
+  - "object-oriented"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "ALGOL family"
+    title: "Introduction to Ada, part 1 (history). Ada Information Clearinghouse (Ada Resource Association)"
+    url: "https://www.adaic.org/learn/materials/intro/part1/"
+    quote: "Readable Ada syntax derives from the Algol family of languages."
+  - language: "Pascal"
+    slug: "pascal"
+    title: "1.5 A Brief History of Ada. Ada Essentials, University of Northern Iowa"
+    url: "https://www.cs.uni.edu/~mccormic/AdaEssentials/history.htm"
+    quote: "All four select Pascal as the base language upon which to build, and submit initial design proposals."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "GNAT via Alire"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "Introduction to Ada, part 1 (history). Ada Information Clearinghouse (Ada Resource Association)"
+    url: "https://www.adaic.org/learn/materials/intro/part1/"
+  - title: "Ada Reference Manual, 2022 Edition: Introduction (Language Summary, Acknowledgements). Ada Resource Association"
+    url: "https://www.adaic.org/resources/add_content/standards/22rm/html/RM-0-2.html"
+  - title: "Ada Standards Timeline. Ada Information Clearinghouse"
+    url: "https://www.adaic.org/ada-resources/standards/ada-standards-timeline/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "The Ada compiler checks so much before a program may run that a Hello World that compiles has, in a sense, already passed a review."
+  dictionary:
+    - term: "Ada"
+      definition: "a language that reads the contract before it starts the work, and then reads it again at run time."

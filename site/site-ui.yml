@@ -1,0 +1,172 @@
+# site/site-ui.yml - the English strings of the site's own components: the
+# menu, the Home banner, the language cards, the timeline and the labels the
+# generator adds around the repository Markdown. The Markdown itself
+# (README files, docs/) is not here.
+#
+# English is the source of truth. A translation is i18n/<tag>/site-ui.yml
+# with the same keys (a missing key falls back to English) plus `source` and
+# `source_sha` (see i18n/README.md). "{name}" is a placeholder filled in by
+# the code; keep it as is in a translation.
+# Read by site/i18n.mjs.
+
+site.title: "Hello World in many languages"
+site.description: "The Hello World program in many programming languages, as a command-line app, a desktop window and a web app, with the cited history of each language."
+
+# The menu (site/astro.config.mjs).
+nav.home: "Home"
+nav.startHere: "Start here"
+nav.languages: "Languages"
+nav.allLanguages: "All languages (filter)"
+nav.implementations: "All implementations"
+nav.timeline: "Timeline"
+nav.byLanguage: "By language"
+nav.compareGroup: "Compare"
+nav.compare: "Overview"
+nav.sideBySide: "Side by side"
+nav.facts: "Measured facts"
+nav.genealogy: "Genealogy"
+nav.about: "About"
+nav.paradigms: "Paradigms"
+nav.aiEssay: "AI essay"
+nav.sources: "About the sources"
+nav.platformSupport: "Platform support"
+nav.contributing: "Contributing"
+
+# Home banner.
+home.tagline: "One program, many languages: the Hello World program as a command-line app, a desktop window and a web app, with the history of each language."
+home.startHere: "Start here"
+home.browseLanguages: "Browse languages"
+
+# Language and implementation pages. The status labels match
+# scripts/gen-readme.py, so the site and the README tables agree.
+status.verified: "✅ verified"
+status.compromise: "🔶 compromise"
+status.not-verified: "⚠️ not verified"
+status.documented: "📄 documented only"
+language.description: "{name}: history, milestones and Hello World code."
+# The README heading the "Code and downloads" section is placed before.
+language.historyHeading: "History"
+code.heading: "Code and downloads"
+code.intro: "Each ZIP holds the folder, `scripts/common.sh` and the license; it unpacks with the same paths as the repository."
+impl.result: "result: {run}"
+impl.downloadZip: "⬇ Download ZIP"
+impl.fullGuide: "Full guide"
+impl.howToRun: "**How to run** (from the unzipped folder `{dir}`):"
+impl.sourceFiles: "Source files"
+
+# Timeline page.
+timeline.title: "Timeline"
+timeline.intro: "Every language in this repository, by the year it first appeared. The years and designers come from each language's `meta.yml`, where they are cited."
+timeline.year: "Year"
+timeline.language: "Language"
+timeline.designers: "Designers"
+timeline.paradigms: "Paradigms"
+timeline.note: "Note"
+timeline.undated: "No single year:"
+
+# "Sources by language", appended to the About the sources page.
+sources.heading: "Sources by language"
+sources.intro: "The sources each language page cites for its year and designers (from `meta.yml`). Every page also has its own **Sources** section."
+
+# Language cards page (site/src/pages/[...locale]/languages/index.astro).
+cards.title: "Languages"
+cards.description: "Every language in this repository, filtered by paradigm, era and category."
+cards.intro: "{count} languages. Pick a paradigm, an era (the decade the language first appeared) or a category to narrow the list. Each card opens the language page with its history and code."
+cards.paradigm: "Paradigm"
+cards.era: "Era"
+cards.category: "Category"
+cards.all: "all"
+cards.shown: "{shown} of {total} shown"
+cards.noSingleYear: "no single year"
+cards.implementation: "implementation"
+cards.implementations: "implementations"
+
+# Captions added by site/plugins/rehype-academic.mjs: "Table 1. <heading>".
+caption.table: "Table"
+caption.figure: "Figure"
+
+# The footer link (site/src/components/Footer.astro).
+footer.offTheRecord: "Off the record"
+
+# Off the record: the box at the end of each language page and the
+# attribution of the jokes kept in meta.yml (humor.jokes), scripts/generate.mjs.
+humor.boxTitle: "Off the record"
+humor.more: "More light remarks, jokes about programming and the Improbable Dictionary of Programming are on the [Off the record]({url}) page."
+humor.languageJokes: "About one language"
+humor.byAuthor: "{author}, [{title}]({url}) (accessed {date})."
+humor.originUnknown: "Origin unknown, found at [{title}]({url}) (accessed {date})."
+
+# "Anatomy" sections on language and implementation pages (scripts/generate.mjs).
+anatomy.title: "Anatomy of Hello World"
+anatomy.intro: "The program {file}, split into steps. Each step shows a piece of code and, beside it, the comment the source file gives for it. The comments are taken from the file as they are."
+anatomy.header: "From the file header"
+anatomy.line: "Line {n}"
+anatomy.lines: "Lines {from}–{to}"
+
+# Side-by-side comparator (site/src/pages/[...locale]/compare/side-by-side.astro).
+compare.title: "Side by side"
+compare.description: "Two to four Hello World implementations aligned by concept: entry point, output statement, build steps and run steps."
+compare.intro: "Pick two to four implementations. Each row compares one concept. The data comes from the source files and the build and run scripts of each folder."
+compare.pick: "Implementation {n}"
+compare.none: "(none)"
+compare.concept: "Concept"
+compare.toolchain: "Toolchain"
+compare.status: "Status"
+compare.file: "Main file"
+compare.entry: "Entry point"
+compare.entryTop: "none: the file runs from its first line"
+compare.entryUnknown: "not marked by a single line"
+compare.output: "Output statement"
+compare.build: "Build steps (build.sh)"
+compare.noBuild: "no build step"
+compare.run: "Run steps (run.sh)"
+compare.code: "Program without comments"
+compare.lineN: "line {n}"
+compare.noScript: "Without JavaScript the first two implementations are shown."
+
+# Measured facts page (site/src/pages/[...locale]/facts.astro).
+facts.title: "Measured facts"
+facts.description: "Lines of code, comments, dependencies, build output size and run time of every Hello World implementation, measured by a script."
+facts.intro: "Every number on this page was measured by `site/scripts/measure-facts.mjs` and saved in `site/data/facts.json`. Run the script again to reproduce or update them."
+facts.method: "Method"
+facts.machine: "Machine"
+facts.measuredOn: "Measured on {date}."
+facts.implementation: "Implementation"
+facts.codeLines: "Code lines"
+facts.commentLines: "Comment lines"
+facts.files: "Source files"
+facts.deps: "Direct dependencies"
+facts.steps: "Script steps"
+facts.output: "Build output"
+facts.time: "Run time"
+facts.notMeasured: "not measured"
+facts.chartLines: "Code and comment lines of the main file, command-line implementations"
+facts.chartTime: "Median run time of run.sh, command-line implementations"
+facts.legendCode: "code lines"
+facts.legendComment: "comment lines"
+facts.ms: "{v} ms"
+facts.missing: "No measurements yet. Run site/scripts/measure-facts.mjs."
+facts.kib: "{v} KiB"
+facts.methodLines: "Code and comment lines: lines of the main source file (the file that prints the greeting) that hold code, and lines that hold only a comment. Blank lines are not counted. A comment after code on the same line counts as code."
+facts.methodFiles: "Source files: files of the folder in git, except the README, the .sh scripts, lock files and images."
+facts.methodDeps: "Direct dependencies: packages named in the folder's package.json, Cargo.toml, go.mod, requirements.txt, pom.xml, .csproj or .cabal files. The toolchain and its standard library are not counted."
+facts.methodSteps: "Script steps: the steps that build.sh and run.sh announce while they run."
+facts.methodBuild: "Build output (command-line implementations only): the size of every file that build.sh writes into the folder and git ignores, compiler caches included."
+facts.methodTime: "Run time (command-line implementations only): after build.sh and one warm-up run, run.sh runs {runs} times and the median wall-clock time is kept. It includes the shell script and the start of the interpreter or runtime, so it measures what a reader waits for, not the speed of the language."
+facts.os: "Operating system"
+facts.cpu: "Processor"
+facts.memory: "Memory"
+facts.node: "Node.js (runs the script)"
+
+# Genealogy page (site/src/pages/[...locale]/genealogy.astro).
+genealogy.title: "Genealogy"
+genealogy.description: "Which languages influenced the languages of this repository, on a timeline. Every influence is cited with the words of its source."
+genealogy.intro: "Each language of this repository is placed at the year it first appeared. An arrow means that a cited source links the earlier language to the later one: as an influence, a base or a model it resembles. The table quotes the exact words of each source. Influences from languages outside this repository are listed in the table."
+genealogy.graph: "Influences between the languages of this repository, on a timeline from {from} to {to}"
+genealogy.tableHeading: "All influences"
+genealogy.from: "Influenced by"
+genealogy.to: "Language"
+genealogy.source: "Source"
+genealogy.quote: "What the source says"
+genealogy.outside: "outside this repository"
+genealogy.none: "No cited influence yet:"

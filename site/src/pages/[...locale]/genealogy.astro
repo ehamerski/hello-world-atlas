@@ -1,0 +1,137 @@
+---
+// site/src/pages/[...locale]/genealogy.astro - which languages influenced
+// the languages of this repository: a timeline graph and a table.
+// The data is the `influenced_by` list of each languages/<lang>/meta.yml
+// (through src/generated/genealogy.json, written by scripts/generate.mjs).
+// Every influence there carries its source and the exact words of that
+// source; scripts/gen-readme.py refuses a meta.yml where one is missing.
+//
+// The graph is plain SVG drawn at build time: x is the year a language
+// first appeared, and languages close in time are put on separate rows
+// (lanes) so their labels do not overlap. Only influences between two
+// languages of this repository can be drawn as arrows; the table lists
+// all of them. The SVG is a group, not an image, because its language
+// nodes are links that keyboard users can reach.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import FallbackContentNotice from '@astrojs/starlight/components/FallbackContentNotice.astro';
+import { LOCALES, format } from '../../../i18n.mjs';
+import genealogyByLocale from '../../generated/genealogy.json';
+import uiByLocale from '../../generated/ui.json';
+
+export function getStaticPaths() {
+  return LOCALES.map((l) => ({ params: { locale: l.dir || undefined }, props: { tag: l.tag } }));
+}
+
+const { tag } = Astro.props;
+const { strings: ui, translated } = uiByLocale[tag as keyof typeof uiByLocale];
+const langs = genealogyByLocale[tag as keyof typeof genealogyByLocale];
+const bySlug = new Map(langs.map((l) => [l.slug, l]));
+
+// ---- layout of the timeline graph
+const W = 960, MARGIN = 50, LANE = 34, NODE_H = 22, AXIS = 30;
+const dated = langs.filter((l) => l.year != null).sort((a, b) => a.year! - b.year! || a.name.localeCompare(b.name));
+const from = Math.floor(dated[0].year! / 10) * 10;
+const to = Math.ceil((dated[dated.length - 1].year! + 1) / 10) * 10;
+const xOf = (year: number) => MARGIN + ((year - from) / (to - from)) * (W - 2 * MARGIN);
+// Node width from the label length (an estimate for a 12px sans font).
+const widthOf = (name: string) => Math.max(36, name.length * 7 + 14);
+const laneEnds: number[] = [];
+const nodes = new Map<string, { x: number; y: number; w: number; name: string; url: string; year: number }>();
+for (const l of dated) {
+  const w = widthOf(l.name);
+  // Centered on its year, but kept inside the drawing at both ends.
+  const cx = Math.min(Math.max(xOf(l.year!), MARGIN - 20 + w / 2), W - 4 - w / 2);
+  let lane = laneEnds.findIndex((end) => end + 6 < cx - w / 2);
+  if (lane < 0) { lane = laneEnds.length; laneEnds.push(0); }
+  laneEnds[lane] = cx + w / 2;
+  nodes.set(l.slug, { x: cx, y: 12 + lane * LANE, w, name: l.name, url: l.url, year: l.year! });
+}
+const H = 12 + laneEnds.length * LANE + AXIS;
+const ticks = Array.from({ length: (to - from) / 10 + 1 }, (_, i) => from + i * 10);
+
+// Arrows: influences between two dated languages of this repository.
+const edges = langs.flatMap((l) => l.influencedBy
+  .filter((i) => i.slug && nodes.has(i.slug) && nodes.has(l.slug))
+  .map((i) => ({ a: nodes.get(i.slug!)!, b: nodes.get(l.slug)!, label: `${i.language} → ${l.name}` })));
+const path = ({ a, b }: (typeof edges)[number]) => {
+  // Side by side in time: from the right edge of one box to the left edge
+  // of the other. Close in time (the boxes overlap in x): from the bottom
+  // or top edge of one box to the facing edge of the other.
+  if (b.x - b.w / 2 - 10 < a.x + a.w / 2) {
+    const down = b.y > a.y;
+    const [x1, y1] = [a.x, down ? a.y + NODE_H : a.y];
+    const [x2, y2] = [b.x, down ? b.y - 4 : b.y + NODE_H + 4];
+    const dy = (y2 - y1) / 2;
+    return `M${x1},${y1} C${x1},${y1 + dy} ${x2},${y2 - dy} ${x2},${y2}`;
+  }
+  const [x1, y1] = [a.x + a.w / 2, a.y + NODE_H / 2];
+  const [x2, y2] = [b.x - b.w / 2 - 4, b.y + NODE_H / 2];
+  const dx = Math.max(30, Math.abs(x2 - x1) / 2);
+  return `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
+};
+
+// ---- the table: every influence, in timeline order
+const rows = [...langs].sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999) || a.name.localeCompare(b.name))
+  .flatMap((l) => l.influencedBy.map((i) => ({ lang: l, i })));
+const none = langs.filter((l) => l.influencedBy.length === 0);
+const urlOf = (slug: string | null) => (slug && bySlug.get(slug)?.url) || null;
+---
+
+<StarlightPage frontmatter={{ title: ui['genealogy.title'], description: ui['genealogy.description'] }}
+  headings={[{ depth: 2, slug: 'influences', text: ui['genealogy.tableHeading'] }]} lang={translated ? tag : 'en'}>
+  {!translated && <FallbackContentNotice />}
+  <p>{ui['genealogy.intro']}</p>
+
+  <figure class="figure not-content">
+    <figcaption id="fig-genealogy">{ui['caption.figure']} 1. {format(ui['genealogy.graph'], { from, to })}</figcaption>
+    <div class="table-scroll">
+      <svg class="chart genealogy" viewBox={`0 0 ${W} ${H}`} role="group" aria-labelledby="fig-genealogy" style={`min-width: ${W}px`}>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path class="arrow" d="M0,0 L10,5 L0,10 z" />
+          </marker>
+        </defs>
+        {ticks.map((t) => (
+          <g>
+            <line class="grid" x1={xOf(t)} x2={xOf(t)} y1="0" y2={H - AXIS + 4} />
+            <text x={xOf(t)} y={H - 8} text-anchor="middle">{t}</text>
+          </g>
+        ))}
+        {edges.map((e) => <path class="edge" d={path(e)} marker-end="url(#arrow)"><title>{e.label}</title></path>)}
+        {[...nodes.values()].map((n) => (
+          <a href={n.url}>
+            <title>{`${n.name} (${n.year})`}</title>
+            <rect class="node" x={n.x - n.w / 2} y={n.y} width={n.w} height={NODE_H} rx="4" />
+            <text class="node-label" x={n.x} y={n.y + 15} text-anchor="middle">{n.name}</text>
+          </a>
+        ))}
+      </svg>
+    </div>
+  </figure>
+
+  <h2 id="influences">{ui['genealogy.tableHeading']}</h2>
+  <div class="table-scroll not-content">
+    <table class="data-table">
+      <caption class="academic-caption">{ui['caption.table']} 1. {ui['genealogy.tableHeading']}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{ui['genealogy.to']}</th>
+          <th scope="col">{ui['genealogy.from']}</th>
+          <th scope="col">{ui['genealogy.quote']}</th>
+          <th scope="col">{ui['genealogy.source']}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(({ lang, i }) => (
+          <tr>
+            <th scope="row"><a href={lang.url}>{lang.name}</a></th>
+            <td>{urlOf(i.slug) ? <a href={urlOf(i.slug)}>{i.language}</a> : <>{i.language} <small>({ui['genealogy.outside']})</small></>}</td>
+            <td><q>{i.quote}</q></td>
+            <td><a href={i.url}>{i.title}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  {none.length > 0 && <p>{ui['genealogy.none']} {none.map((l, n) => <>{n > 0 && ', '}<a href={l.url}>{l.name}</a></>)}.</p>}
+</StarlightPage>

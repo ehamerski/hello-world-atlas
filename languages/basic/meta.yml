@@ -1,0 +1,28 @@
+# languages/basic/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "BASIC"
+year: 1964
+designers:
+  - "John Kemeny"
+  - "Thomas Kurtz"
+paradigms:
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "QB64 Phoenix Edition"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "BASIC Begins at Dartmouth. Dartmouth College, BASIC at 50"
+    url: "https://www.dartmouth.edu/basicfifty/basic.html"
+  - title: "May 1, 1964: First BASIC program runs. Computer History Museum, This Day in History"
+    url: "https://www.computerhistory.org/tdih/may/1/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Numbering lines in steps of ten leaves room for nine afterthoughts between any two ideas."
+  dictionary:
+    - term: "BASIC"
+      definition: "the language in which many programmers wrote their first bug, on line 10."

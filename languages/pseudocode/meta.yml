@@ -1,0 +1,43 @@
+# languages/pseudocode/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Pseudocode"
+year: null
+year_note: "no single origin; it is a family of notations: CLRS 1st edition 1990, PSeInt project registered 2004, Portugol Studio used at UNIVALI from 2011"
+designers: []
+paradigms:
+  - "imperative"
+  - "teaching"
+categories:
+  - folder: "portugol"
+    kind: "cli"
+    label: "Portugol"
+    toolchain: "Delégua interpreter (VisuAlg dialect), via npm"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "pseint"
+    kind: "cli"
+    label: "PSeInt"
+    toolchain: "PSeInt"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "clrs"
+    kind: "cli"
+    label: "CLRS"
+    toolchain: "none: documented only"
+    run: "– (no interpreter)"
+    status: "documented"
+sources:
+  - title: "Q&A: What makes a bestselling textbook? (Introduction to Algorithms). MIT News, 2022-02-23"
+    url: "https://news.mit.edu/2022/qa-what-makes-bestselling-textbook-introduction-algorithms-0223"
+  - title: "PSeInt project page. SourceForge"
+    url: "https://sourceforge.net/projects/pseint/"
+  - title: "Esteves, A. M. S.; Noschang, L. F.; Raabe, A. L. A.; Haendchen Filho, A. Portugol Studio: Em direção a uma comunidade aberta para pesquisa sobre o aprendizado de programação. WEI 2019. SBC OpenLib"
+    url: "https://sol.sbc.org.br/index.php/wei/article/download/6656/6552"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "The CLRS pseudocode has never crashed at run time. It has never been run."
+  dictionary:
+    - term: "Pseudocode"
+      definition: "a language in which `return the answer` is a valid statement."
