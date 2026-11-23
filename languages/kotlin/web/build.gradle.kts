@@ -30,5 +30,5 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:3.6.1")
     // Ktor logs through SLF4J. Without a logging library behind it, SLF4J
     // prints a warning and drops every message.
-    implementation("ch.qos.logback:logback-classic:1.6.7")
+    implementation("ch.qos.logback:logback-classic:1.6.8")
 }
