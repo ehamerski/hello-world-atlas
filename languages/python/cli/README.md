@@ -98,8 +98,8 @@ the source into an executable before `run.sh` can start it.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Homebrew `python@3.14` 3.14.10. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands as Intel (`brew install python@3.14`). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y python3`. Most distributions already include it [5]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install the Python install manager [8]: `winget install 9NQ7512CXL7T -e --accept-package-agreements --disable-interactivity`, then `py install 3.14`. In Git Bash run `PYTHON=python ./run.sh`. Native (PowerShell / `cmd`): `py hello.py`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `python3` with apt when missing [5]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Python: if the interpreter (`PYTHON`, default `python3`) is missing it prints the `winget` and `py install 3.14` steps and stops. [8] WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

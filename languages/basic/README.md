@@ -18,7 +18,7 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | QBasic / QuickBASIC 4.5 dialect · QB64 Phoenix Edition 4.7.0 (`qb64pe -x`) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | QB64 Phoenix Edition | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version) | – |
 | web | – | not implemented, same section | – |
 

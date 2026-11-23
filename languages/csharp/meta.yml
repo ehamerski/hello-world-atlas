@@ -2,6 +2,8 @@
 # scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
 # year and designers are cited in README.md; the same sources are below.
 name: "C#"
+other_names:
+  - "C sharp"
 year: 2000
 year_note: "announced 2000-06-26; ECMA-334 December 2001; C# 1.0 released January 2002"
 designers:

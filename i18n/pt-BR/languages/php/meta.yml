@@ -1,0 +1,11 @@
+source: languages/php/meta.yml
+source_sha: c5881f4c42afd0ce99c6567ed93d90c048c98590
+year_note: "criada em 1994 como binários CGI em C; anunciada publicamente em 1995-06-08 como PHP Tools 1.0"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "O texto fora das tags `<?php` é enviado como está, então um Hello World em PHP pode ser uma página sem nenhum PHP dentro."
+  dictionary:
+    - term: "PHP"
+      definition: "um acrônimo recursivo, \"PHP: Hypertext Preprocessor\", e por isso seu nome é o primeiro programa dentro dele que nunca termina."

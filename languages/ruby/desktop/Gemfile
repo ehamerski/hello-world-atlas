@@ -1,0 +1,13 @@
+# Gemfile - the libraries (gems) this Ruby program needs.
+#
+# Bundler reads this file: "bundle install" downloads the gems listed here
+# and writes the exact versions it chose to Gemfile.lock. Both files are
+# committed, so every reader gets the same versions.
+
+# Where Bundler downloads gems from.
+source "https://rubygems.org"
+
+# Ruby/Tk. The version is pinned with "=" so that it never changes by
+# itself. The gem is written in C and Ruby: install.sh builds its C part
+# against the Tcl/Tk 9.1 libraries that Homebrew installs.
+gem "tk", "= 0.6.0"

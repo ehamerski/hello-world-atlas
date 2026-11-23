@@ -11,8 +11,9 @@
 #       except on macOS, where Apple's Command Line Tools provide it).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the development machine); macOS Apple
-# Silicon, Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the development machine); Linux and
+# Windows (Git Bash) verified in CI; macOS Apple Silicon and WSL are
+# documented but NOT verified.
 # Sources for the install commands:
 #   https://formulae.brew.sh/formula/gnucobol
 #   https://packages.debian.org/stable/gnucobol
@@ -27,6 +28,9 @@ cd -- "$(dirname -- "$0")"
 # fix_developer_dir.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# Windows: MSYS2's ucrt64 folder (cobc, gcc, libcob) on PATH.
+# shellcheck source=gnucobol-env.sh
+. ./gnucobol-env.sh
 
 step "1/2 Check whether GnuCOBOL (cobc) is installed"
 explain "WHY: 'cobc' is the GnuCOBOL compiler. It turns hello.cob into C, and"
@@ -52,10 +56,20 @@ case "$TF_OS" in
         # (gnucobol3). It needs sudo, which is shown, not hidden.
         install_pkg "GnuCOBOL" sudo apt-get install -y gnucobol || exit 1 ;;
     windows)
-        explain "Install MSYS2 (https://www.msys2.org/), then in the 'MSYS2 UCRT64' shell:"
-        explain "    pacman -S mingw-w64-ucrt-x86_64-gnucobol mingw-w64-ucrt-x86_64-gcc"
-        explain "and add C:\\msys64\\ucrt64\\bin to PATH. Reopen Git Bash."
-        exit 1 ;;
+        # MSYS2 is preinstalled on the GitHub Actions Windows image; elsewhere
+        # install it from https://www.msys2.org/ first. Its login shell
+        # (bash -l) sets up pacman. -Sy refreshes the package lists first:
+        # the image's lists can be older than the mirrors, and old lists
+        # make pacman ask for files that no longer exist (404). --needed
+        # skips what is already installed. The package names are on
+        # https://packages.msys2.org/base/mingw-w64-gnucobol
+        [ -x "$MSYS2_ROOT/usr/bin/bash.exe" ] \
+            || fail "MSYS2 was not found in $MSYS2_ROOT. Install it from https://www.msys2.org/ first."
+        install_pkg "GnuCOBOL (MSYS2 UCRT64)" "$MSYS2_ROOT/usr/bin/bash.exe" -lc \
+            "pacman -Sy --noconfirm --needed mingw-w64-ucrt-x86_64-gnucobol mingw-w64-ucrt-x86_64-gcc" \
+            || exit 1
+        # Now that the folder has cobc in it, put it on PATH.
+        . ./gnucobol-env.sh ;;
     *)
         fail "Unknown OS. See https://gnucobol.sourceforge.io/ for downloads." ;;
 esac

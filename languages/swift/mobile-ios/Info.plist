@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Info.plist - the property list that describes the iOS app bundle.
+
+  WHAT: the name of the executable, the bundle identifier and the lowest iOS
+    version the app supports. build.sh copies this file into HelloWorld.app.
+  WHY:  iOS (and the Simulator) refuses to install a bundle without these keys.
+    CFBundleIdentifier must be unique on a device; com.example.* is the
+    reserved example prefix, so it is safe for teaching code.
+  Reference: https://developer.apple.com/documentation/bundleresources/information-property-list
+-->
+<plist version="1.0">
+<dict>
+    <!-- The name of the executable file inside HelloWorld.app (see build.sh). -->
+    <key>CFBundleExecutable</key>
+    <string>HelloWorld</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.example.helloworld.swift</string>
+    <key>CFBundleName</key>
+    <string>HelloWorld</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <!-- Lowest iOS version the app runs on. build.sh compiles for the same version. -->
+    <key>MinimumOSVersion</key>
+    <string>17.0</string>
+    <!-- 1 = iPhone only. -->
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+    </array>
+    <!-- An empty launch screen tells iOS the app supports the full screen, not the old letterbox mode. -->
+    <key>UILaunchScreen</key>
+    <dict/>
+</dict>
+</plist>

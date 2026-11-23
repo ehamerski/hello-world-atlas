@@ -172,8 +172,8 @@ Open [`server.lisp`](server.lisp) next to this list. Read
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | SBCL 2.6.10 from Homebrew (built from source, no Intel bottle [6]), Quicklisp in `~/quicklisp`, Hunchentoot 1.3.1. `otool -L bin/hello-web` lists `libSystem.B.dylib` and Homebrew's `libzstd.1.dylib` (Homebrew's SBCL depends on `zstd` [6]). |
 | macOS Apple Silicon | ⚠️ not verified | `brew install sbcl` installs a pre-built bottle [6]. Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y sbcl curl`. Debian stable (trixie) has SBCL 2.5.2 [18]; newer binaries are on sbcl.org [7]. Quicklisp installs the same way. Same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install the SBCL 2.6.10 `.msi` from sbcl.org [7] and add it to `PATH`. `install.sh` needs `curl` and `shasum` in Git Bash. Name the output `bin/hello-web.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs the cli `install.sh` (which installs `sbcl` with apt when missing), then downloads `quicklisp.lisp`, checks its SHA-256, and installs Quicklisp into `~/quicklisp`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 package `sbcl` with `pacman` when `sbcl` is missing (through the cli `install.sh`). It then downloads `quicklisp.lisp`, checks its SHA-256, and installs Quicklisp into `~/quicklisp`. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

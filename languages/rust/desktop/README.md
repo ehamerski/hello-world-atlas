@@ -40,7 +40,7 @@ and no C compiler beyond the linker Rust already uses (compare
 | Script | What it does | Why it is needed |
 |---|---|---|
 | `install.sh` | Same check as [../cli](../cli/README.md#scripts-explained), with minimum Rust 1.95. On Linux it also prints the `apt-get` command for the window libraries (not run: it needs `sudo`). | eframe is a dependency of this project, not a tool on your computer, so Cargo downloads it during the build, as Maven downloads JavaFX in [../../java/desktop](../../java/desktop/). |
-| `build.sh` | Runs `cargo build --release --locked` [2] | The first build downloads and compiles eframe, egui, and the crates they use: 179 on macOS (counted with `cargo tree`). `Cargo.lock` lists 427, because it also records crates used only on other systems (Windows, Linux, Android, the web). On the test machine, the first clean build took 4 min 18 s; later builds recompile only `main.rs`. |
+| `build.sh` | Runs `cargo build --release --locked` [2] | The first build downloads and compiles eframe, egui, and the crates they use: 176 on macOS (the `Compiling` lines of the build log). `Cargo.lock` lists 348, because it also records crates used only on other systems (Windows, Linux, Android, the web). On the test machine, the first clean build took 9 min 10 s (while other builds ran); later builds recompile only `main.rs`. |
 | `run.sh` | Runs `./target/release/hello-desktop`. `--verify` sets `TF_VERIFY=1`: the app prints the label's text on its first frame and closes itself after about 2 seconds. | The executable already contains eframe and egui. Only the operating system's own libraries are loaded at run time: on macOS, `otool -L` lists AppKit, Metal, QuartzCore, and CoreText, among others. |
 
 ## Folder structure
@@ -66,8 +66,8 @@ desktop/
   and its API changes between minor releases (in 0.37 the app is written
   as a `ui` function), so this matters.
 - **`Cargo.lock`** is committed, as in [../web](../web/README.md#folder-structure),
-  so every student builds the same 427-entry dependency tree.
-- eframe is used with its default features. Its default renderer is
+  so every student builds the same 348-entry dependency tree.
+- eframe is used with its default features minus `accesskit`, `wayland`, `winit/default` and the web-only `web_screen_reader`: the first three pull the crates `zbus`, `zvariant` and `ttf-parser`, which have open RustSec advisories with no patched release ([RUSTSEC-2026-0192](https://rustsec.org/advisories/RUSTSEC-2026-0192.html), [0370](https://rustsec.org/advisories/RUSTSEC-2026-0370.html), [0371](https://rustsec.org/advisories/RUSTSEC-2026-0371.html), [0372](https://rustsec.org/advisories/RUSTSEC-2026-0372.html)). The price: on Linux the window uses X11 (through the X11 compatibility layer on Wayland desktops) and the screen-reader bridge is off. Its default renderer is
   **wgpu**: "Switching from `wgpu (the default)` to `glow` can
   significantly reduce your binary size" [5]. wgpu "runs natively on
   Vulkan, Metal, D3D12, and OpenGL" [8]; on macOS it uses Metal, which is
@@ -121,7 +121,7 @@ Open [`src/main.rs`](src/main.rs) next to this list.
 
 ## Why this toolchain
 - **Pure Rust, one dependency:** `Cargo.toml` names only eframe, and
-  `cargo build` does the rest. On macOS none of the 179 crates compiles C
+  `cargo build` does the rest. On macOS none of the 176 crates compiles C
   code (`cargo tree` shows no `cc`, `cmake`, or `bindgen` crate), so there is
   no Xcode or separate GUI SDK to install. Linux needs a few system
   libraries.
@@ -137,8 +137,15 @@ Open [`src/main.rs`](src/main.rs) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Rust 1.98.1, eframe 0.37.0, rendered with Metal through wgpu. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Before building, eframe 0.37's README says to run: `sudo apt-get install libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libssl-dev` [5]. `install.sh` prints this command. The egui repository's current README lists a longer command (it adds `libclang-dev libgtk-3-dev`) [1]; use it if the build still fails. wgpu uses Vulkan or OpenGL there [8]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Rust with rustup and the MSVC Build Tools, as in [../cli](../cli/README.md#platform-notes). wgpu uses D3D12 or Vulkan [8]. The executable is `target\release\hello-desktop.exe`. Under WSL a window needs WSLg. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libxkbcommon-x11-0 mesa-vulkan-drivers libgl1-mesa-dri libvulkan1 libegl1` with apt when any is missing, then runs the rustup installer when Rust 1.95 or newer is missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Rust: if Rust 1.95 or newer is missing it prints `winget install --id Rustlang.Rustup -e` [13] and stops. rustup needs the Visual Studio C++ Build Tools [14]. wgpu uses D3D12 or Vulkan [8]. WSL not verified; it behaves like Linux, and a window needs WSLg or an X server. |
+
+**The rustup script is not digest-checked.** rustup publishes SHA-256
+files for the `rustup-init` programs, but not for the `rustup-init.sh`
+script behind `https://sh.rustup.rs` [20], and that script changes with each
+rustup release. So `install.sh` saves it to
+`~/.cache/hello-world-rust/rustup-init.sh` and shows the path, so you can
+read the script before you answer `y` to run it.
 
 ## Expected output
 `./run.sh` opens this window (on the test machine, macOS was in dark mode,
@@ -170,3 +177,4 @@ Hello, World!
 10. The Rust Programming Language, ch. 3.1 "Variables and Mutability". The Rust Project. <https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html> (accessed 2026-10-31)
 11. The Rust Programming Language, ch. 13.1 "Closures". The Rust Project. <https://doc.rust-lang.org/book/ch13-01-closures.html> (accessed 2026-10-31)
 12. egui CHANGELOG. emilk/egui (GitHub). <https://github.com/emilk/egui/blob/main/CHANGELOG.md> (accessed 2026-10-31)
+20. The rustup book: Other installation methods. The Rust Project. <https://rust-lang.github.io/rustup/installation/other.html> (accessed 2026-11-19)

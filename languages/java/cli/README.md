@@ -31,7 +31,7 @@ builds this project in the same way.
 | Script | What it does | Why it is needed |
 |---|---|---|
 | `install.sh` | 1. Runs `javac -version` and checks that the version is 21 or newer. 2. Checks that `mvn` is on `PATH`. If one is missing, it shows the install command (Homebrew, apt or winget) and runs it only if you answer `y`. | Java is compiled: the JDK holds the compiler and the JVM, and Maven drives the build. On macOS `/usr/bin/javac` always exists, but it only works when a JDK is installed, so the script runs it instead of only checking that the file exists. |
-| `build.sh` | Runs `mvn --batch-mode --quiet package`. | Maven's phases "are executed sequentially": `validate`, `compile`, `test`, then `package`, which takes "the compiled code and package[s] it in its distributable format, such as a JAR" [2]. The JVM runs bytecode, never `.java` files [8]. |
+| `build.sh` | Runs `mvn --batch-mode --quiet package`. | Maven's phases "are executed sequentially": `validate`, `compile`, `test`, then `package`, which takes "the compiled code and package[s] it in its distributable format, such as a JAR" [2]. The JVM runs bytecode, never `.java` files [8]. The first build downloads Maven's plugins from Maven Central into `~/.m2/repository`; later builds reuse them. |
 | `run.sh` | Runs `java -jar target/hello-cli.jar`. `--verify` does the same (a cli program ends by itself). | `java` starts the JVM, which reads the manifest of the JAR file to find the main class (`com.example.hello.Hello`) [4]. |
 
 ## Folder structure
@@ -116,8 +116,8 @@ form is used here.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Temurin 21.0.8, Maven 3.9.16. The Homebrew `maven` formula depends on Homebrew's `openjdk` [7]; on the verification machine, its `mvn` wrapper script uses `JAVA_HOME` when it is set and that `openjdk` otherwise (check with `mvn -v`). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. `brew install --cask temurin@21` installs the arm64 JDK [16]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install openjdk-21-jdk maven`. `openjdk-21-jdk` is in Debian 13 "trixie" and Ubuntu 24.04 "noble" [17][18], but not in Debian 12, which only ships Java 17; use Temurin from Adoptium there [6]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | JDK: `winget install --id EclipseAdoptium.Temurin.21.JDK -e` [19]. Maven: unzip the binary archive and add its `bin` folder to PATH [5]. Native commands (PowerShell): `mvn package`, then `java -jar target\hello-cli.jar`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `openjdk-21-jdk` and `maven` with apt when missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` puts the JDK from `JAVA_HOME_21_X64` on PATH when that variable is set. It does not install a JDK or Maven: if one is missing it prints the `winget` Temurin 21 command or the Maven zip steps and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

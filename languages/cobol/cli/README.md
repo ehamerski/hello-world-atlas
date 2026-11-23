@@ -122,8 +122,8 @@ Open [`hello.cob`](hello.cob) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | GnuCOBOL 3.2.0 (Homebrew), Apple clang from the Command Line Tools. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands: `brew install gnucobol` [6]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y gnucobol`; the `gnucobol` package is the "compiler package for default GnuCOBOL" and depends on `gnucobol3` [8]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install MSYS2, then in the "MSYS2 UCRT64" shell `pacman -S mingw-w64-ucrt-x86_64-gnucobol mingw-w64-ucrt-x86_64-gcc` [9], and add `C:\msys64\ucrt64\bin` to PATH. Name the output `bin/hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `gnucobol` with apt when `cobc` is missing [8]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `gnucobol` and `gcc` with `pacman` when `cobc` is missing [9]. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

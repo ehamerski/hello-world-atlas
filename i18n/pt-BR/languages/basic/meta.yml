@@ -1,0 +1,10 @@
+source: languages/basic/meta.yml
+source_sha: 5ed8fcefa1dcc9990d9941abef711fc09116709c
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "Numerar as linhas de dez em dez deixa espaço para nove ideias de última hora entre quaisquer duas ideias."
+  dictionary:
+    - term: "BASIC"
+      definition: "a linguagem em que muitos programadores escreveram seu primeiro bug, na linha 10."

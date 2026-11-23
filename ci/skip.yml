@@ -1,0 +1,39 @@
+# ci/skip.yml - implementations that .github/workflows/ci-matrix.yml does
+# not run on one operating system, and why.
+#
+# WHAT: one entry per folder and OS. scripts/verify-all.sh reads this file
+#   and prints each skipped folder as [SKIP] with its reason, so nothing is
+#   skipped silently.
+# WHY:  some toolchains cannot be installed on a GitHub-hosted runner, or
+#   cannot run there (for example, no package for that OS). Each reason
+#   cites a source.
+#
+# Format (read by awk in verify-all.sh, so keep one "key: value" per line):
+#   - folder: languages/<language>/<category>
+#     os: linux | windows | macos | all
+#     reason: "short reason"
+#     source: "https://..."
+skips:
+  # The windows-latest runner has no GPU (GitHub lists GPU runners only among
+  # its paid "larger runners":
+  # https://docs.github.com/en/actions/reference/runners/github-hosted-runners),
+  # and LÖVE 11.5 needs OpenGL 2.1 or later. With Mesa's software OpenGL (the MSYS2 mesa package, loaded
+  # through SDL_OPENGL_LIBRARY) the window was drawn and "Hello, World!"
+  # printed, but lovec.exe then ended with exit code 87, so the step fails.
+  # The iOS app needs Xcode's iphonesimulator SDK and the iOS Simulator, which
+  # ship only inside the full Xcode app. Linux and Windows cannot run them at all.
+  # On macOS the folder runs like any other; .github/workflows/ios.yml runs it
+  # on a macOS runner.
+  - folder: languages/swift/mobile-ios
+    os: linux
+    reason: "the iOS SDK and the iOS Simulator ship only inside Xcode, which runs only on macOS"
+    source: "https://developer.apple.com/xcode/"
+  - folder: languages/swift/mobile-ios
+    os: windows
+    reason: "the iOS SDK and the iOS Simulator ship only inside Xcode, which runs only on macOS"
+    source: "https://developer.apple.com/xcode/"
+  - folder: languages/lua/desktop
+    os: windows
+    reason: "no GPU on the runner; LÖVE needs OpenGL 2.1+, and with Mesa software OpenGL it exits with code 87 after drawing"
+    source: "https://github.com/love2d/love/blob/11.5/readme.md"
+

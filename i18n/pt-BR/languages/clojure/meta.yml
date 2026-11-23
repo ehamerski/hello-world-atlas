@@ -1,0 +1,15 @@
+source: languages/clojure/meta.yml
+source_sha: 325cda73d684118338bcf40d30ceeccacc9c1e71
+year_note: "Rich Hickey iniciou o trabalho em 2005; anunciado em 2007-10-17 como alfa; Clojure 1.0 lançado em maio de 2009"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+  - folder: "web"
+    run: "http://localhost:8080/"
+humor:
+  line: "O Hello World em Clojure tem uma linha, e o Lisp cumpre a promessa sobre os parênteses: abre um no início e o fecha no fim. A JVM acorda primeiro, depois o programa diz olá e vai embora."
+  dictionary:
+    - term: "Clojure"
+      definition: "um Lisp que se mudou para a Java Virtual Machine e levou os parênteses junto."

@@ -136,8 +136,8 @@ Open [`hello.prg`](hello.prg) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | Harbour 3.2.0 built from source by `install.sh` with Apple clang 21. |
 | macOS Apple Silicon | ⚠️ not verified | Same script. Harbour's CI includes macOS [1], but this project did not test arm64. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Same source build. Install a C compiler and make first: `sudo apt-get install -y build-essential`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Download `harbour-3.2.0-win-mingw64.7z` from the release [2], add its `bin` folder to PATH and install a MinGW-w64 C compiler (e.g. via MSYS2). Name the output `bin/hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` downloads `harbour-3.2.0.src.tar.gz` from the Harbour releases, checks its SHA-256, and builds it with `make install` into `~/.local/harbour-3.2.0`. It needs `make` and `cc`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` downloads `harbour-3.2.0-win-mingw64.7z` [2], checks its SHA-256, and unpacks it with 7-Zip into `~/.local/harbour-3.2.0`. It needs 7-Zip and a MinGW-w64 `gcc` on PATH. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

@@ -54,9 +54,9 @@ side-effects whatsoever" [2].
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | `ghc hello.hs` (GHC 9.10.3 (GHCup)) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | GHC (via GHCup) | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop version](#why-there-is-no-desktop-version) | – |
-| web | [web/](web/) | Cabal package · Scotty web framework (WAI/Warp) from Hackage | ✅ verified on macOS Intel |
+| web | [web/](web/) | Scotty, Cabal | ✅ |
 
 ## History
 Haskell was designed by a committee. The Preface of the Haskell Report

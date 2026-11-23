@@ -1,0 +1,15 @@
+source: languages/java/meta.yml
+source_sha: 4cd5ee146a723ecc0f59d9c13711fbf684f1b89a
+year_note: "o Green Project começou na Sun em 1991 (a linguagem se chamava Oak); anunciada em 1995-05-23; Java 1.0 lançada em 1996-01-23"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+  - folder: "desktop-swing"
+    run: "janela"
+humor:
+  line: "O Hello World de Java precisa de uma classe, de um método estático público e de um array de argumentos que ele nunca lê. Chega vestido para uma reunião que acabou sendo um café."
+  dictionary:
+    - term: "Java"
+      definition: "uma ilha, um café e uma linguagem; só um dos três precisa de `public static void main`."

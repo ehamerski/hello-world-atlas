@@ -1,0 +1,13 @@
+source: languages/kotlin/meta.yml
+source_sha: 02ad1e0be155f8095dc35949dd03f94e49f4dc1e
+year_note: "o projeto começou em 2010; a JetBrains o apresentou na JVM Language Summit em julho de 2011; o Kotlin 1.0 foi lançado em fevereiro de 2016"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+  - folder: "mobile-android"
+    label: "Android"
+    run: "a aplicação no emulador Android"
+humor:
+  line: "O Hello World de Kotlin mantém uma palavra da cerimônia do Java, `main`, e abandona a classe, o `static`, o array de argumentos e o ponto e vírgula. A JVM o executa sem perguntar para onde foi a papelada."

@@ -1,0 +1,38 @@
+# languages/qcl/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "QCL (Quantum Computation Language)"
+year: 1998
+year_note: "title page date of the author's master thesis on QCL (23 July 1998); the archive used here is version 0.6.7 (the interpreter reports 0.6.4)"
+designers:
+  - "Bernhard Oemer"
+paradigms:
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "QCL 0.6.7 interpreter and simulator, built from source (GNU readline)"
+    run: "prints `: Hello, World! ` (QCL adds the prefix and the trailing space)"
+    status: "verified"
+    note: "The interpreter prints each print with a ': ' prefix and a trailing space; plotting is not built"
+sources:
+  - title: "QCL source archive, qcl-0.6.7.tgz (README, qcl.cc). Bernhard Oemer"
+    url: "https://tph.itp.tuwien.ac.at/~oemer/tgz/qcl-0.6.7.tgz"
+  - title: "Qiskit documentation (IBM)"
+    url: "https://quantum.cloud.ibm.com/docs/en/guides/tools-intro"
+  - title: "Q# overview. Microsoft Learn"
+    url: "https://learn.microsoft.com/azure/quantum/qsharp-overview"
+  - title: "QCL - A Programming Language for Quantum Computers (Bernhard Oemer)"
+    url: "https://tph.itp.tuwien.ac.at/~oemer/qcl.html"
+  - title: "A Procedural Formalism for Quantum Computing (master thesis). Bernhard Oemer"
+    url: "https://tph.itp.tuwien.ac.at/~oemer/doc/qcldoc.pdf"
+  - title: "Quantum Programming in QCL (master thesis). Bernhard Oemer"
+    url: "https://tph.itp.tuwien.ac.at/~oemer/doc/quprog.pdf"
+  - title: "Structured Quantum Programming (PhD thesis). Bernhard Oemer"
+    url: "https://tph.itp.tuwien.ac.at/~oemer/doc/structquprog.pdf"
+# humor: one light line for the Off the record page.
+humor:
+  line: "QCL lets a program be in superposition of two answers, which is more than most of its readers can say about their weekend plans."
+  dictionary:
+    - term: "QCL"
+      definition: "a language where the program is both a yes and a no until someone looks at it."

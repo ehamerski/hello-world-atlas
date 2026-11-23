@@ -21,7 +21,7 @@ open-source successor ("100% compatible with Clipper compilers" [2]).
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Clipper 5 syntax · Harbour 3.2.0 (`hbmk2`), built from source | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | Harbour | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version) | – |
 | web | – | not implemented, same section | – |
 

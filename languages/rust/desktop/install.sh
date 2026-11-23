@@ -11,8 +11,9 @@
 #       rust-version, copied into this folder's Cargo.toml).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://www.rust-lang.org/tools/install
 #   https://rust-lang.github.io/rustup/installation/index.html
@@ -43,13 +44,36 @@ rust_ok() {
 }
 
 # On Linux, the window needs the X11/Wayland keyboard and window libraries
-# with their development files. eframe's README gives this command for
-# Debian/Ubuntu. It needs sudo, so it is only printed, never run.
+# with their development files. eframe's README gives the first five
+# packages for Debian/Ubuntu:
+#   https://github.com/emilk/egui/tree/main/crates/eframe#linux
+# The others are needed to RUN the program, not to build it:
+#   - libxkbcommon-x11-0: winit loads libxkbcommon-x11.so at start-up and
+#     panics without it ("Library libxkbcommon-x11.so could not be loaded",
+#     seen on a bare GitHub Actions runner);
+#   - mesa-vulkan-drivers, libgl1-mesa-dri, libvulkan1, libegl1: egui draws
+#     with wgpu, which needs a Vulkan or OpenGL driver. On a machine with no
+#     GPU (a CI runner, a virtual machine) Mesa's software renderers
+#     (lavapipe for Vulkan, llvmpipe for OpenGL) provide one.
+#     Package pages: https://packages.ubuntu.com/search?keywords=mesa-vulkan-drivers
+# apt-get needs sudo, so the command is shown and runs only if you agree.
+LINUX_PKGS="libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libssl-dev libxkbcommon-x11-0 mesa-vulkan-drivers libgl1-mesa-dri libvulkan1 libegl1"
 if [ "$TF_OS" = linux ]; then
     step "Linux only: system libraries for the window"
     explain "WHY: eframe talks to the window system through these C libraries."
-    explain "Install them once (Debian/Ubuntu), as shown in eframe's README:"
-    explain "    sudo apt-get install libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev libssl-dev"
+    # dpkg -s fails for a package that is not installed.
+    missing=
+    for pkg in $LINUX_PKGS; do
+        dpkg -s "$pkg" >/dev/null 2>&1 || missing="$missing $pkg"
+    done
+    if [ -z "$missing" ]; then
+        ok "All system libraries are installed."
+    else
+        # $missing is deliberately unquoted: one argument per package.
+        # shellcheck disable=SC2086
+        install_pkg "the window libraries" sudo apt-get install -y $missing \
+            || warn "Continuing without them: the build may fail."
+    fi
 fi
 
 step "1/2 Check whether Rust 1.$RUST_MIN_MINOR (or newer) is installed"
@@ -66,10 +90,14 @@ explain "WHY: rustup is the official installer. It puts rustc, cargo, and the st
 explain "     library in ~/.cargo and ~/.rustup (no sudo) and can update them later."
 case "$TF_OS" in
     macos-intel|macos-arm|linux)
-        # The command published on https://www.rust-lang.org/tools/install.
-        # It downloads rustup-init over HTTPS (TLS 1.2 or newer) and runs it.
-        install_pkg "Rust (rustup)" sh -c \
-            "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" || exit 1 ;;
+        # The script behind the command on https://www.rust-lang.org/tools/install,
+        # saved to a file first (HTTPS, TLS 1.2 or newer) so you can read it
+        # before it runs. It downloads rustup-init and runs it.
+        rustup_script=${XDG_CACHE_HOME:-$HOME/.cache}/hello-world-rust/rustup-init.sh
+        install_pkg "rustup's installer script (download only)" \
+            curl --proto '=https' --tlsv1.2 -fsSL --create-dirs https://sh.rustup.rs -o "$rustup_script" || exit 1
+        explain "The script is saved in $rustup_script; you can read it before the next step."
+        install_pkg "Rust (rustup)" sh "$rustup_script" || exit 1 ;;
     windows)
         explain "On Windows, run this command in PowerShell, then reopen Git Bash:"
         explain "    winget install --id Rustlang.Rustup -e"

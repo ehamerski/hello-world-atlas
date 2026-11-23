@@ -1,0 +1,13 @@
+source: languages/cpp/meta.yml
+source_sha: 6bdde4adae6f64f0fee286defaaafd4a0c971b89
+year_note: "trabalho iniciado em 1979 como \"C with Classes\"; nome C++ em 1983; primeira versão comercial (Cfront) em outubro de 1985; padrão ISO em 1998"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "`std::cout << \"Hello, World!\"` desloca uma saudação para a esquerda, até o console. Os bits não se importam."
+  dictionary:
+    - term: "C++"
+      definition: "a resposta à pergunta \"E se o C tivesse um pouco mais de tudo?\""

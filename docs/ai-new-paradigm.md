@@ -13,7 +13,7 @@ the four paradigms this repository already covers.
 - [Evidence so far](#evidence-so-far)
 - [Counter-arguments](#counter-arguments)
 - [What this repository shows](#what-this-repository-shows)
-- [What it means for a student](#what-it-means-for-a-student)
+- [What it means for students and professionals](#what-it-means-for-students-and-professionals)
 - [Sources](#sources)
 
 > **This is an opinion piece.** The quotes, numbers and dates are facts,
@@ -54,6 +54,16 @@ paradigm it has to change **what a program is made of** and **how it
 becomes a running thing**, the same two questions that separate the four
 paradigms in [`docs/paradigms.md`](paradigms.md#what-a-paradigm-is).
 
+History suggests that such a change can start small. Simula was designed
+for simulation programs, and its authors "introduced the basic concepts of
+what later became object-orientation" [12]. Alan Kay then wrote that "most
+of my ideas from then on took their roots from Simula" [13]. A structuring
+idea from one domain, simulation, became a general paradigm over time. The
+[paradigms page](paradigms.md#where-object-orientation-came-from) follows
+the path from Simula to Swift. This essay does not claim that
+intent-oriented programming will follow the same path, only that a paradigm
+can be recognized late.
+
 ## The proposed paradigm: intent-oriented programming
 This section adds one row to the table in [`docs/paradigms.md`](paradigms.md#what-a-paradigm-is):
 
@@ -88,7 +98,7 @@ check:   exit status == 0
 ```
 
 From this, a generator could produce [`c/cli/hello.c`](../languages/c/cli/hello.c),
-[`python/cli/hello.py`](../languages/python/cli/hello.py) or any other of the 46
+[`python/cli/hello.py`](../languages/python/cli/hello.py) or any other of the 100
 runnable implementations here. All of them pass the same two checks. In
 intent-oriented programming those four lines are the program, and the C
 or Python file is output, the way a `.o` file is output today.
@@ -146,6 +156,30 @@ the algorithm**, written in whatever language fits. Prolog searches for a
 proof with a fixed strategy. A generator searches through possible
 programs and is guided by what it learned from existing code.
 
+The idea that checks belong **inside** the program is older than AI too.
+Bertrand Meyer's Design by Contract, built into
+[Eiffel](../languages/eiffel/README.md), lets a routine state "The client's
+obligation, which protects the supplier" (the precondition) and "The
+client's benefit, which describes what the supplier must do" (the
+postcondition) [14]. Meyer's 1992 article gives the aim as helping "improve
+the reliability of software systems" [15]. A contract is a check that is
+written next to the code and runs with it
+([`eiffel/cli/hello.e`](../languages/eiffel/cli/hello.e) has one even for
+Hello World; see [Design by Contract](paradigms.md#design-by-contract)). In
+this essay's terms it is the nearest thing among the languages here to
+principle 2. The comparison is this essay's own, not Meyer's. In an
+intent-oriented program the contracts would be the part of the source that a
+person writes and a model cannot change.
+
+Sampling has a parallel in quantum programming. Measuring a quantum state
+gives each outcome "with probability equal to the absolute value squared"
+of its amplitude [16], so a quantum program is judged over many runs, not by
+one. [QCL](../languages/qcl/README.md), the quantum language of this
+repository, is read in the same way, although its Hello World uses no qubit
+(see [Quantum](paradigms.md#quantum)). Generated code differs from a
+quantum measurement, but principle 3 draws the same lesson from both: when a
+single run proves little, correctness has to come from checks.
+
 The "automatic programming" dream is older still. Frederick P. Brooks, Jr. wrote in
 1986: "For almost 40 years, people have been anticipating and writing
 about 'automatic programming', the generation of a program for solving a
@@ -164,11 +198,11 @@ ready.
   with 100 samples per problem" [3]. This supports principles 2 and 3:
   generating many candidates and keeping the one that passes the tests
   works much better than trusting a single answer.
-- **Adoption is wide.** In the Stack Overflow Developer Survey 2025, "84%
+- **Adoption is wide (as of 2025).** In the Stack Overflow Developer Survey 2025, "84%
   of respondents are using or planning to use AI tools in their
   development process", and "51% of professional developers use AI tools
   daily" [8].
-- **Trust is low.** The same survey (2025): "More developers actively
+- **Trust is low (as of 2025).** The same survey: "More developers actively
   distrust the accuracy of AI tools (46%) than trust it (33%)". The
   biggest frustration, "cited by 66% of developers", is "AI solutions that
   are almost right, but not quite" [8]. Without checks, "almost right" is
@@ -268,21 +302,32 @@ that the output contains `Hello, World!`;
 link. A human reviewer approved each step.
 
 This is a small version of the loop described above: the intent is the
-specification, the checks are the scripts and the reviews, and the 47
-implementations listed in
+specification, the checks are the scripts and the reviews, and the 101
+implementations in 47 languages listed in
 [`languages/README.md`](../languages/README.md#all-implementations) are the
-generated artifacts. This is one project with a simple program, so it
-proves nothing on its own. It does show where the human effort went: into
+generated artifacts. The second round added the `mobile` category, where
+a check has to start a virtual phone and look at its screen. It also showed the limit of the
+loop: some fixes were to the checks, not to the programs. The Android check
+([`kotlin/mobile-android/run.sh`](../languages/kotlin/mobile-android/run.sh))
+had to learn to tap **Wait** on the "not responding" dialog that Android can
+show on a cold-booted emulator, and
+[`scripts/verify-all.sh`](../scripts/verify-all.sh) had to give every
+implementation its own port. So the checks need review too, and a reviewer
+has to read them with the same care as the code. This is one project with a
+simple program, so it proves nothing on its own. It does show where the human effort went: into
 the specification, the plan, the checks, and the review, not into typing
 `printf`.
 
-## What it means for a student
+## What it means for students and professionals
 - **Learn the four paradigms anyway.** Generated code is written in
   existing languages, and someone has to judge whether it is right. You
   cannot review a Prolog program, or a Haskell one, if you do not know how
   it thinks ([`docs/paradigms.md`](paradigms.md)).
 - **Learn to write checks.** A test, a type or a contract is the part of
-  the program that a generator cannot argue with.
+  the program that a generator cannot argue with. Eiffel's `require` and
+  `ensure` are the oldest example in this repository.
+- **Learn to read checks.** A wrong check accepts wrong code, so a check is
+  reviewed like code.
 - **Learn to state intent precisely.** Dijkstra's warning [11] still
   holds: the skill is to say exactly what you mean, in prose and in formal
   checks.
@@ -295,7 +340,12 @@ the specification, the plan, the checks, and the review, not into typing
 5. DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines. Omar Khattab et al., arXiv:2310.03714, 2023. <https://arxiv.org/abs/2310.03714> (accessed 2026-11-02)
 6. Algorithm = Logic + Control. Robert Kowalski, Communications of the ACM, July 1979. <https://www.doc.ic.ac.uk/~rak/papers/algorithm%20=%20logic%20+%20control.pdf> (accessed 2026-11-02)
 7. No Silver Bullet: Essence and Accident in Software Engineering. Frederick P. Brooks, Jr., Proceedings of the IFIP Tenth World Computing Conference, Elsevier, 1986, pp. 1069–1076; reprinted in *The Mythical Man-Month*, anniversary edition, Addison-Wesley, 1995. Copy used: <https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf> (accessed 2026-11-02)
-8. Stack Overflow Developer Survey 2025: AI. Stack Overflow, 2025. <https://survey.stackoverflow.co/2025/ai> (accessed 2026-11-02)
+8. Stack Overflow Developer Survey 2025: AI. Stack Overflow, 2025. <https://survey.stackoverflow.co/2025/ai> (accessed 2026-11-20)
 9. The Impact of AI on Developer Productivity: Evidence from GitHub Copilot. Sida Peng, Eirini Kalliamvakou, Peter Cihon, Mert Demirer, arXiv:2302.06590, 2023. <https://arxiv.org/abs/2302.06590> (accessed 2026-11-02)
 10. Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity. Joel Becker, Nate Rush, Beth Barnes, David Rein, METR, arXiv:2507.09089, 2025. <https://arxiv.org/abs/2507.09089> (accessed 2026-11-02)
 11. EWD 667: On the foolishness of "natural language programming". Edsger W. Dijkstra; E. W. Dijkstra Archive, University of Texas at Austin. <https://www.cs.utexas.edu/~EWD/transcriptions/EWD06xx/EWD667.html> (accessed 2026-11-02)
+12. The Birth of Simula. Stein Krogdahl, Department of Informatics, University of Oslo. <https://www.mn.uio.no/english/services/it/simula/bibliography/history/sk-the-birth-of-simula.pdf> (accessed 2026-11-16)
+13. The Early History of Smalltalk. Alan C. Kay, Second History of Programming Languages conference (HOPL-II), ACM, 1993. Full-text copy: <https://worrydream.com/EarlyHistoryOfSmalltalk/> (accessed 2026-11-16)
+14. Design by Contract, Assertions and Exceptions (Eiffel Tutorial). Eiffel Software, eiffel.org. <https://www.eiffel.org/doc/eiffel/ET-_Design_by_Contract_%28tm%29%2C_Assertions_and_Exceptions> (accessed 2026-11-16)
+15. Applying "Design by Contract". Bertrand Meyer, *Computer* (IEEE), October 1992. Author's copy, ETH Zurich. <https://se.inf.ethz.ch/~meyer/publications/computer/contract.pdf> (accessed 2026-11-16)
+16. Quantum information (Basics of quantum information, Single systems). IBM Quantum Learning. <https://quantum.cloud.ibm.com/learning/en/courses/basics-of-quantum-information/single-systems/quantum-information> (accessed 2026-11-16)

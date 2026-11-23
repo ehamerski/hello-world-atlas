@@ -1,0 +1,11 @@
+source: languages/cobol/meta.yml
+source_sha: bb5fe2724688a74ee0f2a099a1a251ccba4e17f2
+year_note: "reunião no Pentágono e CODASYL em maio de 1959; relatório COBOL-60 publicado em abril de 1960"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "O COBOL exige que o programa diga seu nome em uma IDENTIFICATION DIVISION antes de poder dizer qualquer coisa. É a linguagem mais educada deste repositório."
+  dictionary:
+    - term: "COBOL"
+      definition: "uma linguagem que escreve `ADD A TO B GIVING C`, para que um programa possa ser lido em voz alta em uma reunião."

@@ -1,0 +1,15 @@
+# osv-scanner.toml - documented exception for osv-scanner (OSV-Scanner v2)
+# Config format: https://google.github.io/osv-scanner/configuration/
+#
+# HSEC-2023-0007 affects every version of the "base" package, from 3.0.3.1
+# to the newest (4.22.0.0), so no fixed release exists.
+# Advisory: https://osv.dev/vulnerability/HSEC-2023-0007
+# It concerns Numeric.readFloat taking time and memory linear in the size of
+# the number a string denotes (for example "1e1000000000"). This program
+# never calls readFloat, and neither do scotty 0.30, warp, wai, http2 or http-types (their sources do not contain the name): app/Main.hs only uses "read" to turn the PORT
+# environment variable into an Int, and serves a fixed text.
+# Review this entry again on the date below.
+[[IgnoredVulns]]
+id = "HSEC-2023-0007"
+effectiveUntil = 2027-02-17T00:00:00Z
+reason = "base has no fixed release; readFloat is never called by this program (the PORT variable is parsed to an Int with read)"

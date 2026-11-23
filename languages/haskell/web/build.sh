@@ -18,8 +18,9 @@
 #       a while; later builds only recompile Main.hs.
 # HOW:  ./build.sh             (after ./install.sh; run again after editing)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -32,6 +33,9 @@ cd -- "$(dirname -- "$0")"
 # Puts ~/.ghcup/bin on PATH.
 # shellcheck source=ghcup-env.sh
 . ./ghcup-env.sh
+# CABAL_PROJECT_OPTS (empty except on Windows).
+# shellcheck source=cabal-project.sh
+. ./cabal-project.sh
 
 CABAL=${CABAL:-cabal}
 
@@ -52,7 +56,8 @@ explain "     updates only fetch what changed."
 step "3/3 Build with 'cabal build'"
 explain "WHY: Cabal downloads and compiles every package pinned in"
 explain "     cabal.project.freeze, then compiles app/Main.hs."
-"$CABAL" build
+# shellcheck disable=SC2086  # CABAL_PROJECT_OPTS is empty or one option
+"$CABAL" build $CABAL_PROJECT_OPTS
 
 # list-bin prints the path of the executable inside dist-newstyle/.
-ok "Built $("$CABAL" list-bin hello-web). Next: ./run.sh"
+ok "Built $("$CABAL" list-bin $CABAL_PROJECT_OPTS hello-web). Next: ./run.sh"

@@ -99,3 +99,31 @@ backup/
 *.ali
 alire/
 *.hrb
+
+# --- Swift (SPM) ---
+.build/
+Package.resolved
+# Compiled hello binary (macOS has no extension; Linux would be hello)
+# The languages/ prefix prevents hiding source files named hello.*
+languages/*/cli/hello
+languages/*/desktop/hello
+languages/*/web/hello
+languages/*/web/server
+languages/*/web-angular/hello
+languages/*/web-react/hello
+languages/*/web-vue/hello
+languages/*/web-rails/hello
+languages/*/desktop-swing/hello
+
+# Pharo VM and image cache (downloaded by install.sh; never commit build output)
+languages/smalltalk/.cache/
+
+# Pharo files that land in the checkout root when Pharo is started from there
+/Pharo.image
+/Pharo.changes
+/Pharo*.sources
+/pharo
+/pharo-ui
+/pharo-vm/
+/pharo-local/
+/PharoDebug.log

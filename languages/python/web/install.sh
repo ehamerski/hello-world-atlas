@@ -14,8 +14,9 @@
 # HOW:  ./install.sh       (run once; safe to run again)
 #       PYTHON=python ./install.sh   use another interpreter command
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://flask.palletsprojects.com/en/stable/installation/
 #   https://docs.python.org/3/library/venv.html

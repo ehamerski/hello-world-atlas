@@ -11,8 +11,8 @@
 #       ./run.sh --verify   self-check used by scripts/verify-all.sh: start
 #                           the server, fetch the page once with curl, stop
 #
-# Platforms: macOS Intel (verified); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified); Linux and Windows (Git Bash) verified in
+# CI; macOS Apple Silicon and WSL are documented but NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu

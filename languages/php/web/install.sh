@@ -11,8 +11,9 @@
 # HOW:  ./install.sh       (run once; safe to run again)
 #       PHP=/path/to/php ./install.sh   check another interpreter
 #
-# Platforms: macOS Intel (verified on the test machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the test machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://www.php.net/manual/en/install.macosx.packages.php
 #   https://www.php.net/manual/en/install.unix.debian.php

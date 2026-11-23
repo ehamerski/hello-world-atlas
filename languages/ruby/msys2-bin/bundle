@@ -1,0 +1,10 @@
+#!/bin/sh
+# bundle - Windows only: runs MSYS2's Bundler from Git Bash (see ../use-msys2-ruby.sh)
+#
+# WHY: MSYS2's C:\msys64\ucrt64\bin\bundle is one file that cmd.exe, sh and
+#      Ruby can all read, and it does not start with "#!". Git Bash fakes the
+#      "x" permission bit from the first bytes of a file ("noacl" mount), so it
+#      does not see that file as a command. This file starts with "#!", and
+#      "sh FILE" runs the sh part of MSYS2's file, which starts its Ruby.
+# Source: https://cygwin.com/cygwin-ug-net/using-filemodes.html
+exec sh /c/msys64/ucrt64/bin/bundle "$@"

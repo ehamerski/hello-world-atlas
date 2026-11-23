@@ -11,12 +11,14 @@
 # HOW:  ./install.sh       (run once; safe to run again)
 #       SBCL=/path/to/sbcl ./install.sh   check another sbcl command
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://formulae.brew.sh/formula/sbcl
 #   https://www.sbcl.org/platform-table.html
 #   https://www.sbcl.org/getting.html
+#   https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-sbcl
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -26,6 +28,8 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, TF_OS, has_cmd, install_pkg.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# shellcheck source=../use-msys2-sbcl.sh
+. ../use-msys2-sbcl.sh
 
 SBCL=${SBCL:-sbcl}
 
@@ -53,10 +57,17 @@ case "$TF_OS" in
         # release; binaries for other systems are on sbcl.org).
         install_pkg "SBCL" sudo apt-get install -y sbcl || exit 1 ;;
     windows)
-        explain "Download the Windows installer (.msi) from"
-        explain "    https://www.sbcl.org/platform-table.html"
-        explain "then add the SBCL folder to PATH and reopen Git Bash."
-        exit 1 ;;
+        # MSYS2 comes with the GitHub windows-latest image and has a current
+        # SBCL build: https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-sbcl
+        # (pacman -Sy refreshes the package lists first; -S --needed skips what
+        # is already installed). The login shell (-l) sets MSYS2 up for pacman.
+        # use-msys2-sbcl.sh puts C:\msys64\ucrt64\bin on PATH for the next steps.
+        # If you do not have MSYS2, the .msi installer on
+        # https://www.sbcl.org/platform-table.html works too.
+        [ -x /c/msys64/usr/bin/bash.exe ] \
+            || fail "MSYS2 was not found in C:\\msys64. Install it from https://www.msys2.org/ or use the SBCL .msi."
+        install_pkg "SBCL (MSYS2 package)" /c/msys64/usr/bin/bash.exe -lc \
+            "pacman -Sy --noconfirm --needed mingw-w64-ucrt-x86_64-sbcl" || exit 1 ;;
     *)
         fail "Unknown OS. See https://www.sbcl.org/platform-table.html" ;;
 esac

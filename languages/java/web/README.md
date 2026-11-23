@@ -34,7 +34,7 @@ Open <http://localhost:8080/> in a browser, or in a second terminal run
 | Script | What it does | Why it is needed |
 |---|---|---|
 | `install.sh` | 1. Runs `javac -version` and checks that the version is 21 or newer. 2. Checks that `mvn` is on `PATH`. If one is missing, it shows the install command and runs it only if you answer `y`. | Same toolchain as [../cli](../cli/README.md#scripts-explained). Spring Boot needs no separate install. |
-| `build.sh` | Runs `mvn --batch-mode --quiet package`. | Maven compiles the code and packs `target/hello-web.jar`. Then the Spring Boot plugin's `repackage` goal, which `spring-boot-starter-parent` binds to the build [2], turns it into an executable JAR: an archive "containing your compiled classes along with all of the jar dependencies that your code needs to run" [2]. |
+| `build.sh` | Runs `mvn --batch-mode --quiet package`. | Maven compiles the code and packs `target/hello-web.jar`. Then the Spring Boot plugin's `repackage` goal, which `spring-boot-starter-parent` binds to the build [2], turns it into an executable JAR: an archive "containing your compiled classes along with all of the jar dependencies that your code needs to run" [2]. The first build downloads Maven's plugins and the libraries in `pom.xml` from Maven Central into `~/.m2/repository`; later builds reuse them. |
 | `run.sh` | Runs `java -jar target/hello-web.jar`. `--verify` starts it in the background, waits for the page with `curl`, prints it, then stops the server. | `SpringApplication` "bootstraps our application, starting Spring, which, in turn, starts the auto-configured Tomcat web server" [2]. The self-check lets `scripts/verify-all.sh` test the server without waiting for Ctrl+C. |
 
 ## Folder structure
@@ -117,8 +117,8 @@ application" [2].
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Temurin 21.0.8, Maven 3.9.16, Spring Boot 4.1.2, Tomcat 11.0.27. Starts in about 2–3 s. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. Spring Boot is pure Java, so the same JAR file runs on any JVM for Java 21 or newer. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Install as in [../cli](../cli/README.md#platform-notes). |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install as in [../cli](../cli/README.md#platform-notes). Native PowerShell: `mvn package`, then `java -jar target\hello-web.jar`; another port with `$env:PORT=9000` first. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `openjdk-21-jdk` and `maven` with apt when missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` puts the JDK from `JAVA_HOME_21_X64` on PATH when that variable is set. It does not install a JDK or Maven: if one is missing it prints the `winget` Temurin 21 command or the Maven zip steps and stops. |
 
 ## Expected output
 `./run.sh` (the server keeps running until Ctrl+C):

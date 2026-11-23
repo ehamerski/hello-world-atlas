@@ -9,15 +9,25 @@
 # Pathspec syntax: https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
 
 languages/
+# The approved list is inside languages/; it is named on its own so that a
+# change to the line above can never leave it out.
+languages/APPROVED.txt
 docs/
 i18n/
 site/
 scripts/
 .github/workflows/
+.github/dependabot.yml
+ci/
 README.md
 LICENSE
+LICENSE-docs
+NOTICE
 CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
 CITATION.cff
 .gitignore
+.gitattributes
 .vale.ini
 .vale/

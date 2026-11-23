@@ -1,0 +1,25 @@
+# ci/timeouts.yml - implementations whose steps may take longer than the
+# default of scripts/verify-all.sh (300 s per step, TF_VERIFY_TIMEOUT).
+#
+# WHAT: one entry per folder; seconds replaces the default for each step
+#   (install.sh, build.sh, run.sh --verify) of that folder only.
+# WHY:  a cold build or boot can legitimately take longer than the default,
+#   and a full run must not need a rerun. A limit is still a limit: a step
+#   that hangs fails once it is over, so only a measured cold time belongs
+#   here, with a margin.
+#
+# Format (read by awk in verify-all.sh, so keep one "key: value" per line):
+#   - folder: languages/<language>/<category>
+#     seconds: 1800
+#     reason: "what takes the time"
+timeouts:
+  # swift build of Vapor from an empty .build/: it fetches and compiles
+  # about 70 packages (SwiftNIO, Vapor, ...) in debug mode.
+  - folder: languages/swift/web
+    seconds: 1800
+    reason: "cold swift build of Vapor and its dependencies"
+  # run.sh --verify builds the APK, cold-boots the emulator (-no-snapshot),
+  # waits for Android and the package manager, then installs and checks.
+  - folder: languages/kotlin/mobile-android
+    seconds: 900
+    reason: "builds the APK, cold-boots the emulator and waits for Android"

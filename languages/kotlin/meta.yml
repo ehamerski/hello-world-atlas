@@ -1,0 +1,46 @@
+# languages/kotlin/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Kotlin"
+year: 2011
+year_note: "The project started in 2010; JetBrains unveiled it at the JVM Language Summit in July 2011; Kotlin 1.0 was released in February 2016"
+designers:
+  - "JetBrains"
+paradigms:
+  - "object-oriented"
+  - "functional"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "JDK 21, `kotlinc` 2.4.21"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    label: "Compose"
+    toolchain: "Compose Multiplatform, Gradle"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    label: "Ktor"
+    toolchain: "Ktor (Netty), Gradle"
+    run: "http://localhost:8080/"
+    status: "verified"
+  - folder: "mobile-android"
+    kind: "mobile"
+    label: "Android"
+    toolchain: "Jetpack Compose, Android Gradle plugin, Android emulator (x86_64)"
+    run: "the app on the Android emulator"
+    status: "verified"
+sources:
+  - title: "Hello World. Dmitry Jemerov, The JetBrains Blog, 2011"
+    url: "https://blog.jetbrains.com/kotlin/2011/07/hello-world-2/"
+  - title: "Kotlin FAQ. JetBrains"
+    url: "https://kotlinlang.org/docs/faq.html"
+  - title: "Kotlin 1.0 Released: Pragmatic Language for the JVM and Android. Andrey Breslav, The JetBrains Blog, 2016"
+    url: "https://blog.jetbrains.com/kotlin/2016/02/kotlin-1-0-released-pragmatic-language-for-jvm-and-android/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Kotlin's Hello World keeps one word of Java's ceremony, `main`, and drops the class, the `static`, the argument array and the semicolon. The JVM runs it without asking where the paperwork went."

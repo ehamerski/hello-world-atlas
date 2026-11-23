@@ -1,0 +1,80 @@
+---
+// site/src/components/PageTitle.astro - Starlight's page title, with a
+// breadcrumb above it on language and implementation pages
+// (Languages > Python > cli). The names come from the generated data of the
+// Languages page and the comparator.
+// Overriding a component: https://starlight.astro.build/guides/overriding-components/
+// Breadcrumb pattern: https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/
+import { LOCALES } from '../../i18n.mjs';
+import languagesByLocale from '../generated/languages.json';
+import implsByLocale from '../generated/implementations.json';
+import uiByLocale from '../generated/ui.json';
+
+// Starlight's id of the title, the target of its "Overview" link in the
+// table of contents (PAGE_TITLE_ID in Starlight's constants, not exported).
+const PAGE_TITLE_ID = '_top';
+const { lang, id, entry } = Astro.locals.starlightRoute;
+const locale = LOCALES.find((l) => l.tag === lang) || LOCALES[0];
+const tag = locale.tag as keyof typeof uiByLocale;
+const { strings: ui } = uiByLocale[tag];
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const route = locale.dir && id.startsWith(`${locale.dir}/`) ? id.slice(locale.dir.length + 1) : id;
+
+// [label, url] pairs, the last one being the page itself.
+const crumbs: [string, string][] = [];
+const m = route.replace(/\/$/, '').match(/^languages\/([^/]+)(?:\/([^/]+))?$/);
+const language = m && languagesByLocale[tag].find((l) => l.slug === m[1]);
+if (language) {
+  crumbs.push([ui['nav.languages'], base + [locale.dir, 'languages'].filter(Boolean).join('/') + '/']);
+  crumbs.push([language.name, language.url]);
+  const impl = m[2] && implsByLocale[tag].find((i) => i.id === `${m[1]}/${m[2]}`);
+  if (impl) crumbs.push([impl.label, impl.url]);
+}
+---
+
+{crumbs.length > 0 && (
+  <nav class="breadcrumb" aria-label={ui['breadcrumb.label']}>
+    <ol>
+      {crumbs.map(([label, href], i) => (
+        <li>{i === crumbs.length - 1 ? <a href={href} aria-current="page">{label}</a> : <a href={href}>{label}</a>}</li>
+      ))}
+    </ol>
+  </nav>
+)}
+<h1 id={PAGE_TITLE_ID}>{entry.data.title}</h1>
+
+<style>
+  h1 {
+    margin-top: 1rem;
+    font-size: var(--sl-text-h1);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+  .breadcrumb + h1 {
+    margin-top: 0.25rem;
+  }
+  .breadcrumb {
+    margin-top: 1rem;
+    font-size: var(--sl-text-sm);
+  }
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .breadcrumb li + li::before {
+    content: '›';
+    margin-inline: 0.5rem;
+    color: var(--sl-color-gray-3);
+  }
+  .breadcrumb a {
+    color: var(--sl-color-text-accent);
+  }
+  .breadcrumb a[aria-current='page'] {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
+</style>

@@ -47,7 +47,7 @@ GHCup puts its programs in `~/.ghcup/bin` [4], in your home folder, so no
 ## Scripts explained
 | Script | What it does | Why it is needed |
 |---|---|---|
-| `install.sh` | Runs `ghc --version`. If GHC is missing, shows GHCup's official command (`curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org \| sh` [1]) and runs it only if you answer `y`, with `BOOTSTRAP_HASKELL_NONINTERACTIVE=1` (no questions, as in GHCup's guide [3]) and `BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1` (skip Stack, a build tool these examples do not use). On Windows it prints the PowerShell command instead [1]. | Haskell is compiled, so GHC is the only tool the cli needs. GHCup should be run "as **non-root/non-admin user**" [4]. |
+| `install.sh` | Runs `ghc --version`. If GHC is missing, downloads GHCup's bootstrap script from `https://get-ghcup.haskell.org` [1] to a file and shows its path, then runs it only if you answer `y` (it asks before the download too), with `BOOTSTRAP_HASKELL_NONINTERACTIVE=1` (no questions, as in GHCup's guide [3]) and `BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1` (skip Stack, a build tool these examples do not use). On Windows it prints the PowerShell command instead [1]. | Haskell is compiled, so GHC is the only tool the cli needs. GHCup should be run "as **non-root/non-admin user**" [4]. |
 | `build.sh` | Runs `ghc -O -outputdir build -o bin/hello-cli hello.hs` and prints that command (`set -x`). `GHC=ghc-9.10 ./build.sh` picks another compiler command. | Turns the source into machine code. The flags are explained below. |
 | `run.sh` | Runs `./bin/hello-cli`. `--verify` does the same (a cli program ends by itself). | The executable is machine code, so the operating system runs it directly. |
 | `ghcup-env.sh` | Not run on its own: the other three scripts read it. It adds `~/.ghcup/bin` to `PATH` if it is not there yet. | `install.sh` does not edit your shell profile, so each script finds `ghc` this way. |
@@ -159,8 +159,14 @@ Open [`hello.hs`](hello.hs) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | GHC 9.10.3, GHCup 0.2.6.2. GHC has an x86-64 macOS build [2]. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands; GHC has an AArch64 macOS build [2]. GHCup notes: "On Darwin M1 you might also need a working llvm installed (e.g. via brew) and have the toolchain exposed in PATH" [13]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Same commands. GHCup lists the system packages it needs, for Debian: `build-essential curl libffi-dev libffi8 libgmp-dev libgmp10 libncurses-dev libncurses6 libtinfo6 pkg-config` [13]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Run GHCup's PowerShell command as a non-admin user [1][4]; `install.sh` prints it. GHCup installs into `C:\ghcup\bin` [4] and sets up MSYS2 [13]. The executable would be `bin/hello-cli.exe`. WSL behaves like Linux [1]. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs GHCup's bootstrap script from `get-ghcup.haskell.org` (non-interactive, without Stack) when `ghc` is missing. It installs GHC and Cabal into `~/.ghcup`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install GHC: if `ghc` is missing it prints GHCup's PowerShell command [4] and stops. WSL not verified; it behaves like Linux. |
+
+**GHCup's bootstrap script is not digest-checked.** GHCup's install page
+gives no checksum for it: it points to the script's source code, and offers
+GPG checks only for a manual install of the binaries [4]. So `install.sh`
+saves the script to `~/.cache/hello-world-haskell/bootstrap-haskell.sh` and
+shows the path, so you can read it before you answer `y` to run it.
 
 ## Expected output
 ```text
@@ -178,7 +184,7 @@ The program itself prints only the last line; the other lines come from
 1. GHCup (home page: install commands). haskell.org. <https://www.haskell.org/ghcup/> (accessed 2026-11-01)
 2. GHC 9.10.3 download page (release date, binary distributions). GHC developers, haskell.org. <https://www.haskell.org/ghc/download_ghc_9_10_3.html> (accessed 2026-11-01)
 3. GHCup User Guide (tags such as `recommended`, non-interactive install). haskell.org. <https://www.haskell.org/ghcup/guide/> (accessed 2026-11-01)
-4. GHCup: Installation. haskell.org. <https://www.haskell.org/ghcup/install/> (accessed 2026-11-01)
+4. GHCup: Installation. haskell.org. <https://www.haskell.org/ghcup/install/> (accessed 2026-11-19)
 5. GHC 9.10.3 User's Guide: <!-- vale HelloWorld.British = NO -->Optimisation<!-- vale HelloWorld.British = YES --> (code improvement). GHC developers. <https://downloads.haskell.org/ghc/9.10.3/docs/users_guide/using-optimisation.html> (accessed 2026-11-01)
 6. GHC 9.10.3 User's Guide: Filenames and separate compilation (-o, -outputdir, interface files). GHC developers. <https://downloads.haskell.org/ghc/9.10.3/docs/users_guide/separate_compilation.html> (accessed 2026-11-01)
 7. Haskell 2010 Language Report, Chapter 2: Lexical Structure (2.3 Comments). haskell.org. <https://www.haskell.org/onlinereport/haskell2010/haskellch2.html> (accessed 2026-11-01)

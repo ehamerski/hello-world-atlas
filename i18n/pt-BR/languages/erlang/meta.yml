@@ -1,0 +1,13 @@
+source: languages/erlang/meta.yml
+source_sha: 5e17b816a04f142fab34056318982e2d0576a53c
+year_note: "desenvolvimento inicial no Ericsson Computer Science Laboratory em 1986; Erlang de código aberto anunciado em 1998-12-02"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "O Erlang foi feito para programas que rodam para sempre, e seu hello web cumpre a promessa: o processo principal espera por uma mensagem chamada `never`."
+  dictionary:
+    - term: "Erlang"
+      definition: "uma linguagem em que um processo pode falhar de propósito, desde que outro processo esteja de olho."

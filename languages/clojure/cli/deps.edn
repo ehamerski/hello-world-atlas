@@ -1,0 +1,16 @@
+;; deps.edn - Clojure cli: the project file of the Clojure CLI.
+;;
+;; The whole file is one map written in EDN (Extensible Data Notation), the
+;; data format that is a subset of Clojure's own syntax. A pom.xml (Java) or
+;; Cargo.toml (Rust) plays the same role, but this file is plain data.
+;; Reference: https://clojure.org/reference/deps_and_cli
+
+{;; :paths lists the source folders that are put on the classpath. The
+ ;; namespace hello.core is found in src/hello/core.clj.
+ :paths ["src"]
+
+ ;; :deps is a map from a library name to its version. This program needs
+ ;; no library besides Clojure itself, so the map is empty, and the CLI
+ ;; adds the Clojure version from its own deps.edn (1.12.6 for CLI
+ ;; 1.12.6.1673). Compare ../web, where this map names Ring.
+ :deps {}}

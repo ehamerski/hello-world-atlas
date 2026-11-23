@@ -21,9 +21,9 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Rust 1.98 + Cargo, standard library only | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | Rust 1.98 + eframe/egui 0.37.0 (rendered with wgpu) | ✅ verified on macOS Intel |
-| web | [web/](web/) | Rust 1.98 + Axum 0.8.9 + Tokio 1.54.1 | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | Cargo | ✅ |
+| desktop | [desktop/](desktop/) | eframe / egui | ✅ |
+| web | [web/](web/) | Axum | ✅ |
 
 ## History
 Rust began as Graydon Hoare's personal project. In a 2025 essay he

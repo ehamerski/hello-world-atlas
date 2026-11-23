@@ -9,6 +9,9 @@ and never changed ahead of it.
 Source code, code comments, file names, script output and the download ZIPs
 are not translated: they are the same for every reader.
 
+The steps to add a new language, and the rules for translators, are in
+[`docs/contributing/translating.md`](../docs/contributing/translating.md).
+
 ## Layout
 
 Each language folder mirrors the paths of the English files:
@@ -47,7 +50,10 @@ languages the website builds are listed in `site/i18n.mjs`.
 2. **Keep the links as they are in the English file.** The generator
    resolves them from the English file's folder and points them to pages in
    the same language. Only `#anchor` links into the same page change, to
-   match its translated headings.
+   match its translated headings. A link to a heading of another page keeps
+   its English anchor: when that page is translated, the generator points
+   it to the heading in the same position, so a translation keeps the
+   headings of its English file.
 3. **`meta.yml`: only these fields are translated:** `year_note`, and per
    category (matched by `folder`) `label` and `run`. Names, years,
    designers, paradigms and sources are facts and stay as in English.

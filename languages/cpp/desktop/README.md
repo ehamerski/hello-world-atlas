@@ -149,8 +149,8 @@ Open [`hello.cpp`](hello.cpp) next to
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | Apple clang 21.0.0, CMake 4.4.5, Qt 6.12.0 (`qtbase`, built from source by Homebrew: no Intel bottle [2]). `./run.sh --verify` printed `Hello, World!`; the program is a plain executable, not a `.app` bundle. |
 | macOS Apple Silicon | ⚠️ not verified | `brew install qtbase` downloads a bottle [2]; same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y build-essential cmake qt6-base-dev` [10]. Needs a graphical session (X11 or Wayland). |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install MSYS2; in the "MSYS2 UCRT64" shell run `pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-qt6-base` [11] and add `C:\msys64\ucrt64\bin` to `PATH`. Then `cmake -S . -B build -G "MinGW Makefiles"`, `cmake --build build`, `build\hello-desktop.exe`. With Qt's own installer instead, pass its folder with `CMAKE_PREFIX_PATH`. WSL needs WSLg to show windows. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential`, `cmake` and `qt6-base-dev` with apt when missing [10]. A window needs a graphical session. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `gcc`, `cmake`, `ninja` and `qt6-base` with `pacman` when missing [11]. WSL not verified; it behaves like Linux, and a window needs WSLg or an X server. |
 
 ## Expected output
 `./run.sh` opens a window titled "Hello, World!" with the text

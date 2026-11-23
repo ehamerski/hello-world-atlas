@@ -1,7 +1,7 @@
 #!/bin/sh
 # install.sh - Go desktop: check (and optionally install) Go and a C compiler
 #
-# WHAT: 1. checks that Go 1.22 or newer is installed;
+# WHAT: 1. checks that Go 1.25 or newer is installed;
 #       2. checks that a C compiler (and, on Linux, the graphics headers)
 #          is available for cgo.
 #       If something is missing, shows the install command for your
@@ -13,11 +13,13 @@
 #       ../../java/desktop. But Fyne talks to the operating system's
 #       graphics (OpenGL) and window system through C code, so Go must call
 #       a C compiler while building. That bridge between Go and C is "cgo".
-#       Fyne needs Go 1.22 or newer.
+#       This program needs Go 1.25 or newer: go.mod requires it so that
+#       the patched golang.org/x/image (v0.43.0) can be used.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://go.dev/doc/install
 #   https://formulae.brew.sh/formula/go
@@ -34,9 +36,9 @@ cd -- "$(dirname -- "$0")"
 . ../../../scripts/common.sh
 
 # The oldest Go version this code is written for (the "go" line in go.mod).
-GO_MIN_MINOR=22
+GO_MIN_MINOR=25
 
-# go_ok succeeds if "go" is on PATH and is Go 1.22 or newer.
+# go_ok succeeds if "go" is on PATH and is Go 1.25 or newer.
 # "go env GOVERSION" prints e.g. go1.27.3; sed keeps the minor number (27).
 go_ok() {
     has_cmd go || return 1
@@ -57,7 +59,7 @@ else
             install_pkg "Go" brew install go || exit 1 ;;
         linux)
             # The Fyne docs' apt line below also installs Go ("golang"), but
-            # the distribution's Go may be older than 1.22; see the README.
+            # the distribution's Go may be older than 1.25; see the README.
             explain "Install Go from https://go.dev/dl/ as described on https://go.dev/doc/install:"
             explain "    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.X.Y.linux-amd64.tar.gz"
             explain "    export PATH=\$PATH:/usr/local/go/bin     (add this line to ~/.profile)"

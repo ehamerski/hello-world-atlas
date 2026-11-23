@@ -2,6 +2,7 @@
 //
 // WHAT: reads the Markdown and meta.yml files of the repository and writes
 //   site/src/content/docs/**      one page per README / doc (Starlight pages)
+//   site/src/content/i18n/*.json  Starlight's own UI strings (the 404 text)
 //   site/src/generated/*.json     data for the custom pages (language cards)
 //   site/public/assets/**         images the READMEs show (screenshots)
 // Every output path is git-ignored and deleted at the start of each run, so
@@ -24,11 +25,18 @@
 //
 // HOW: run by scripts/build-site.sh, or by hand from site/:
 //   node scripts/generate.mjs
+//   node scripts/generate.mjs --check   # write nothing; fail when an
+//                                       # implementation's main file has no
+//                                       # known comment syntax or Shiki id
+//   node scripts/generate.mjs --check python ruby   # the same, for these
+//                                       # language folders only
 // Environment:
 //   SITE_BASE  URL path the site is served under (default "/"); for
 //              example "/hello-world/" for a GitHub Pages project site.
-//   REPO_URL   where links to non-page files point (default: the GitHub
-//              repository, branch develop).
+//   REPO_URL   where links to non-page files point (default: the public
+//              GitHub repository, branch main).
+//   REPO_ROOT  the repository to read (default: the one this script is in);
+//              the fixture tests (test-source-code.mjs) point it elsewhere.
 // Only files that git tracks (or new files that are not ignored) are read,
 // the same rule as scripts/check-links.sh, so build output never leaks in.
 
@@ -38,17 +46,18 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
 import { LOCALES, ROOT_LOCALE, UI_SOURCE, format, uiStrings } from '../i18n.mjs';
-import { GREETING, anatomy, classify, entryPoint, linesWith, mainFile as findMainFile } from './source-code.mjs';
+import { GREETING, anatomy, classify, entryPoint, hasCommentSyntax, isScript, linesWith, lookup, mainFile as findMainFile } from './source-code.mjs';
 
 const SITE = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const ROOT = path.dirname(SITE);
+const ROOT = process.env.REPO_ROOT ? path.resolve(process.env.REPO_ROOT) : path.dirname(SITE);
 const OUT_DOCS = path.join(SITE, 'src', 'content', 'docs');
+const OUT_I18N = path.join(SITE, 'src', 'content', 'i18n');
 const OUT_DATA = path.join(SITE, 'src', 'generated');
 const OUT_ASSETS = path.join(SITE, 'public', 'assets');
 
 const BASE = withSlashes(process.env.SITE_BASE || '/');
 const REPO_URL = (process.env.REPO_URL ||
-  'https://github.com/ehamerski/hello-world/blob/develop').replace(/\/$/, '');
+  'https://github.com/ehamerski/hello-world-atlas/blob/main').replace(/\/$/, '');
 
 const IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp']);
 
@@ -56,6 +65,7 @@ const IMAGE_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp']);
 // (astro.config.mjs). A docs/*.md file that is not listed here stops the
 // build: docs/ is published, so a new page must be added on purpose.
 const DOC_ROUTES = {
+  'docs/home.md': '',
   'docs/start-here.md': 'start-here',
   'docs/comparisons.md': 'compare',
   'docs/paradigms.md': 'paradigms',
@@ -138,12 +148,14 @@ for (const f of files.filter((f) => f.startsWith('i18n/') && f.split('/').length
 
 // Map each Markdown file that becomes a page to its route (no slashes).
 const routes = new Map();
+// README.md is not a page of its own: links to it lead to the home page
+// (docs/home.md), whose route is also ''.
 routes.set('README.md', '');
 routes.set('CONTRIBUTING.md', 'contributing');
 routes.set('languages/README.md', 'implementations');
 for (const f of files) {
   if (/^docs\/[^/]+\.md$/.test(f)) {
-    if (!DOC_ROUTES[f]) {
+    if (!(f in DOC_ROUTES)) {
       throw new Error(`${f} has no route: add it to DOC_ROUTES in site/scripts/generate.mjs`);
     }
     routes.set(f, DOC_ROUTES[f]);
@@ -186,6 +198,48 @@ function mapOutsideFences(md, fn) {
   return out.join('\n');
 }
 
+// The anchor ids of a Markdown file's headings, in order, as Starlight
+// makes them with github-slugger (https://github.com/Flet/github-slugger):
+// the heading text in lower case, punctuation removed, spaces as hyphens,
+// "-1", "-2" … added to repeated ids.
+function headingIds(md) {
+  const ids = [];
+  const seen = new Map();
+  mapOutsideFences(md, (text) => {
+    for (const [, heading] of text.matchAll(/^#{1,6}\s+(.+?)\s*#*\s*$/gm)) {
+      const plain = heading.replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[`*_]/g, '');
+      const base = plain.toLowerCase().replace(/[^\p{L}\p{M}\p{N}\p{Pc}\s-]/gu, '').replace(/\s/g, '-');
+      const n = seen.get(base) || 0;
+      seen.set(base, n + 1);
+      ids.push(n ? `${base}-${n}` : base);
+    }
+    return text;
+  });
+  return ids;
+}
+
+// A link into another page keeps the English anchor, as in the English
+// file. When that page is translated, its headings have other ids, so the
+// anchor is replaced by the id of the heading in the same position. A
+// translation has the same headings as its English file. When it does not,
+// the translation is outdated (scripts/check-translations.sh reports it), the
+// positions no longer match, and the link goes to the top of the page
+// instead of to an anchor that does not exist.
+const anchorMaps = new Map();
+function localAnchor(file, anchor, loc) {
+  if (loc === ROOT_LOCALE) return anchor;
+  const key = `${loc.tag}:${file}`;
+  if (!anchorMaps.has(key)) {
+    const local = fileSet.has(`i18n/${loc.tag}/${file}`) && translated(loc, file);
+    const en = headingIds(read(file));
+    const tr = local ? headingIds(local) : [];
+    anchorMaps.set(key, !local ? null : en.length === tr.length ? new Map(en.map((id, i) => [id, tr[i]])) : false);
+  }
+  const map = anchorMaps.get(key);
+  if (map === false) return null;
+  return map?.get(decodeURIComponent(anchor)) ?? anchor;
+}
+
 // Rewrite one link target found in the Markdown file `from`.
 // `page` is set when the text is shown on a page other than its own (the
 // "Quick start" of an implementation on the language page): an "#anchor"
@@ -197,8 +251,14 @@ function rewriteTarget(target, from, page, loc) {
   const hash = anchor !== undefined ? '#' + anchor : '';
   let resolved = path.posix.normalize(path.posix.join(path.posix.dirname(from), decodeURI(p)));
   resolved = resolved.replace(/\/$/, '');
-  if (routes.has(resolved)) return url(routes.get(resolved), loc) + hash;
-  if (routes.has(resolved + '/README.md')) return url(routes.get(resolved + '/README.md'), loc) + hash;
+  const doc = [resolved, resolved + '/README.md'].find((f) => routes.has(f));
+  // The site's home page is docs/home.md, not the repository README: a
+  // link to a heading of the README goes to the README on GitHub.
+  if (doc === 'README.md' && anchor) return `${REPO_URL}/README.md${hash}`;
+  if (doc) {
+    const local = anchor ? localAnchor(doc, anchor, loc) : null;
+    return url(routes.get(doc), loc) + (anchor && local ? '#' + local : anchor ? '' : hash);
+  }
   if (IMAGE_EXT.has(path.extname(resolved).toLowerCase()) && fileSet.has(resolved)) {
     const dest = path.join(OUT_ASSETS, resolved);
     fs.mkdirSync(path.dirname(dest), { recursive: true });
@@ -224,6 +284,24 @@ function rewriteLinks(md, from, page, loc = ROOT_LOCALE) {
       (all, open, target) => open + rewriteTarget(target, from, page, loc)));
 }
 
+// The README of a language or implementation opens with a "> Part of …"
+// quote that links back up the repository on GitHub. The site shows a
+// breadcrumb instead (src/components/PageTitle.astro), so the quote is left
+// out: the first block quote, when nothing but blank lines comes before it.
+const dropPartOf = (md) => md.replace(/^\s*(>.*\n)+/, '');
+
+// The opening sentence of a language page: what the page covers, the year
+// and the designers, from meta.yml (where they are cited).
+function topicSentence(lang, ui) {
+  const names = lang.designers;
+  const designers = names.length > 1
+    ? names.slice(0, -1).join(', ') + ui['list.and'] + names[names.length - 1]
+    : names[0];
+  if (lang.year != null) return format(ui['language.topic'], { name: lang.name, year: lang.year, designers });
+  const undated = format(ui['language.topicUndated'], { name: lang.name, note: lang.year_note });
+  return designers ? `${undated} ${format(ui['language.topicDesigners'], { designers })}` : undated;
+}
+
 // Remove the first "# Title" line and return [title, rest].
 function splitTitle(md, fallback) {
   const m = md.match(/^# (.+)\n/m);
@@ -239,6 +317,19 @@ function section(md, heading) {
   let end = lines.findIndex((l, i) => i > start && /^## /.test(l));
   if (end < 0) end = lines.length;
   return lines.slice(start + 1, end).join('\n').trim();
+}
+
+// The section of `file` in the locale `loc`. A translation keeps the
+// headings of its English file in the same order, so the section is the one
+// in the position of the English `heading`; English when there is none.
+function localSection(file, heading, loc) {
+  const en = read(file);
+  const tr = translated(loc, file);
+  const h2 = (md) => md.split('\n').filter((l) => /^## /.test(l)).map((l) => l.slice(3).trim());
+  const i = h2(en).indexOf(heading);
+  const local = tr ? h2(tr) : [];
+  if (i >= 0 && local.length === h2(en).length) return section(tr, local[i]);
+  return section(en, heading);
 }
 
 function frontmatter(fields) {
@@ -257,20 +348,45 @@ function writePage(loc, route, fields, body) {
 
 // --------------------------------------------------------- source files
 
-// Shiki language ids (https://shiki.style/languages) for the code blocks.
+// Shiki language ids for the code blocks, looked up by language folder
+// first and file extension second, like the tables in source-code.mjs.
+// Every id is in the Shiki languages list (https://shiki.style/languages;
+// the installed list is `bundledLanguagesInfo` of the shiki package).
+// Languages Shiki does not know (QB64 BASIC, Portugol, PSeInt, Clipper,
+// Simula, Eiffel, QCL, ALGOL 68) are
+// listed as 'txt' on purpose, so `--check` knows they were not forgotten.
 const LANG_BY_EXT = {
-  '.py': 'python', '.c': 'c', '.h': 'c', '.cpp': 'cpp', '.hpp': 'cpp',
-  '.java': 'java', '.cs': 'csharp', '.csproj': 'xml', '.go': 'go',
-  '.js': 'javascript', '.mjs': 'javascript', '.jsx': 'jsx', '.ts': 'typescript',
-  '.html': 'html', '.css': 'css', '.json': 'json', '.rs': 'rust',
-  '.toml': 'toml', '.php': 'php', '.hs': 'haskell', '.lisp': 'common-lisp',
-  '.asd': 'common-lisp', '.pl': 'prolog', '.pas': 'pascal', '.lpr': 'pascal',
-  '.pp': 'pascal', '.cob': 'cobol', '.cbl': 'cobol', '.f90': 'fortran-free-form',
-  '.adb': 'ada', '.ads': 'ada', '.gpr': 'ada', '.asm': 'asm', '.xml': 'xml',
-  '.lpi': 'xml', '.yml': 'yaml', '.yaml': 'yaml', '.properties': 'properties',
-  '.vue': 'vue', '.sh': 'sh', '.cabal': 'txt', '.mod': 'txt',
+  byLanguage: {
+    perl: { '.pl': 'perl' },
+    prolog: { '.pl': 'prolog' },
+    'objective-c': { '.h': 'objective-c' },
+    bash: { '.sh': 'bash' },
+  },
+  byExt: {
+    '.py': 'python', '.c': 'c', '.h': 'c', '.cpp': 'cpp', '.hpp': 'cpp',
+    '.java': 'java', '.cs': 'csharp', '.csproj': 'xml', '.go': 'go',
+    '.js': 'javascript', '.mjs': 'javascript', '.jsx': 'jsx', '.ts': 'typescript',
+    '.html': 'html', '.css': 'css', '.json': 'json', '.rs': 'rust',
+    '.toml': 'toml', '.php': 'php', '.hs': 'haskell', '.lisp': 'common-lisp',
+    '.asd': 'common-lisp', '.pas': 'pascal', '.lpr': 'pascal',
+    '.pp': 'pascal', '.cob': 'cobol', '.cbl': 'cobol', '.f90': 'fortran-free-form',
+    '.adb': 'ada', '.ads': 'ada', '.gpr': 'ada', '.asm': 'asm', '.xml': 'xml',
+    '.lpi': 'xml', '.yml': 'yaml', '.yaml': 'yaml', '.properties': 'properties',
+    '.vue': 'vue', '.sh': 'sh', '.cabal': 'txt', '.mod': 'txt',
+    '.rb': 'ruby', '.ru': 'ruby', '.erb': 'erb', '.pm': 'perl', '.lua': 'lua',
+    '.kt': 'kotlin', '.kts': 'kotlin', '.gradle': 'groovy',
+    '.clj': 'clojure', '.cljs': 'clojure', '.cljc': 'clojure', '.edn': 'clojure',
+    '.erl': 'erlang', '.hrl': 'erlang', '.ex': 'elixir', '.exs': 'elixir',
+    '.swift': 'swift', '.m': 'objective-c', '.dart': 'dart', '.st': 'smalltalk',
+    '.dpr': 'pascal', '.vb': 'vb', '.vbproj': 'xml', '.fsproj': 'xml',
+    '.tsx': 'tsx', '.scala': 'scala', '.sc': 'scala', '.sbt': 'scala',
+    '.fs': 'fsharp', '.fsx': 'fsharp', '.ml': 'ocaml', '.mli': 'ocaml',
+    '.jl': 'julia', '.r': 'r', '.zig': 'zig', '.rkt': 'racket',
+    '.sim': 'txt', '.e': 'txt', '.qcl': 'txt', '.a68': 'txt', '.prg': 'txt',
+    '.bas': 'txt', '.alg': 'txt', '.psc': 'txt',
+  },
 };
-const LANG_BY_NAME = { 'CMakeLists.txt': 'cmake', Makefile: 'make', Dockerfile: 'docker' };
+const LANG_BY_NAME = { 'CMakeLists.txt': 'cmake', Makefile: 'make', Dockerfile: 'docker', Gemfile: 'ruby' };
 // Not shown inline: the READMEs themselves, generated lock files, and
 // binary files. They are still in the ZIP download.
 const HIDDEN = /(^|\/)(README\.md|package-lock\.json|Cargo\.lock|go\.sum|[^/]*\.lock|\.gitignore)$/;
@@ -282,12 +398,15 @@ function implFiles(dir) {
     .map((f) => f.slice(dir.length + 1))
     .filter((f) => !HIDDEN.test(f) && !BINARY_EXT.has(path.extname(f).toLowerCase()))
     .filter((f) => fs.statSync(path.join(ROOT, dir, f)).size <= MAX_INLINE_BYTES)
-    .sort((a, b) => Number(a.endsWith('.sh')) - Number(b.endsWith('.sh')) || a.localeCompare(b));
+    .sort((a, b) => Number(isScript(a, langOf(dir))) - Number(isScript(b, langOf(dir))) || a.localeCompare(b));
 }
+
+// The language of an implementation folder languages/<lang>/<folder>.
+const langOf = (dir) => dir.split('/')[1];
 
 function codeBlock(dir, file) {
   const text = read(`${dir}/${file}`).replace(/\n$/, '');
-  const lang = LANG_BY_NAME[path.basename(file)] || LANG_BY_EXT[path.extname(file).toLowerCase()] || 'txt';
+  const lang = shikiLang(file, langOf(dir));
   // A fence must be longer than any run of backticks inside the file.
   const longest = Math.max(2, ...(text.match(/`+/g) || []).map((s) => s.length));
   const fence = '`'.repeat(longest + 1);
@@ -296,10 +415,10 @@ function codeBlock(dir, file) {
 
 // Source files as code blocks; scripts are collapsed so the code stays first.
 function sourceSection(dir, { scripts }) {
-  const list = implFiles(dir).filter((f) => scripts || !f.endsWith('.sh'));
+  const list = implFiles(dir).filter((f) => scripts || !isScript(f, langOf(dir)));
   return list.map((f) => {
     const block = codeBlock(dir, f);
-    return f.endsWith('.sh')
+    return isScript(f, langOf(dir))
       ? `<details>\n<summary><code>${f}</code></summary>\n\n${block}\n\n</details>`
       : block;
   }).join('\n\n');
@@ -312,7 +431,7 @@ const downloadButton = (lang, folder, ui) =>
 // ------------------------------------------------------------- anatomy
 
 // The main source file of an implementation (see source-code.mjs).
-const mainFile = (dir) => findMainFile(implFiles(dir), (f) => read(`${dir}/${f}`));
+const mainFile = (dir) => findMainFile(implFiles(dir), (f) => read(`${dir}/${f}`), langOf(dir));
 
 const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -345,8 +464,8 @@ function noteHtml(note) {
   }).join('');
 }
 
-function shikiLang(file) {
-  return LANG_BY_NAME[path.basename(file)] || LANG_BY_EXT[path.extname(file).toLowerCase()] || 'txt';
+function shikiLang(file, lang) {
+  return LANG_BY_NAME[path.basename(file)] || lookup(LANG_BY_EXT, file, lang) || 'txt';
 }
 
 // "Anatomy": the main file as numbered steps, each one a piece of code
@@ -355,8 +474,8 @@ function shikiLang(file) {
 function anatomySection(dir, ui, heading) {
   const file = mainFile(dir);
   if (!file) return '';
-  const { header, steps } = anatomy(read(`${dir}/${file}`), file);
-  const lang = shikiLang(file);
+  const { header, steps } = anatomy(read(`${dir}/${file}`), file, langOf(dir));
+  const lang = shikiLang(file, langOf(dir));
   const lineLabel = (code) => {
     if (!code.length) return '';
     const [a, b] = [code[0].n, code[code.length - 1].n];
@@ -402,9 +521,52 @@ function describe(md, fallback = '') {
   return plain.slice(0, 157).replace(/\s+\S*$/, '').replace(/[\s.,;:]+$/, '') + '…';
 }
 
+// ---------------------------------------------------------------- check
+
+// --check: every implementation must have a main file whose language the
+// tables know. Without this, a new language with an unknown extension
+// would build fine, with no Anatomy section, plain-text code and no line
+// counts in the Facts, and nothing would say so.
+// Implementations shown as plain text on purpose: the CLRS pseudocode is a
+// notation meant to be read, not a program, so it has no Anatomy section.
+const PLAIN_TEXT = new Set(['languages/pseudocode/clrs']);
+if (process.argv.includes('--check')) {
+  const problems = [];
+  let count = 0;
+  let plain = 0;
+  // Language folders named after --check; none means all of them.
+  const only = process.argv.slice(process.argv.indexOf('--check') + 1);
+  for (const slug of only) {
+    if (!languages.some((l) => l.slug === slug)) problems.push(`languages/${slug}: no meta.yml`);
+  }
+  for (const lang of languages.filter((l) => !only.length || only.includes(l.slug))) {
+    for (const cat of lang.categories) {
+      const dir = `languages/${lang.slug}/${cat.folder}`;
+      count++;
+      if (PLAIN_TEXT.has(dir)) { plain++; continue; }
+      const file = mainFile(dir);
+      if (!file) {
+        const unknown = implFiles(dir).filter((f) => !isScript(f, lang.slug)
+          && read(`${dir}/${f}`).includes(GREETING) && !hasCommentSyntax(f, lang.slug));
+        problems.push(unknown.length
+          ? `${dir}: no comment syntax for ${unknown.join(', ')} (add it to COMMENT_SYNTAX in site/scripts/source-code.mjs)`
+          : `${dir}: no source file contains "${GREETING}"`);
+      } else if (!LANG_BY_NAME[path.basename(file)] && !lookup(LANG_BY_EXT, file, lang.slug)) {
+        problems.push(`${dir}: no Shiki language id for ${file} (add it to LANG_BY_EXT in site/scripts/generate.mjs)`);
+      }
+    }
+  }
+  for (const p of problems) console.error(`error: ${p}`);
+  if (problems.length) process.exit(1);
+  console.log(`ok: the main file of all ${count} implementations has a known comment syntax and Shiki id`
+    + ` (${plain} shown as plain text on purpose)`);
+  process.exit(0);
+}
+
 // ---------------------------------------------------------------- pages
 
 fs.rmSync(OUT_DOCS, { recursive: true, force: true });
+fs.rmSync(OUT_I18N, { recursive: true, force: true });
 fs.rmSync(OUT_DATA, { recursive: true, force: true });
 fs.rmSync(OUT_ASSETS, { recursive: true, force: true });
 fs.mkdirSync(OUT_DATA, { recursive: true });
@@ -422,8 +584,9 @@ function generateLocale(loc) {
   const langs = localizedLanguages(loc);
   const page = (route, fields, body) => { writePage(loc, route, fields, body); pageCount++; };
 
-  // Home: the root README on a splash page.
-  const home = translated(loc, 'README.md');
+  // Home: docs/home.md on a splash page. The repository README stays the
+  // front page on GitHub; links to it from other files lead here.
+  const home = translated(loc, 'docs/home.md');
   if (home) {
     const [title, body] = splitTitle(home, 'Hello World');
     page('', {
@@ -435,14 +598,19 @@ function generateLocale(loc) {
         actions: [
           { text: ui['home.startHere'], link: url('start-here', loc), icon: 'right-arrow' },
           { text: ui['home.browseLanguages'], link: url('languages', loc), variant: 'minimal' },
+          { text: ui['home.compare'], link: url('compare', loc), variant: 'minimal' },
         ],
       },
-    }, rewriteLinks(body, 'README.md', undefined, loc));
+    // On GitHub the "Languages" link of the home page opens the table of
+    // every implementation (languages/README.md); on the site it opens the
+    // Languages page, with its search and filters.
+    }, rewriteLinks(body, 'docs/home.md', undefined, loc)
+      .replaceAll(`](${url('implementations', loc)})`, `](${url('languages', loc)})`));
   }
 
   // Docs, CONTRIBUTING and the implementations table.
   for (const [file, route] of routes) {
-    if (file === 'README.md' || file.startsWith('languages/') && file !== 'languages/README.md') continue;
+    if (route === '' || file.startsWith('languages/') && file !== 'languages/README.md') continue;
     const md = translated(loc, file);
     if (!md) continue;
     const [title, body] = splitTitle(md, path.basename(file, '.md'));
@@ -457,13 +625,13 @@ function generateLocale(loc) {
     const readme = `languages/${lang.slug}/README.md`;
     const langMd = translated(loc, readme);
     if (langMd) {
-      const [title, body] = splitTitle(langMd, lang.name);
+      const [title, readmeBody] = splitTitle(langMd, lang.name);
+      const body = `${topicSentence(lang, ui)}\n\n${dropPartOf(readmeBody)}`;
       const impls = lang.categories.map((cat) => {
         const dir = `languages/${lang.slug}/${cat.folder}`;
         const guide = url(`languages/${lang.slug}/${cat.folder}`, loc);
         // The implementation's own translation if there is one, else English.
-        const quick = section(translated(loc, `${dir}/README.md`) || read(`${dir}/README.md`), 'Quick start')
-          ?? section(read(`${dir}/README.md`), 'Quick start');
+        const quick = localSection(`${dir}/README.md`, 'Quick start', loc);
         return [
           `### ${cat.label || cat.folder}`,
           `${ui[`status.${cat.status}`] || cat.status} · ${cat.toolchain} · ${format(ui['impl.result'], { run: cat.run })}`,
@@ -490,7 +658,8 @@ function generateLocale(loc) {
       const dir = `languages/${lang.slug}/${cat.folder}`;
       const implMd = translated(loc, `${dir}/README.md`);
       if (!implMd) continue;
-      const [implTitle, implBody] = splitTitle(implMd, `${lang.name} · ${cat.folder}`);
+      const [implTitle, readmeBody] = splitTitle(implMd, `${lang.name} · ${cat.folder}`);
+      const implBody = dropPartOf(readmeBody);
       const anatomyMd = anatomySection(dir, ui, '##');
       page(`languages/${lang.slug}/${cat.folder}`, { title: implTitle, description: describe(implBody, implTitle) },
         `${downloadButton(lang.slug, cat.folder, ui)}\n\n${rewriteLinks(implBody, `${dir}/README.md`, undefined, loc)}\n\n`
@@ -516,11 +685,13 @@ function generateLocale(loc) {
 
   // Data for the language cards page (src/pages/[...locale]/languages/index.astro).
   cardsByLocale[loc.tag] = langs.map((l) => ({
-    slug: l.slug, name: l.name, year: l.year,
-    era: l.year == null ? ui['cards.noSingleYear'] : `${Math.floor(l.year / 10) * 10}s`,
+    slug: l.slug, name: l.name, otherNames: l.other_names ?? [], year: l.year,
     designers: l.designers, paradigms: l.paradigms,
     kinds: [...new Set(l.categories.map((c) => c.kind))],
     implementations: l.categories.length, url: url(`languages/${l.slug}`, loc),
+    // false when the language page has no translation in this locale yet:
+    // the cards page then says how many languages are only in English.
+    translated: loc === ROOT_LOCALE || fileSet.has(`i18n/${loc.tag}/languages/${l.slug}/README.md`),
   }));
   uiByLocale[loc.tag] = { strings: ui, translated: uiTranslated };
 
@@ -551,14 +722,14 @@ for (const lang of languages) {
   for (const cat of lang.categories) {
     const dir = `languages/${lang.slug}/${cat.folder}`;
     const file = mainFile(dir);
-    const facts = { file, lang: file ? shikiLang(file) : null, code: null, entry: null, output: [], build: [], run: [] };
+    const facts = { file, lang: file ? shikiLang(file, lang.slug) : null, code: null, entry: null, output: [], build: [], run: [] };
     if (file) {
       const text = read(`${dir}/${file}`);
       // The program without its comments; runs of blank lines become one.
-      facts.code = classify(text, file).filter((l) => l.kind !== 'comment')
+      facts.code = classify(text, file, lang.slug).filter((l) => l.kind !== 'comment')
         .map((l) => l.text).join('\n').replace(/\n\s*\n(\s*\n)+/g, '\n\n').trim();
-      facts.entry = entryPoint(text, file);
-      facts.output = linesWith(text, file, GREETING).map((l) => ({ n: l.n, text: l.text.trim() }));
+      facts.entry = entryPoint(text, file, lang.slug);
+      facts.output = linesWith(text, file, GREETING, lang.slug).map((l) => ({ n: l.n, text: l.text.trim() }));
     }
     facts.build = scriptSteps(dir, 'build.sh');
     facts.run = scriptSteps(dir, 'run.sh');
@@ -628,6 +799,28 @@ function humorBox(lang, ui, loc) {
 }
 
 for (const loc of LOCALES) generateLocale(loc);
+
+// The not-found page. Starlight looks up the entry "404" of the docs
+// collection and the strings of the i18n collection, and logs a warning
+// when either is missing. Starlight serves one 404 page, in the root
+// locale, so only the root locale gets an i18n entry; the others keep
+// Starlight's built-in translations.
+// `draft: true` keeps the entry out of the normal page routes in a
+// production build, where it would clash with Starlight's /404 route.
+// https://starlight.astro.build/guides/i18n/#translate-starlights-ui
+{
+  const ui = uiStrings(ROOT_LOCALE.tag).strings;
+  fs.writeFileSync(path.join(OUT_DOCS, '404.md'), frontmatter({
+    title: ui['notFound.title'],
+    template: 'splash',
+    editUrl: false,
+    pagefind: false,
+    draft: true,
+    hero: { tagline: ui['notFound.text'] },
+  }));
+  fs.mkdirSync(OUT_I18N, { recursive: true });
+  fs.writeFileSync(path.join(OUT_I18N, `${ROOT_LOCALE.tag}.json`), JSON.stringify({ '404.text': ui['notFound.text'] }, null, 2) + '\n');
+}
 fs.writeFileSync(path.join(OUT_DATA, 'languages.json'), JSON.stringify(cardsByLocale, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT_DATA, 'ui.json'), JSON.stringify(uiByLocale, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT_DATA, 'implementations.json'), JSON.stringify(implsByLocale, null, 2) + '\n');

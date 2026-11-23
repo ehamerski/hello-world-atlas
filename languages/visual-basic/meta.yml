@@ -1,0 +1,42 @@
+# languages/visual-basic/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Visual Basic (VB.NET)"
+year: 2002
+year_note: "First release of Visual Basic .NET with Visual Studio .NET 2002; Visual Basic itself dates from 1991, and support for the Visual Basic 6.0 IDE ended on 2008-04-08"
+designers:
+  - "Microsoft"
+paradigms:
+  - "object-oriented"
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: ".NET 10 SDK (`dotnet`), VB.NET"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: ".NET 10 SDK, ASP.NET Core minimal API in VB.NET"
+    run: "http://localhost:8080 (PORT)"
+    status: "verified"
+    note: "Verified on macOS; check with PORT set to a free port if another program uses 8080"
+sources:
+  - title: "Visual Basic documentation (VB.NET). Microsoft Learn"
+    url: "https://learn.microsoft.com/dotnet/visual-basic/"
+  - title: "What's new for Visual Basic. Microsoft Learn"
+    url: "https://learn.microsoft.com/dotnet/visual-basic/whats-new/"
+  - title: "Support Statement for Visual Basic 6.0. Microsoft Learn"
+    url: "https://learn.microsoft.com/previous-versions/visualstudio/visual-basic-6/visual-basic-6-support-policy"
+  - title: "Happy 20th Birthday Visual Basic!, Visual Basic Team blog, 20 May 2011. Microsoft"
+    url: "https://devblogs.microsoft.com/vbteam/happy-20th-birthday-visual-basic/"
+  - title: "TIOBE Index for November 2026"
+    url: "https://www.tiobe.com/tiobe-index/"
+  - title: "2026 Stack Overflow Developer Survey: programming languages (data)"
+    url: "https://survey.stackoverflow.co/2026/technology/data/languages"
+# humor: one light line for the Off the record page.
+humor:
+  line: "Visual Basic .NET still reads like English, which is exactly why it is so polite to your brackets."
+  dictionary:
+    - term: "Visual Basic"
+      definition: "a language that asks you to write Then and End If so often that the keyboard starts to feel polite."

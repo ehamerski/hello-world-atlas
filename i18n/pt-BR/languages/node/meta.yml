@@ -1,0 +1,13 @@
+source: languages/node/meta.yml
+source_sha: da3d03fa15627ca59115f9c770baed2d2a7bce40
+year_note: "Node.js (o runtime): primeiros commits em 2009-02-16; JavaScript (a linguagem): criado em 1995 por Brendan Eich na Netscape"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "O JavaScript cresceu dentro do navegador web. O Node.js o deixou sair, e a primeira coisa que ele fez foi cumprimentar um terminal."
+  dictionary:
+    - term: "Node.js"
+      definition: "um runtime em que o primeiro Hello World não precisa de nenhuma dependência, e o segundo precisa de quatrocentas."

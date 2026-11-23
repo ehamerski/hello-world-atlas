@@ -131,8 +131,8 @@ servers. This folder uses cpp-httplib for the following reasons:
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | Apple clang 21.0.0, CMake 4.4.5, cpp-httplib 0.64.0 (Homebrew). `./run.sh --verify` printed `<p>Hello, World!</p>`; `curl -i` showed `HTTP/1.1 200 OK` and `Content-Type: text/html; charset=utf-8`, and `/nope` gave `404 Not Found`. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands; the Homebrew bottle is the same file [4]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y build-essential cmake libcpp-httplib-dev` [5]. Debian stable packages an older version (0.18.7 on 2026-11-01) [5]; `Server::Get`, `set_content`, and `listen` exist there too, but this was not tested. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | MSYS2 has no cpp-httplib package. Install `mingw-w64-ucrt-x86_64-gcc` and `mingw-w64-ucrt-x86_64-cmake` with MSYS2, copy `httplib.h` from the cpp-httplib releases [1] into `C:\msys64\ucrt64\include`, then `cmake -S . -B build -G "MinGW Makefiles"`, `cmake --build build`. On Windows, cpp-httplib also needs the Winsock library: `httplib.h` asks for `ws2_32.lib` with `#pragma comment(lib, ...)`, which Visual C++ honors; with MinGW GCC, add `ws2_32` to `target_link_libraries` if linking fails. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential`, `cmake` and `libcpp-httplib-dev` with apt when missing [5]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `gcc`, `cmake` and `ninja` with `pacman` when missing. MSYS2 has no cpp-httplib package, so it downloads `httplib.h` 0.64.0 from the cpp-httplib repository [1], checks its SHA-256, and puts it in `C:\msys64\ucrt64\include`. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

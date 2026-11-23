@@ -33,8 +33,16 @@ LAZARUS_DIR=${LAZARUS_DIR:-$HOME/.local/lazarus-$LAZARUS_VERSION}
 if [ -x "$LAZARUS_DIR/lazbuild" ]; then
     LAZBUILD=$LAZARUS_DIR/lazbuild
     LAZBUILD_OPTS="--lazarusdir=$LAZARUS_DIR --pcp=$LAZARUS_DIR/config"
+elif [ -x /c/lazarus/lazbuild.exe ]; then
+    # Windows: the Chocolatey package installs Lazarus in C:\lazarus. lazbuild
+    # is told where Lazarus is, and keeps its settings in ~/.lazarus.
+    # cygpath -m turns a Git Bash path into the C:/... form a Windows
+    # program understands.
+    LAZBUILD=/c/lazarus/lazbuild.exe
+    LAZBUILD_OPTS="--lazarusdir=$(cygpath -m /c/lazarus) --pcp=$(cygpath -m "$HOME/.lazarus")"
 else
     LAZBUILD=lazbuild
     LAZBUILD_OPTS=
 fi
 export LAZARUS_DIR
+return 0

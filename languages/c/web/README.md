@@ -164,8 +164,8 @@ functions" [8]. So the header needs C99, and `build.sh` uses `-std=c99
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Apple clang 21.0.0, libmicrohttpd 1.0.10, and pkgconf 3.0.10 from Homebrew (bottled for Intel [2]). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands; Homebrew has arm64 bottles [2]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y build-essential pkg-config libmicrohttpd-dev` [3]. The same code and flags; `ldd bin/hello-web` replaces `otool -L`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | In the "MSYS2 UCRT64" shell: `pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-pkgconf mingw-w64-ucrt-x86_64-libmicrohttpd` [4]. `hello.c` skips `<netinet/in.h>` on Windows; the address types come from Winsock through `microhttpd.h`. Name the output `bin/hello-web.exe`. Not tested. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential`, `pkg-config` and `libmicrohttpd-dev` with apt when missing [3]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `gcc`, `pkgconf` and `libmicrohttpd` with `pacman` when missing [4]. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text
@@ -194,11 +194,11 @@ Content-Length: 20
 `chrome --headless=new --window-size=640,240 --screenshot=screenshot.png http://localhost:8080/`.)
 
 ## Sources
-1. GNU libmicrohttpd (project page: description, license, platforms, stable/experimental versions, example handler). GNU Project. <https://www.gnu.org/software/libmicrohttpd/> (accessed 2026-10-31)
+1. GNU libmicrohttpd (project page: description, license, platforms, stable/experimental versions, example handler). GNU Project. <https://www.gnu.org/software/libmicrohttpd/> (accessed 2026-10-31; archived copy: <https://web.archive.org/web/20261113123927/http://www.gnu.org/software/libmicrohttpd/>, accessed 2026-11-22)
 2. libmicrohttpd (formula). Homebrew Formulae. <https://formulae.brew.sh/formula/libmicrohttpd> (accessed 2026-10-31)
 3. Package libmicrohttpd-dev (stable). Debian. <https://packages.debian.org/stable/libmicrohttpd-dev> (accessed 2026-10-31)
 4. mingw-w64-libmicrohttpd. MSYS2 Packages. <https://packages.msys2.org/base/mingw-w64-libmicrohttpd> (accessed 2026-10-31)
 5. `microhttpd.h` from libmicrohttpd 1.0.10 (API documentation comments: `MHD_run_wait`, `MHD_create_response_from_buffer_static`, `MHD_destroy_response`, `MHD_OPTION_SOCK_ADDR_LEN`). Installed by Homebrew at `/usr/local/include/microhttpd.h`; the same file is in the release tarball at <https://ftp.gnu.org/gnu/libmicrohttpd/> (accessed 2026-10-31)
-6. A Tutorial for GNU libmicrohttpd (chapter "Hello browser example"). GNU Project. <https://www.gnu.org/software/libmicrohttpd/tutorial.html> (accessed 2026-10-31)
-7. The GNU libmicrohttpd Reference Manual (`MHD_USE_ERROR_LOG`, `MHD_OPTION_SOCK_ADDR`). GNU Project. <https://www.gnu.org/software/libmicrohttpd/manual/libmicrohttpd.html> (accessed 2026-10-31)
+6. A Tutorial for GNU libmicrohttpd (chapter "Hello browser example"). GNU Project. <https://www.gnu.org/software/libmicrohttpd/tutorial.html> (accessed 2026-10-31; archived copy: <https://web.archive.org/web/20260219200524/https://www.gnu.org/software/libmicrohttpd/tutorial.html>, accessed 2026-11-22)
+7. The GNU libmicrohttpd Reference Manual (`MHD_USE_ERROR_LOG`, `MHD_OPTION_SOCK_ADDR`). GNU Project. <https://www.gnu.org/software/libmicrohttpd/manual/libmicrohttpd.html> (accessed 2026-10-31; archived copy: <https://web.archive.org/web/20250330001954/https://www.gnu.org/software/libmicrohttpd/manual/libmicrohttpd.html>, accessed 2026-11-22)
 8. ISO/IEC 9899:TC3, committee draft WG14/N1256 (C99; Foreword list of changes). ISO/IEC JTC1/SC22/WG14, 2007-09-07. <https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf> (accessed 2026-10-31)

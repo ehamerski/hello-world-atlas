@@ -15,8 +15,15 @@ disk, instead of editing about 70 table rows by hand.
 HOW:
   python3 scripts/gen-readme.py           # rewrite the generated parts
   python3 scripts/gen-readme.py --check   # change nothing; exit 1 if stale
+  python3 scripts/gen-readme.py --validate python ruby
+                                          # only check these meta.yml files
+                                          # and their folders (used by
+                                          # scripts/check-language.sh)
 The output only depends on the meta.yml files and the folders, so running
 it twice gives no diff. --check is what CI runs.
+Both modes first compare the languages and folders with the approved list,
+languages/APPROVED.txt (read by scripts/approved.py), and stop when they
+differ, so a lost language cannot produce smaller tables that pass.
 
 No third-party package is needed. meta.yml uses a small, strict subset of
 YAML (documented in languages/README.md, "meta.yml schema"), and the
@@ -26,6 +33,7 @@ generator, site/scripts/generate.mjs, reads it with a full parser). YAML 1.2.2:
 https://yaml.org/spec/1.2.2/
 """
 
+import importlib.util
 import json
 import os
 import re
@@ -43,7 +51,8 @@ STATUS_ICONS = {'verified': '✅', 'compromise': '🔶',
 # Paradigms explained in docs/paradigms.md get a link to their section.
 LINKED_PARADIGMS = ['imperative', 'object-oriented', 'functional', 'logic']
 
-LANGUAGE_KEYS = {'name': True, 'year': True, 'year_note': False,
+LANGUAGE_KEYS = {'name': True, 'other_names': False,
+                 'year': True, 'year_note': False,
                  'designers': True, 'paradigms': True, 'categories': True,
                  'sources': True, 'influenced_by': False, 'humor': True}
 CATEGORY_KEYS = {'folder': True, 'kind': True, 'label': False,
@@ -186,6 +195,8 @@ def check_keys(mapping, allowed, where):
 def check_humor(humor, path):
     where = f'{path} (humor)'
     check_keys(humor, HUMOR_KEYS, where)
+    if not isinstance(humor['line'], str) or not humor['line'].strip():
+        raise MetaError(f'{where}: line must be a non-empty string')
     for key, keys in (('jokes', JOKE_KEYS), ('dictionary', DICTIONARY_KEYS)):
         if not isinstance(humor.get(key, []), list):
             raise MetaError(f'{where}: {key} must be a list')
@@ -194,6 +205,27 @@ def check_humor(humor, path):
     for joke in humor.get('jokes', []):
         if not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', str(joke['accessed'])):
             raise MetaError(f'{where}: accessed must be a date, YYYY-MM-DD')
+
+
+def check_other_names(meta, lang, path):
+    """other_names: a list of names, none of them another language's name."""
+    names = meta.get('other_names', [])
+    if not isinstance(names, list) or not all(
+            isinstance(n, str) and n.strip() for n in names):
+        raise MetaError(f'{path}: other_names must be a list of non-empty names')
+    if not names:
+        return
+    others = {}
+    for other in os.listdir(LANG_DIR):
+        other_path = os.path.join(LANG_DIR, other, 'meta.yml')
+        if other != lang and os.path.isfile(other_path):
+            others[parse_meta(other_path)['name'].casefold()] = other
+    for name in names:
+        if name.casefold() == meta['name'].casefold():
+            raise MetaError(f'{path}: other_names repeats the name {name!r}')
+        if name.casefold() in others:
+            raise MetaError(f'{path}: other name {name!r} is the name of '
+                            f'{LANG_DIR}/{others[name.casefold()]}')
 
 
 def load_language(lang):
@@ -221,6 +253,7 @@ def load_language(lang):
                 os.path.join(LANG_DIR, slug, 'meta.yml')):
             raise MetaError(f'{path}: influenced_by slug {slug!r} is not a '
                             f'folder of {LANG_DIR}/')
+    check_other_names(meta, lang, path)
     check_humor(meta['humor'], path)
     folders = []
     for cat in meta['categories']:
@@ -254,6 +287,31 @@ def load_all():
     metas = [load_language(lang) for lang in langs]
     # Sorted by display name, so the order never depends on the file system.
     return sorted(metas, key=lambda m: (m['name'].casefold(), m['lang']))
+
+
+def check_approved(metas):
+    """The languages and folders must be the ones in APPROVED.txt."""
+    spec = importlib.util.spec_from_file_location(
+        'approved', os.path.join(ROOT, 'scripts', 'approved.py'))
+    approved = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(approved)
+    try:
+        langs = approved.read(ROOT)
+    except approved.ApprovedError as error:
+        raise MetaError(str(error)) from error
+    listed = set(approved.folders(langs))
+    found = {f'{LANG_DIR}/{m["lang"]}/{c["folder"]}'
+             for m in metas for c in m['categories']}
+    if listed - found:
+        raise MetaError(f'listed in {approved.LIST} but not under categories '
+                        f'in a meta.yml: {", ".join(sorted(listed - found))}')
+    if found - listed:
+        raise MetaError(f'not listed in {approved.LIST}: '
+                        f'{", ".join(sorted(found - listed))}')
+    if len(metas) != len(langs) or len(found) != len(listed):
+        raise MetaError(f'{len(found)} implementations in {len(metas)} '
+                        f'languages, but {approved.LIST} lists '
+                        f'{len(listed)} in {len(langs)}')
 
 
 # ------------------------------------------------------------- rendering
@@ -360,14 +418,40 @@ def replace_block(text, name, body, path):
     return f'{head}{begin}\n{note}\n{body}\n{end}{tail}'
 
 
+def validate(langs):
+    """--validate: check each language's meta.yml and folders, report all."""
+    failed = 0
+    for lang in langs:
+        if not os.path.isfile(os.path.join(LANG_DIR, lang, 'meta.yml')):
+            print(f'gen-readme: {LANG_DIR}/{lang}/meta.yml does not exist',
+                  file=sys.stderr)
+            failed += 1
+            continue
+        try:
+            meta = load_language(lang)
+        except (MetaError, OSError) as error:
+            print(f'gen-readme: {error}', file=sys.stderr)
+            failed += 1
+            continue
+        print(f'gen-readme: {LANG_DIR}/{lang}/meta.yml is valid '
+              f'({len(meta["categories"])} folder'
+              f'{"" if len(meta["categories"]) == 1 else "s"})')
+    return 1 if failed else 0
+
+
 def main(argv):
+    if argv[1:2] == ['--validate'] and argv[2:]:
+        os.chdir(ROOT)
+        return validate(argv[2:])
     check = argv[1:] == ['--check']
     if argv[1:] and not check:
-        print('usage: python3 scripts/gen-readme.py [--check]', file=sys.stderr)
+        print('usage: python3 scripts/gen-readme.py [--check | --validate LANG...]',
+              file=sys.stderr)
         return 2
     os.chdir(ROOT)
     try:
         metas = load_all()
+        check_approved(metas)
         targets = {
             'README.md': ('language-table', language_table(metas, '')),
             os.path.join(LANG_DIR, 'README.md'):

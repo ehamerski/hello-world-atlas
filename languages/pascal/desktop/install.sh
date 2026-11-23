@@ -25,8 +25,9 @@
 #       its official macOS release into ~/.local/fpc-3.2.2 (fpc-env.sh).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://sourceforge.net/projects/freepascal/files/  (official FPC releases)
 #   https://gitlab.com/freepascal.org/lazarus/lazarus/-/blob/main/README.md  (building from source)
@@ -95,13 +96,17 @@ install_fpc_official_macos() {
     . ./fpc-env.sh
 }
 
-# windows_hint - Windows: the official Lazarus installer includes Free
-# Pascal, so one download is enough. This script installs nothing there.
-windows_hint() {
-    explain "Download and run the Lazarus installer for Windows (it includes Free Pascal):"
-    explain "    https://www.lazarus-ide.org/index.php?page=downloads"
-    explain "then add the Lazarus folder (where lazbuild.exe is) and the folder that"
-    explain "contains fpc.exe to PATH. Reopen Git Bash."
+# install_lazarus_windows - Windows: the official Lazarus installer includes
+# Free Pascal, so one package is enough. Chocolatey's "lazarus" package runs
+# that installer (Lazarus 4.0 with Free Pascal 3.2.2) silently and checks the
+# SHA-256 of the download: https://community.chocolatey.org/packages/lazarus
+# Chocolatey needs an administrator terminal, which a CI runner is.
+install_lazarus_windows() {
+    has_cmd choco || fail "Chocolatey (choco) is missing. Install it from https://chocolatey.org/install or download Lazarus from https://www.lazarus-ide.org/index.php?page=downloads"
+    install_pkg "Lazarus 4.0 with Free Pascal 3.2.2" choco install -y --no-progress lazarus --version=4.0.0 || exit 1
+    # Read both env files again: they now find C:\lazarus.
+    . ./fpc-env.sh
+    . ./lazarus-env.sh
 }
 
 # build_lazbuild_from_source - macOS: download the Lazarus source release,
@@ -148,7 +153,7 @@ else
         linux)
             # Debian/Ubuntu package "fpc". It needs sudo, which is shown.
             install_pkg "Free Pascal" sudo apt-get install -y fpc || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
+        windows) install_lazarus_windows ;;
         *)       fail "Unknown OS. See https://sourceforge.net/projects/freepascal/files/" ;;
     esac
     has_cmd "$FPC" || fail "'$FPC' is still not on PATH. Open a new terminal and retry."
@@ -168,12 +173,26 @@ else
             # Debian/Ubuntu: the "lazarus" package installs the IDE, lazbuild,
             # the LCL and fpc. It needs sudo, which is shown.
             install_pkg "Lazarus" sudo apt-get install -y lazarus || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
+        windows) install_lazarus_windows ;;
         *)       fail "Unknown OS. See https://www.lazarus-ide.org/index.php?page=downloads" ;;
     esac
     # Read lazarus-env.sh again: it now finds $LAZARUS_DIR/lazbuild.
     . ./lazarus-env.sh
     has_cmd "$LAZBUILD" || fail "lazbuild is still not found. Open a new terminal and retry."
     ok "lazbuild found: version $("$LAZBUILD" --version 2>/dev/null | tail -n 1)"
+fi
+
+# The LCL's default widgetset on Linux is GTK 2. The "lazarus" package does
+# not depend on its development files, and without them linking fails with
+# "cannot find -lgtk-x11-2.0". libgtk2.0-dev is the Debian/Ubuntu package:
+# https://packages.ubuntu.com/search?keywords=libgtk2.0-dev
+if [ "$TF_OS" = linux ]; then
+    step "Linux only: GTK 2 development files"
+    explain "WHY: the LCL draws the window with GTK 2; linking needs libgtk-x11-2.0 and libgdk-x11-2.0."
+    if dpkg -s libgtk2.0-dev >/dev/null 2>&1; then
+        ok "libgtk2.0-dev is installed."
+    else
+        install_pkg "the GTK 2 development files" sudo apt-get install -y libgtk2.0-dev || exit 1
+    fi
 fi
 ok "Ready. Next: ./build.sh"

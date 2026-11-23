@@ -140,8 +140,8 @@ Open [`hello.c`](hello.c) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Apple clang 21.0.0 from the Command Line Tools (no Xcode app). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. The executable is built for arm64. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y build-essential` installs GCC, `make`, and the C library headers [8]. `cc` is GCC there; the flags are the same [1][2]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install MSYS2 [7]; in the "MSYS2 UCRT64" shell run `pacman -S mingw-w64-ucrt-x86_64-gcc` and add `C:\msys64\ucrt64\bin` to `PATH`. The executable needs `.exe`: `gcc -std=c89 -pedantic-errors -Wall -Wextra -o bin/hello-cli.exe hello.c`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential` with apt when `cc` is missing [8]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install a compiler: if `cc` is missing it prints the MSYS2 steps (`pacman -S mingw-w64-ucrt-x86_64-gcc`) [7] and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

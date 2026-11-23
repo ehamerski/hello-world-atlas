@@ -9,8 +9,9 @@
 #                           cli program it does the same thing)
 #
 # Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon
-# (via Rosetta) is documented but NOT verified. Linux and Windows need a
-# different source (see README.md, "Platform notes").
+# (via Rosetta) is documented but NOT verified. Linux and Windows (Git Bash)
+# build a different source and are verified in CI (see README.md,
+# "Platform notes").
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu

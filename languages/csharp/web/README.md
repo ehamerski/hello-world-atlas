@@ -15,7 +15,7 @@ by Angular and the C# server only sends JSON.
 ## Prerequisites
 | Tool | Version used (macOS Intel) | Why it is needed |
 |---|---|---|
-| .NET SDK 10 | 10.0.403 (ASP.NET Core runtime 10.0.14), in `~/.dotnet` | the C# compiler, MSBuild, the .NET runtime, and ASP.NET Core |
+| .NET SDK 10 | 10.0.404 (ASP.NET Core runtime 10.0.15), in `~/.dotnet` | the C# compiler, MSBuild, the .NET runtime, and ASP.NET Core |
 | `curl` | system `curl` | only for `./run.sh --verify` and for testing by hand |
 
 ASP.NET Core is part of the SDK: "`Microsoft.AspNetCore.App` is installed
@@ -119,10 +119,10 @@ Open [`Program.cs`](Program.cs) and [`hello-web.csproj`](hello-web.csproj).
 ## Platform notes
 | Platform | Status | Notes |
 |---|---|---|
-| macOS Intel | ✅ verified (2026-11-01) | .NET SDK 10.0.403, ASP.NET Core 10.0.14. |
+| macOS Intel | ✅ verified (2026-11-20) | .NET SDK 10.0.404, ASP.NET Core 10.0.15. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Install the SDK as in [../cli](../cli/README.md#platform-notes); the SDK includes ASP.NET Core [1]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id Microsoft.DotNet.SDK.10 -e`. Native PowerShell: `dotnet build -c Release`, `$env:PORT=8080; dotnet bin\Release\net10.0\hello-web.dll`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs Microsoft's `dotnet-install.sh` (channel 10.0) into `~/.dotnet` when no .NET 10 SDK is found [2]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install the SDK: if no .NET 10 SDK is found it prints `winget install --id Microsoft.DotNet.SDK.10 -e` and stops. |
 
 ## Expected output
 `./run.sh --verify`:

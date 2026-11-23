@@ -1,0 +1,8 @@
+# Output of Gradle and the Kotlin compiler
+build/
+.gradle/
+.kotlin/
+
+# Android Studio writes local.properties with the path of your SDK on this
+# computer. It is personal to your machine, so it is never committed.
+local.properties

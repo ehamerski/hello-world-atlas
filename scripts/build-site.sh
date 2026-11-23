@@ -4,12 +4,18 @@
 # WHAT:
 #   1. checks Node.js (Astro needs Node >= 22.23.4, an even major version);
 #   2. installs the site's npm packages from site/package-lock.json (npm ci);
-#   3. generates the pages from the repository Markdown and meta.yml files
+#   3. runs the site's unit tests (npm test: the search, filters, sort order
+#      and address of the Languages page);
+#   4. checks that every language folder is complete
+#      (scripts/check-language.sh; it needs Vale for the prose check);
+#   5. generates the pages from the repository Markdown and meta.yml files
 #      (site/scripts/generate.mjs);
-#   4. packs one ZIP per implementation (scripts/package-downloads.sh);
-#   5. builds the static site into site/dist/ (Astro + Starlight);
-#   6. checks every internal link of the built site (site/scripts/check-links.mjs);
-#   7. with --preview, serves site/dist/ on http://localhost:4321/.
+#   6. packs one ZIP per implementation (scripts/package-downloads.sh);
+#   7. builds the static site into site/dist/ (Astro + Starlight);
+#   8. checks every internal link of the built site (site/scripts/check-links.mjs);
+#   9. checks that the built site has a page for every language and a ZIP
+#      for every category in languages/APPROVED.txt (scripts/approved.py --site);
+#   10. with --preview, serves site/dist/ on http://localhost:4321/.
 #
 # WHY: the site has no content of its own. Every page comes from the
 #   repository at build time, so the site and the READMEs never disagree.
@@ -59,25 +65,37 @@ else
     explain "site/node_modules exists, so the install is skipped (use --clean to reinstall from the lockfile)."
 fi
 
-step "3. Generating the pages from languages/ and docs/"
+step "3. Running the site's unit tests"
+explain "The Languages page filters and sorts in the browser; the tests check that logic without a browser."
+(cd site && npm test)
+
+step "4. Checking that every language is complete"
+explain "An incomplete language would still build, with missing tables, facts or Anatomy sections."
+scripts/check-language.sh
+
+step "5. Generating the pages from languages/ and docs/"
 explain "Each README, doc, and meta.yml becomes a page; nothing is copied by hand."
 node site/scripts/generate.mjs
 
-step "4. Packing the download ZIPs"
+step "6. Packing the download ZIPs"
 explain "Each language page links to a ZIP of its implementations."
 scripts/package-downloads.sh site/public/downloads
 
-step "5. Building the static site"
+step "7. Building the static site"
 explain "Astro renders every page to HTML in site/dist/ and Pagefind builds the search index."
 (cd site && ./node_modules/.bin/astro build)
 ok "Site built in site/dist/"
 
-step "6. Checking the links of the built site"
+step "8. Checking the links of the built site"
 explain "Every rewritten link must land on a real page and heading."
 node site/scripts/check-links.mjs
 
+step "9. Checking the built site against the approved list"
+explain "Every language in languages/APPROVED.txt needs its page, every category its ZIP."
+python3 scripts/approved.py --site site/dist
+
 if [ "$PREVIEW" = 1 ]; then
-    step "7. Serving the site at http://localhost:4321/ (Ctrl+C to stop)"
+    step "10. Serving the site at http://localhost:4321/ (Ctrl+C to stop)"
     explain "astro preview serves the built files; it is for checking, not for production."
     cd site && exec ./node_modules/.bin/astro preview
 else

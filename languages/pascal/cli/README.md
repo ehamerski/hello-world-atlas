@@ -148,8 +148,8 @@ Open [`hello.pas`](hello.pas) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | FPC 3.2.2 official release in `~/.local/fpc-3.2.2` (Homebrew's source build fails, see Prerequisites). Linking prints two harmless warnings from Apple's newer linker: `-macosx_version_min has been renamed to -macos_version_min` and `ld: warning: -multiply_defined is obsolete`. |
 | macOS Apple Silicon | ⚠️ not verified | The same `install.sh` path: the release file covers Intel and Apple Silicon [6]. `brew install fpc` also has a bottle there [4]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y fpc`; Debian stable has 3.2.2 [13]. Same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install `fpc-3.2.2.win32.and.win64.exe` from FPC's SourceForge files [14] (or Lazarus, which includes FPC [15]) and add the folder with `fpc.exe` to `PATH`. Name the output `hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `fpc` with apt when missing [13]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs Chocolatey and installs Lazarus 4.0.0, which includes Free Pascal 3.2.2 [15], with `choco install lazarus --version=4.0.0` when `fpc` is missing. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

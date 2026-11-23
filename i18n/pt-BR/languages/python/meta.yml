@@ -1,0 +1,13 @@
+source: languages/python/meta.yml
+source_sha: a023b80657f4e41dade4212b9ddb0ac4e7671d07
+year_note: "implementação iniciada em dezembro de 1989; Python 0.9.0 publicado na USENET em 1991-02-20"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "O Python recebeu o nome de uma série de comédia, o que talvez explique por que seu Hello World tem uma linha só e não faz ninguém perder tempo."
+  dictionary:
+    - term: "Python"
+      definition: "uma linguagem em que o espaço em branco é sintaxe, de modo que até as partes vazias de um programa precisam estar corretas."

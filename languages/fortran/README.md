@@ -15,7 +15,7 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Fortran 2008, free form · `gfortran` (Homebrew `gcc` 16.2.0) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | GFortran (`gfortran`) | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version) | – |
 | web | – | not implemented, same section | – |
 

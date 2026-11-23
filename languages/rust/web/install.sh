@@ -10,8 +10,9 @@
 #       first release with edition 2024, the edition named in Cargo.toml.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://www.rust-lang.org/tools/install
 #   https://rust-lang.github.io/rustup/installation/index.html
@@ -55,10 +56,14 @@ explain "WHY: rustup is the official installer. It puts rustc, cargo, and the st
 explain "     library in ~/.cargo and ~/.rustup (no sudo) and can update them later."
 case "$TF_OS" in
     macos-intel|macos-arm|linux)
-        # The command published on https://www.rust-lang.org/tools/install.
-        # It downloads rustup-init over HTTPS (TLS 1.2 or newer) and runs it.
-        install_pkg "Rust (rustup)" sh -c \
-            "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" || exit 1 ;;
+        # The script behind the command on https://www.rust-lang.org/tools/install,
+        # saved to a file first (HTTPS, TLS 1.2 or newer) so you can read it
+        # before it runs. It downloads rustup-init and runs it.
+        rustup_script=${XDG_CACHE_HOME:-$HOME/.cache}/hello-world-rust/rustup-init.sh
+        install_pkg "rustup's installer script (download only)" \
+            curl --proto '=https' --tlsv1.2 -fsSL --create-dirs https://sh.rustup.rs -o "$rustup_script" || exit 1
+        explain "The script is saved in $rustup_script; you can read it before the next step."
+        install_pkg "Rust (rustup)" sh "$rustup_script" || exit 1 ;;
     windows)
         explain "On Windows, run this command in PowerShell, then reopen Git Bash:"
         explain "    winget install --id Rustlang.Rustup -e"

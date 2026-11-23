@@ -96,8 +96,8 @@ Open [`hello.py`](hello.py) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Python 3.14.10 with Homebrew `python-tk@3.14` and Tcl/Tk 9.1.0. Homebrew says "Intel macOS remains Tier 3", where "bottles will rarely be built or published" [6], so `brew install python-tk@3.14` built `tcl-tk` and `python-tk@3.14` from source (on 2026-10-31 with the Command Line Tools 26.6, `tcl-tk` took about 5 minutes and `python-tk@3.14` about 20 seconds, after `python@3.14` itself took about 10 minutes; an outdated `/Applications/Xcode.app` left on the machine had made an earlier attempt fail). |
 | macOS Apple Silicon | ⚠️ not verified | `brew install python@3.14 python-tk@3.14`, or the python.org installer, which includes Tk [5]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y python3-tk` [3]. Needs a desktop session (X11 or Wayland). |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install Python with the Python install manager [7], then check with `py -m tkinter`. In Git Bash: `PYTHON=python ./run.sh`. Native: `py hello.py`. WSL shows Linux GUI apps on the Windows desktop through WSLg [8]. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `python3` (when missing) and `python3-tk` (when `tkinter` does not load) with apt [3]. A window needs a graphical session. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Python: if the interpreter (`PYTHON`, default `python3`) is missing it prints the `winget` and `py install 3.14` steps and stops. [7] It also needs `tkinter` to load; if it does not, it stops. WSL not verified; it behaves like Linux, and WSLg shows Linux GUI apps on the Windows desktop [8]. |
 
 ## Expected output
 `./run.sh` opens a small window titled "Hello, World!" with the text

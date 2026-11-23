@@ -17,8 +17,8 @@ code builds on all three.
 ## Prerequisites
 | Tool | Version used (macOS Intel) | Why it is needed |
 |---|---|---|
-| .NET SDK 10 | 10.0.403 (runtime 10.0.14), in `~/.dotnet` | the C# compiler, MSBuild, the .NET runtime, and `dotnet restore` for the packages |
-| Avalonia | 12.1.4 (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`) | the UI toolkit; downloaded by `install.sh` from nuget.org |
+| .NET SDK 10 | 10.0.404 (runtime 10.0.15), in `~/.dotnet` | the C# compiler, MSBuild, the .NET runtime, and `dotnet restore` for the packages |
+| Avalonia | 12.1.6 (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`) | the UI toolkit; downloaded by `install.sh` from nuget.org |
 | Internet access | the first time only | `dotnet restore` downloads 25 packages (about 295 MB of `.nupkg` files on the development machine) into `~/.nuget/packages` |
 
 ## Quick start
@@ -31,7 +31,7 @@ code builds on all three.
 ## Scripts explained
 | Script | What it does | Why it is needed |
 |---|---|---|
-| `install.sh` | 1. Checks for a .NET SDK 10 or newer, as in [../cli](../cli/README.md#scripts-explained). 2. Runs `dotnet restore`. | Avalonia is not part of .NET: "the .NET CLI uses NuGet to look for these dependencies and download them if necessary" [5]. They go into "the `.nuget/packages` directory in the user's home directory" [5], shared by all projects. |
+| `install.sh` | 1. Checks for a .NET SDK 10 or newer, as in [../cli](../cli/README.md#scripts-explained). 2. Runs `dotnet restore` after asking, unless `obj/project.assets.json` shows that the packages are already restored. | Avalonia is not part of .NET: "the .NET CLI uses NuGet to look for these dependencies and download them if necessary" [5]. They go into "the `.nuget/packages` directory in the user's home directory" [5], shared by all projects. |
 | `build.sh` | Runs `dotnet build -c Release --disable-build-servers`. | Compiles `Program.cs` to IL and copies Avalonia's `.dll` files and native libraries into `bin/Release/net10.0/`. |
 | `run.sh` | Runs `dotnet bin/Release/net10.0/hello-desktop.dll`. `--verify` sets `TF_VERIFY=1`: the app prints the text once the window is open and closes after about 2 seconds. | The .NET runtime runs the IL; Avalonia opens a native window. |
 
@@ -80,7 +80,7 @@ desktop/
 ## Step-by-step walkthrough
 Open [`Program.cs`](Program.cs) and [`hello-desktop.csproj`](hello-desktop.csproj).
 
-1. **`<PackageReference Include="Avalonia" Version="12.1.4" />`** in the
+1. **`<PackageReference Include="Avalonia" Version="12.1.6" />`** in the
    project file lists a NuGet package with an exact version, the way a
    `<dependency>` does in Maven's `pom.xml`. `Avalonia.Desktop` adds the desktop back ends, and `Avalonia.Themes.Fluent` adds the look of the controls.
    `<OutputType>WinExe</OutputType>` marks a GUI program. On Windows it
@@ -119,7 +119,7 @@ Open [`Program.cs`](Program.cs) and [`hello-desktop.csproj`](hello-desktop.cspro
 ## Why this toolchain
 - **Avalonia** describes itself as a way to "Build cross-platform desktop,
   mobile, and web apps with shared XAML and C#", and it is "MIT licensed"
-  [1]. The latest stable version on NuGet on 2026-11-01 was 12.1.4 [10]. This repository uses Avalonia because Microsoft's own toolkits do not cover all
+  [1]. The latest stable version on NuGet on 2026-11-19 was 12.1.6 [10]. This repository uses Avalonia because Microsoft's own toolkits do not cover all
   three desktop platforms: WPF and Windows Forms are Windows-only [2][3],
   and MAUI has no Linux target [4].
 - **Code only, no XAML.** XAML is the usual way to write Avalonia UIs
@@ -129,10 +129,10 @@ Open [`Program.cs`](Program.cs) and [`hello-desktop.csproj`](hello-desktop.cspro
 ## Platform notes
 | Platform | Status | Notes |
 |---|---|---|
-| macOS Intel | ✅ verified (2026-11-01) | .NET SDK 10.0.403, Avalonia 12.1.4. The window follows the system appearance: "By default, Avalonia inherits the theme variant set by the system-wide user preference" [11], so it is dark on the development machine. |
+| macOS Intel | ✅ verified (2026-11-20) | .NET SDK 10.0.404, Avalonia 12.1.6. The window follows the system appearance: "By default, Avalonia inherits the theme variant set by the system-wide user preference" [11], so it is dark on the development machine. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. The native libraries in `runtimes/osx/native` are universal binaries (`file` reports `x86_64` and `arm64`). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Install the SDK as in [../cli](../cli/README.md#platform-notes).  |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id Microsoft.DotNet.SDK.10 -e`. Native PowerShell: `dotnet build -c Release`, then `bin\Release\net10.0\hello-desktop.exe`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs Microsoft's `dotnet-install.sh` (channel 10.0) into `~/.dotnet` when no .NET 10 SDK is found [2]. It then runs `dotnet restore`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install the SDK: if no .NET 10 SDK is found it prints `winget install --id Microsoft.DotNet.SDK.10 -e` and stops. It then runs `dotnet restore`. |
 
 ## Expected output
 `./run.sh --verify`:
@@ -159,7 +159,7 @@ which captures only this window.)
 7. Avalonia.Templates: templates/csharp/app (the `avalonia.app` template files). AvaloniaUI, GitHub. <https://github.com/AvaloniaUI/Avalonia.Templates/tree/main/templates/csharp/app> (accessed 2026-11-01)
 8. Code-only UI. Avalonia Docs. <https://docs.avaloniaui.net/docs/fundamentals/coded-ui> (accessed 2026-11-01)
 9. Application lifetimes. Avalonia Docs. <https://docs.avaloniaui.net/docs/concepts/application-lifetimes> (accessed 2026-11-01)
-10. Avalonia 12.1.4. NuGet Gallery. <https://www.nuget.org/packages/Avalonia> (accessed 2026-11-01)
+10. Avalonia 12.1.6. NuGet Gallery. <https://www.nuget.org/packages/Avalonia> (accessed 2026-11-19)
 11. Theme variants. Avalonia Docs. <https://docs.avaloniaui.net/docs/styling/theme-variants> (accessed 2026-11-01)
 12. Create your first project. Avalonia Docs. <https://docs.avaloniaui.net/docs/get-started/create-your-first-project> (accessed 2026-11-01)
 13. Avalonia.Templates: templates/csharp/app/Program.cs. AvaloniaUI, GitHub. <https://github.com/AvaloniaUI/Avalonia.Templates/blob/main/templates/csharp/app/Program.cs> (accessed 2026-11-01)

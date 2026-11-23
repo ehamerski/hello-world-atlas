@@ -1,0 +1,37 @@
+# languages/ocaml/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "OCaml"
+other_names:
+  - "Objective Caml"
+year: 1996
+year_note: "Caml V3.1 was distributed from 1987; Objective Caml was released in 1996; the official name became OCaml in 2011"
+designers:
+  - "Xavier Leroy"
+  - "Damien Doligez"
+  - "Jérôme Vouillon"
+  - "Didier Rémy"
+paradigms:
+  - "functional"
+  - "object-oriented"
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "OCaml 5.5.2 (`ocamlopt`, Homebrew formula built from source)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "native code compiled by ocamlopt into build/hello"
+sources:
+  - title: "The history of OCaml. OCaml.org (Inria)"
+    url: "https://ocaml.org/history"
+  - title: "The OCaml Manual, release 5.5. Xavier Leroy, Damien Doligez, Alain Frisch, Jacques Garrigue, Didier Rémy, Jérôme Vouillon. Inria"
+    url: "https://ocaml.org/manual/5.5/index.html"
+  - title: "Homebrew formula ocaml"
+    url: "https://formulae.brew.sh/formula/ocaml"
+# humor: one light line for the Off the record page.
+humor:
+  line: "OCaml programs state their types almost nowhere, and the compiler still knows every one of them."
+  dictionary:
+    - term: "OCaml"
+      definition: "a language whose compiler argues with you about types so that nobody else has to later."

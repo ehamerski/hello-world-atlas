@@ -17,8 +17,9 @@
 # HOW:  ./build.sh             (after ./install.sh; run again after editing)
 #       ./build.sh -save-temps keep the generated C files to look at them
 #
-# Platforms: macOS Intel (verified on the development machine); macOS Apple
-# Silicon, Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the development machine); Linux and
+# Windows (Git Bash) verified in CI; macOS Apple Silicon and WSL are
+# documented but NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -28,6 +29,9 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, require_cmd, fix_developer_dir.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# Windows: MSYS2's ucrt64 folder (cobc, gcc, libcob) on PATH.
+# shellcheck source=gnucobol-env.sh
+. ./gnucobol-env.sh
 
 step "1/2 Check the compiler"
 explain "WHY: building needs GnuCOBOL's 'cobc' and the C compiler it calls;"

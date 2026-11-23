@@ -14,8 +14,9 @@
 #       ./run.sh --verify   self-check used by scripts/verify-all.sh: start
 #                           the server, fetch the page once with curl, stop
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -28,10 +29,14 @@ cd -- "$(dirname -- "$0")"
 # Puts ~/.ghcup/bin on PATH.
 # shellcheck source=ghcup-env.sh
 . ./ghcup-env.sh
+# CABAL_PROJECT_OPTS (empty except on Windows).
+# shellcheck source=cabal-project.sh
+. ./cabal-project.sh
 
 CABAL=${CABAL:-cabal}
 require_cmd "$CABAL" "Cabal knows where the built executable is."
-BIN=$("$CABAL" list-bin hello-web)
+# shellcheck disable=SC2086  # CABAL_PROJECT_OPTS is empty or one option
+BIN=$("$CABAL" list-bin $CABAL_PROJECT_OPTS hello-web)
 [ -x "$BIN" ] || fail "hello-web is not built yet. Run ./build.sh first."
 
 # app/Main.hs reads PORT too, so the export makes the server and this

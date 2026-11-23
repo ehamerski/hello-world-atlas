@@ -121,8 +121,8 @@ Open [`main.go`](main.go) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Go 1.27.3 from Homebrew. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands (`brew install go` [10]). The executable is then built for arm64, the value `go env GOARCH` reports there. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Install from the official archive: remove any old `/usr/local/go`, extract the archive into `/usr/local`, and add `/usr/local/go/bin` to `PATH` [6]. `install.sh` prints these commands but does not run them, because they need `sudo`. The distribution's `golang-go` package may be older than the current release. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id GoLang.Go -e` [12], or the MSI installer from go.dev [6]. Windows executables end in `.exe`, which these scripts do not add; native commands (PowerShell): `go build -o bin\hello-cli.exe .`, then `.\bin\hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Go: if Go 1.22 or newer is missing it prints the go.dev archive steps [6] and stops. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Go: if Go 1.22 or newer is missing it prints `winget install --id GoLang.Go -e` [12] and stops. WSL not verified; it behaves like Linux. |
 
 **Cross-compiling:** Go can build for another system from this one, for example
 `GOOS=windows GOARCH=amd64 go build -o bin/hello-cli.exe .` [5]. This was

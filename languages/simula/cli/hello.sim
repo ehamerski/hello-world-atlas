@@ -1,0 +1,18 @@
+Comment hello.sim - Simula cli: Hello, World!
+  WHAT: prints one line, Hello, World!, and stops.
+  WHY:  it is the smallest complete Simula 67 program: one block between
+        begin and end, and one output procedure from the Simula 67 Common
+        Base (outtext prints text, outimage ends the line).
+  Simula comments run from the word comment to the next semicolon, so
+  this text must not contain a semicolon. Source for the convention and
+  the procedures: Dahl, Myhrhaug, Nygaard, SIMULA 67 Common Base Language,
+  Norwegian Computing Center, 1968 (report NR 743), sections "Comment
+  conventions" and "outtext" (https://www.softwarepreservation.org/projects/ALGOL/manual/NR_report_743_Dahl_Myhrhaug_Nygaard_Simula-67-Common-Base-Language.pdf)
+  and GNU Cim 5.1 implements that Common Base.;
+
+begin
+   comment outtext prints the text, with no line end yet;
+   outtext("Hello, World!");
+   comment outimage ends the line, like a newline in C or print in Python;
+   outimage
+end;

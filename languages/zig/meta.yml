@@ -1,0 +1,32 @@
+# languages/zig/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Zig"
+year: 2016
+year_note: "Andrew Kelley introduced Zig in a blog post dated 2016-02-08; the first release listed on ziglang.org is 0.1.1 (2017-10-17)"
+designers:
+  - "Andrew Kelley"
+paradigms:
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Zig 0.17.0 (`zig build-exe`, official tarball)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "native program compiled by zig build-exe into build/hello"
+sources:
+  - title: "Introduction to the Zig Programming Language. Andrew Kelley, 2016-02-08"
+    url: "https://andrewkelley.me/post/intro-to-zig.html"
+  - title: "Announcing the Zig Software Foundation. Andrew Kelley, ziglang.org, 2020-07-11"
+    url: "https://ziglang.org/news/announcing-zig-software-foundation/"
+  - title: "Zig Software Foundation. ziglang.org"
+    url: "https://ziglang.org/zsf/"
+  - title: "Download index (JSON). ziglang.org"
+    url: "https://ziglang.org/download/index.json"
+# humor: one light line for the Off the record page.
+humor:
+  line: "Zig hides no allocation from you, so when the program needs memory, you are the one who has to say where it comes from."
+  dictionary:
+    - term: "allocator"
+      definition: "a function argument that answers the question every other language answers silently and later."

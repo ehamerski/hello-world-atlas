@@ -195,8 +195,8 @@ at the top of each block.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | GTK 4.24.1 built from source by `install.sh` (no Intel bottle; see Prerequisites), Homebrew dependencies, Apple clang 21.0.0. |
 | macOS Apple Silicon | ⚠️ not verified | `brew install gtk4` installs a bottle [2]; `install.sh` does that. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | GTK's Linux page lists `libgtk-4-dev` as the development package for Debian/Ubuntu [14]: `sudo apt-get install -y build-essential pkg-config libgtk-4-dev`. Debian stable has GTK 4.18 [15]; the functions used here all exist there. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | GTK's Windows page: install MSYS2, then `pacman -S mingw-w64-ucrt-x86_64-gtk4` (and `mingw-w64-ucrt-x86_64-toolchain base-devel` for the compiler) [16]. Name the output `bin/hello-desktop.exe`. Under WSL, a window needs WSLg or an X server. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential`, `pkg-config` and `libgtk-4-dev` with apt when missing [14]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `gcc`, `pkgconf` and `gtk4` with `pacman` when missing [16]. WSL not verified; it behaves like Linux, and a window needs WSLg or an X server. |
 
 ## Expected output
 `./run.sh` opens this window:

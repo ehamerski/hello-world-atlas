@@ -79,7 +79,8 @@ anchors() {
             sub(/^#+[ \t]+/, "", h); sub(/[ \t]+#*[ \t]*$/, "", h)
             gsub(/\]\([^)]*\)/, "]", h)        # [text](url) -> text
             h = tolower(h)
-            # Common non-ASCII punctuation (UTF-8 bytes): · — – ’ “ ” → ✅ 📄
+            # Common non-ASCII punctuation, as UTF-8 bytes: middle dot, em dash,
+            # en dash, curly quotes, right arrow, check mark, page emoji
             gsub(/\302\267|\342\200\224|\342\200\223|\342\200\231|\342\200\234|\342\200\235|\342\206\222|\342\234\205|\360\237\223\204/, "", h)
             # Keep letters, digits, space, "-", "_" and other non-ASCII bytes.
             gsub(/[^a-z0-9 _\200-\377-]/, "", h)

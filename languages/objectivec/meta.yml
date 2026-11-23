@@ -1,0 +1,52 @@
+# languages/objectivec/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Objective-C"
+year: null
+year_note: "began at ITT in the early 1980s; Brad Cox developed it into Objective-C at PPI (later Stepstone)"
+designers:
+  - "Brad Cox"
+  - "Tom Love"
+paradigms:
+  - "object-oriented"
+  - "imperative"
+# influenced_by: each influence cited with the exact words of its source.
+influenced_by:
+  - language: "Smalltalk"
+    title: "The Objective-C Programming Language. Apple Inc."
+    url: "https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjectiveC/Introduction/introObjectiveC.html"
+    quote: "Its additions to C are mostly based on Smalltalk, one of the first object-oriented programming languages."
+  - language: "C"
+    title: "Programming with Objective-C. Apple Inc."
+    url: "https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html"
+    quote: "It’s a superset of the C programming language and provides object-oriented capabilities and a dynamic runtime."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "clang + Foundation"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "clang + AppKit"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "clang + Foundation + BSD sockets"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "The Origins of Objective-C at PPI/Stepstone and its Evolution at NeXT. Brad Cox, Steve Naroff, Hansen Hsu, HOPL IV"
+    url: "https://hopl4.sigplan.org/details/hopl-4-papers/18/The-Origins-of-Objective-C-at-PPI-Stepstone-and-its-Evolution-at-NeXT"
+  - title: "Programming with Objective-C. Apple Inc."
+    url: "https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html"
+  - title: "Objective-C Automatic Reference Counting (ARC). Clang documentation, LLVM Project"
+    url: "https://clang.llvm.org/docs/AutomaticReferenceCounting.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Objective-C puts square brackets around every method call, making even a simple print look like it is negotiating a treaty."
+  dictionary:
+    - term: "Objective-C"
+      definition: "a language that wraps C in objects and objects in messages, then asks you to type it all out."

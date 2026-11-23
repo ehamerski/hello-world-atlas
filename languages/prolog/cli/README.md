@@ -161,8 +161,8 @@ World does not need it.)
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | SWI-Prolog 10.0.2 from Homebrew, built from source (no Intel bottle) [3]. |
 | macOS Apple Silicon | ⚠️ not verified | `brew install swi-prolog` installs a pre-built bottle [3]. Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y swi-prolog-nox` (the build "without X support"; Debian stable has 9.2.9) [13]. For the current version on Ubuntu, add the team's PPA: `sudo apt-add-repository ppa:swi-prolog/stable`, `sudo apt-get update`, `sudo apt-get install swi-prolog` [14]. Same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Run the "Self-installing executable for Microsoft Windows 64-bit editions" from the download page [4], or in PowerShell `winget install SWI-Prolog.SWI-Prolog` (package listed in the winget repository [15]). Make sure `swipl` is on `PATH`, then reopen Git Bash. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `swi-prolog-nox` with apt when `swipl` is missing [13]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `swi-prolog-core` and `swi-prolog-packages` with `pacman` when `swipl` is missing. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

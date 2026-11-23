@@ -1,22 +1,3 @@
-This repository uses two licenses:
-
-- Code: the source files, scripts and configuration files, and the code
-  blocks inside the documents, are licensed under the MIT License below.
-
-- Prose: the text of the Markdown documents (*.md) and of the website
-  generated from them is licensed under the Creative Commons Attribution
-  4.0 International License (CC BY 4.0, SPDX: CC-BY-4.0).
-  Summary: https://creativecommons.org/licenses/by/4.0/
-  Legal code: https://creativecommons.org/licenses/by/4.0/legalcode.en
-  To attribute, credit "Eduardo Hamerski, Hello World in many programming
-  languages", link to the source, and indicate if changes were made.
-
-Creative Commons recommends against using its licenses for software
-(https://creativecommons.org/faq/#can-i-apply-a-creative-commons-license-to-software),
-which is why the code keeps the MIT License.
-
--------------------------------------------------------------------------------
-
 MIT License
 
 Copyright (c) 2026 Eduardo Hamerski

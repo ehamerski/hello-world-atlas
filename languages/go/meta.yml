@@ -2,6 +2,8 @@
 # scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
 # year and designers are cited in README.md; the same sources are below.
 name: "Go"
+other_names:
+  - "golang"
 year: 2009
 year_note: "design began 2007-09-21; public open source release 2009-11-10; Go 1 on 2012-03-28"
 designers:

@@ -29,4 +29,21 @@ find_package(Threads REQUIRED)
 add_executable(hello-web hello.cpp)
 target_include_directories(hello-web PRIVATE ${HTTPLIB_INCLUDE_DIR})
 target_link_libraries(hello-web PRIVATE Threads::Threads)
+
+# Debian and Ubuntu's libcpp-httplib-dev is not header-only: its httplib.h
+# only declares the classes, and the code is in libcpp-httplib.so next to it
+# (file list: https://packages.ubuntu.com/resolute/amd64/libcpp-httplib-dev/filelist).
+# Without it the link fails with "undefined reference to httplib::Server".
+# Homebrew's package and the single header used on Windows hold all the code,
+# so there find_library finds nothing and nothing is added.
+find_library(HTTPLIB_LIBRARY NAMES cpp-httplib)
+if(HTTPLIB_LIBRARY)
+  target_link_libraries(hello-web PRIVATE ${HTTPLIB_LIBRARY})
+endif()
+
+# Windows: the sockets API (Winsock) is in ws2_32.dll, which httplib.h calls.
+# https://learn.microsoft.com/en-us/windows/win32/winsock/getting-started-with-winsock
+if(WIN32)
+  target_link_libraries(hello-web PRIVATE ws2_32)
+endif()
 target_compile_options(hello-web PRIVATE -Wall -Wextra -pedantic-errors)

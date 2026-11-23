@@ -131,8 +131,8 @@ other web versions.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Node.js 26.8.2 (nvm), npm 12.2.1, Express 5.3.0. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands as Intel. Express is pure JavaScript: the same `node_modules/` works on every CPU. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | The distribution's own `nodejs` package may be older than Express 5 needs; install a current Long Term Support (LTS) release as shown on nodejs.org [17]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id OpenJS.NodeJS.LTS -e` [18]. Native PowerShell: `npm ci`, then `$env:PORT=8080; node app.js`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Node.js: if version 18 or newer is missing it prints the nodejs.org steps [17] and stops. It runs `npm ci` when Express is not installed. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Node.js: if version 18 or newer is missing it prints `winget install --id OpenJS.NodeJS.LTS -e` [18] and stops. It runs `npm ci` when Express is not installed. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 `./run.sh` (the server keeps running until Ctrl+C):

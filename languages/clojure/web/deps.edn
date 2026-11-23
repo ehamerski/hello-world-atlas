@@ -1,0 +1,19 @@
+;; deps.edn - Clojure web: the project file of the Clojure CLI.
+;;
+;; The whole file is one map written in EDN (Extensible Data Notation), the
+;; data format that is a subset of Clojure's own syntax.
+;; Reference: https://clojure.org/reference/deps_and_cli
+
+{;; :paths lists the source folders that are put on the classpath. The
+ ;; namespace hello.core is found in src/hello/core.clj.
+ :paths ["src"]
+
+ ;; :deps maps a library name (group/artifact) to its version. The CLI
+ ;; downloads each one, and what it needs, from Clojars (Ring) and Maven
+ ;; Central (Jetty), then caches them in ~/.m2.
+ ;; ring-core holds Ring's request and response helpers (this program uses
+ ;; none yet); ring-jetty-adapter starts the embedded Jetty web server. Both
+ ;; versions come from https://github.com/ring-clojure/ring (README,
+ ;; "Installation"; Clojars shows 1.15.6 as the latest release).
+ :deps {ring/ring-core           {:mvn/version "1.15.6"}
+        ring/ring-jetty-adapter {:mvn/version "1.15.6"}}}

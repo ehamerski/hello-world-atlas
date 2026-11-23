@@ -1,0 +1,49 @@
+# languages/perl/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Perl"
+year: 1987
+year_note: "Perl 1.000 released 1987-12-18 by Larry Wall; Perl 5.000 followed on 1994-10-17"
+designers:
+  - "Larry Wall"
+paradigms:
+  - "multi-paradigm"
+  - "imperative"
+  - "object-oriented"
+  - "functional"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "C"
+    slug: "c"
+    title: "perlfaq1: General Questions About Perl. Perl 5 porters, perldoc.perl.org"
+    url: "https://perldoc.perl.org/perlfaq1"
+    quote: "Perl derives from the ubiquitous C programming language"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "perl 5"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Tkx (Tcl/Tk)"
+    run: "window"
+    status: "compromise"
+    note: "Tkx drives the system Tcl/Tk; Perl/Tk, the better-known binding, needs an X11 server on macOS."
+  - folder: "web"
+    kind: "web"
+    toolchain: "Mojolicious::Lite"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "perlhist: the Perl history records. Perl 5 porters, perldoc.perl.org"
+    url: "https://perldoc.perl.org/perlhist"
+  - title: "perlfaq1: General Questions About Perl. Perl 5 porters, perldoc.perl.org"
+    url: "https://perldoc.perl.org/perlfaq1"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "The Perl documentation warns that the name is not an acronym, so writing PERL in capitals is the one mistake its own FAQ is sure about."
+  dictionary:
+    - term: "Perl"
+      definition: "a language whose motto promises more than one way to do it, including more than one way to write the same line."

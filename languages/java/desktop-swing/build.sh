@@ -8,8 +8,9 @@
 #       to download or copy: Swing is already part of the JDK.
 # HOW:  ./build.sh         (after ./install.sh; run again after editing code)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -19,6 +20,9 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, require_cmd.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# Windows runners: select JDK 21 (see use-runner-jdk.sh).
+# shellcheck source=../../../scripts/use-runner-jdk.sh
+. ../../../scripts/use-runner-jdk.sh
 
 step "1/2 Check the build tools"
 explain "WHY: building needs the JDK (javac) and Maven; ./install.sh installs them."

@@ -1,0 +1,65 @@
+# languages/APPROVED.txt - the languages and implementations this
+# repository holds. It is the one approved list: the folders under
+# languages/ must match it, and the checks below fail when they do not.
+#
+# One line per language:
+#   <language folder> <wave> <category folder> <category folder> ...
+# wave is the group the language was added with: 1 = the 20 languages of
+# the first release, 2 and 3 = the two groups added after it.
+# A category written as <folder>:documented has a README.md but no run.sh
+# (status "documented" in meta.yml). Lines starting with "#" and blank lines
+# are ignored.
+#
+# Read by scripts/approved.py (called by scripts/check-language.sh,
+# scripts/gen-readme.py, scripts/build-site.sh and scripts/export-public.sh)
+# and by scripts/package-downloads.sh.
+# Adding or removing a language or a category starts here
+# (CONTRIBUTING.md, "Starting a new implementation").
+
+ada           1  cli
+algol68       3  cli
+assembly      1  cli
+bash          3  cli
+basic         1  cli
+c             1  cli desktop web
+clipper       1  cli
+clojure       2  cli desktop web
+cobol         1  cli
+cpp           1  cli desktop web
+csharp        1  cli desktop web web-angular
+dart          2  cli web mobile-flutter
+dbase         2  cli
+delphi        2  cli desktop
+eiffel        2  cli
+elixir        2  cli web
+erlang        2  cli desktop web
+fortran       1  cli
+fsharp        3  cli
+go            1  cli desktop web web-vue
+haskell       1  cli web
+java          1  cli desktop desktop-swing web web-react
+julia         3  cli
+kotlin        2  cli desktop web mobile-android
+lisp          1  cli web
+lua           2  cli desktop web
+node          1  cli desktop web
+objectivec    2  cli desktop web
+ocaml         3  cli
+pascal        1  cli desktop
+perl          2  cli desktop web
+php           1  cli web
+prolog        1  cli web
+pseudocode    1  portugol pseint clrs:documented
+python        1  cli desktop web
+qcl           2  cli
+r             3  cli
+racket        3  cli
+ruby          2  cli desktop web web-rails
+rust          1  cli desktop web
+scala         3  cli
+simula        2  cli
+smalltalk     2  cli desktop web
+swift         2  cli desktop web mobile-ios
+typescript    3  cli web
+visual-basic  2  cli web
+zig           3  cli

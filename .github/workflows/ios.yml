@@ -1,0 +1,94 @@
+# .github/workflows/ios.yml - build the iOS apps and run them in the iOS Simulator.
+#
+# WHAT: one job on a GitHub-hosted macOS runner. It checks the toolchain,
+#   builds the Swift iOS app (languages/swift/mobile-ios), runs it with
+#   --verify in an iPhone Simulator, launches it, takes a screenshot of the
+#   Simulator and uploads that screenshot as the artifact "ios-simulator-screenshot".
+# WHY:  the maintainer's Mac (macOS 26, Intel) has Xcode 26.5 and can compile
+#   the app for the Simulator, but it has no iOS Simulator runtime installed,
+#   so it cannot run the app. A macOS runner with an iOS runtime does, so this
+#   is the one CI check for the Simulator run.
+# WHEN: only by hand (Actions tab > "ios" > Run workflow). No push or tag
+#   starts it, so the macOS minutes are spent on purpose.
+#   The Flutter iOS build from M2 (languages/dart/mobile-flutter) is not in
+#   this job yet; it is added as another step once M2 is merged into develop.
+# COST: macOS minutes are billed at 10 times the Linux rate on a private
+#   repository, and the included allowance counts that multiplier too. The
+#   job has one runner and a 30-minute limit, so one run costs at most 300
+#   billed minutes. Report the real minutes after each run.
+#
+# References:
+#   Workflow syntax:    https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+#   Runner labels:      https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+#   Runner images:      https://github.com/actions/runner-images (the Xcode versions installed)
+#   Billing rates:      https://docs.github.com/en/billing/concepts/product-billing/github-actions
+#   Minute multiplier:  https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration
+#   Artifacts:          https://docs.github.com/en/actions/tutorials/store-and-share-data
+
+name: ios
+
+on:
+  workflow_dispatch:
+
+# Read-only token: the job builds and runs code but changes nothing in the repository.
+# https://docs.github.com/en/actions/reference/security/secure-use#use-the-principle-of-least-privilege
+permissions:
+  contents: read
+
+# A newer run on the same ref cancels the older one, so no minutes are spent
+# on a result nobody reads.
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios-simulator:
+    # Apple Silicon macOS image. Its Xcode and Simulator runtimes are listed in
+    # the runner-images README; the job prints them below.
+    runs-on: macos-26
+    # Stops a stuck Simulator from using minutes all night.
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: languages/swift/mobile-ios
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Show the Xcode and Simulator versions
+        # The image may update; printing the versions records what this run used.
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes
+
+      - name: Check the toolchain (install.sh)
+        run: sh install.sh
+
+      - name: Build the app (build.sh)
+        run: sh build.sh
+
+      - name: Run the self-check in the Simulator (run.sh --verify)
+        # Fails when the app does not print "Hello, World!".
+        run: sh run.sh --verify
+
+      - name: Launch the app and take a screenshot
+        run: |
+          sh run.sh
+          # Give SwiftUI a moment to draw the first frame before the screenshot.
+          sleep 10
+          xcrun simctl io booted screenshot "$RUNNER_TEMP/ios-simulator.png"
+
+      - name: Upload the screenshot
+        # Runs even when an earlier step failed, so a failed run still shows the screen.
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ios-simulator-screenshot
+          path: ${{ runner.temp }}/ios-simulator.png
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Shut down the Simulator
+        if: always()
+        # Frees the device at the end of the job; the runner is discarded anyway.
+        run: xcrun simctl shutdown all || true

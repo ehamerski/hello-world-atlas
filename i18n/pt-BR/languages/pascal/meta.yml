@@ -1,0 +1,13 @@
+source: languages/pascal/meta.yml
+source_sha: 2ddfddb79cfeb9f425893efb524031e022ac6512
+year_note: "desenvolvida entre 1968 e 1970; relatório \"The Programming Language Pascal\" datado de novembro de 1970"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "Um programa Pascal termina com `end.`, ponto final incluído, como uma frase bem escrita."
+  dictionary:
+    - term: "Pascal"
+      definition: "uma linguagem de ensino e uma unidade de pressão. Estudantes já mediram uma com a outra."

@@ -1,0 +1,46 @@
+# languages/erlang/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Erlang"
+year: 1986
+year_note: "initial development at the Ericsson Computer Science Laboratory in 1986; Open Source Erlang announced on 1998-12-02"
+designers:
+  - "Joe Armstrong"
+  - "Robert Virding"
+  - "Mike Williams"
+paradigms:
+  - "functional"
+  - "concurrent"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Prolog"
+    slug: "prolog"
+    title: "A History of Erlang. Joe Armstrong, HOPL III, ACM SIGPLAN, 2007 (DOI 10.1145/1238844.1238850). Author's copy"
+    url: "https://lfe.io/papers/%5B2007%5D%20Armstrong%20-%20HOPL%20III%20A%20History%20of%20Erlang.pdf"
+    quote: "The early syntax of Erlang came straight from Prolog."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Erlang/OTP (`escript hello.erl`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Erlang/OTP, `wx` (`wxWidgets`)"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Erlang/OTP, `httpd` from `inets`"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "A History of Erlang. Joe Armstrong, HOPL III, ACM SIGPLAN, 2007 (DOI 10.1145/1238844.1238850). Author's copy"
+    url: "https://lfe.io/papers/%5B2007%5D%20Armstrong%20-%20HOPL%20III%20A%20History%20of%20Erlang.pdf"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Erlang was built for programs that run forever, and its web hello keeps the promise: the main process waits for a message named `never`."
+  dictionary:
+    - term: "Erlang"
+      definition: "a language in which a process may fail on purpose, provided that another process is watching."

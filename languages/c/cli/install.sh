@@ -11,8 +11,9 @@
 #       (unlike ../desktop and ../web, which need extra libraries).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://developer.apple.com/xcode/resources/   (Command Line Tools)
 #   https://packages.debian.org/stable/build-essential

@@ -1,0 +1,2 @@
+# The app bundle that build.sh writes. It is build output, never source.
+HelloWorld.app/

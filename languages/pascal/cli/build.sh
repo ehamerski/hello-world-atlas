@@ -13,13 +13,16 @@
 #         -FUbin         put the compiled unit files (.o, .ppu) in bin/
 #                        too, so the source folder stays clean
 #         -ohello-cli    the name of the executable (default: hello,
-#                        after the source file)
+#                        after the source file). FPC uses this name as
+#                        given, so on Windows build.sh passes
+#                        -ohello-cli.exe to get a normal .exe file.
 #       Unlike gcc, FPC also links, so no separate link step is needed.
 # HOW:  ./build.sh                  (after ./install.sh; run again after editing)
 #       FPC=/path/to/fpc ./build.sh   use another compiler
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -46,9 +49,13 @@ step "2/2 Compile hello.pas as ISO 7185 Standard Pascal"
 explain "WHY: -Miso selects Standard Pascal; -FE/-FU choose the output folders;"
 explain "     -o names the executable."
 mkdir -p bin
+# Windows runs only files that end in .exe, and fpc does not add the
+# extension to a name given with -o.
+OUT=hello-cli
+[ "$TF_OS" = windows ] && OUT=hello-cli.exe
 # set -x prints the exact command, so you can copy it.
 set -x
-"$FPC" -Miso -FEbin -FUbin -ohello-cli hello.pas
+"$FPC" -Miso -FEbin -FUbin "-o$OUT" hello.pas
 { set +x; } 2>/dev/null
 
 ok "Built bin/hello-cli with Free Pascal $("$FPC" -iV). Next: ./run.sh"

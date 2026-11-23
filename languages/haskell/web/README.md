@@ -48,7 +48,7 @@ Use another port with `PORT=9000 ./run.sh`.
 ## Scripts explained
 | Script | What it does | Why it is needed |
 |---|---|---|
-| `install.sh` | Checks `ghc --version` and `cabal --version`. If either is missing, shows GHCup's official command [4] and runs it only if you answer `y` (details in [../cli](../cli/README.md#scripts-explained)). | This version uses libraries, so it needs Cabal as well as GHC. GHCup installs both. |
+| `install.sh` | Checks `ghc --version` and `cabal --version`. If either is missing, downloads GHCup's bootstrap script [4] to a file, shows its path, and runs it only if you answer `y` (details in [../cli](../cli/README.md#scripts-explained)). | This version uses libraries, so it needs Cabal as well as GHC. GHCup installs both. |
 | `build.sh` | 1. `cabal update`: "updates the state of the package index" [5], the list of every package and version on Hackage. 2. `cabal build`: "Compile targets within the project" [5]. It reads `hello-web.cabal` and `cabal.project.freeze`, downloads and compiles every library (first build only), then compiles `app/Main.hs` and links `hello-web`. 3. Prints where the executable is with `cabal list-bin hello-web` ("List the path to a single executable" [5]). | Like Cargo for Rust or Maven for Java, Cabal finds, downloads and builds the dependencies. |
 | `run.sh` | Finds the executable with `cabal list-bin hello-web` and runs it with `PORT` (default 8080). `--verify` starts it in the background, fetches the page once with `curl`, then stops it. | The executable is the server: there is no separate server program to install (compare [Go](../../go/web/) and [Rust](../../rust/web/)). |
 | `ghcup-env.sh` | Not run on its own: the scripts read it. It adds `~/.ghcup/bin` to `PATH`. | Same as in [../cli](../cli/README.md#scripts-explained). |
@@ -69,7 +69,14 @@ docs say "it is recommended that you distribute the `cabal.project.freeze`
 file in your source repository" [5]. Its last line, `index-state`, fixes
 the Hackage index state "the solver uses to compute install-plans" [7].
 The file lists 133 packages, counting those that ship with GHC, such as
-`base`.
+`base`. The freeze file pins `http2` 5.4.14 and `network` 3.2.14.0:
+`http2` 5.4.14 fixes
+[HSEC-2026-0015](https://osv.dev/vulnerability/HSEC-2026-0015), a missing
+validation of CONNECT requests, and needs `network` 3.2.12 or newer. One
+advisory cannot be fixed by any release:
+[HSEC-2023-0007](https://osv.dev/vulnerability/HSEC-2023-0007) covers
+`Numeric.readFloat` in every version of `base`. This program never calls
+`readFloat`, and `osv-scanner.toml` records that as a dated exception.
 
 ## Folder structure
 ```text
@@ -82,6 +89,7 @@ web/
 ├── screenshot.png         the page in a browser (see Expected output)
 ├── hello-web.cabal        the package description
 ├── cabal.project.freeze   the exact version of every package
+├── osv-scanner.toml       the one documented security-scanner exception
 ├── app/
 │   └── Main.hs            the program: routes + main
 └── dist-newstyle/         created by cabal build; not committed (see ../../../.gitignore)
@@ -190,8 +198,14 @@ Open [`app/Main.hs`](app/Main.hs) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | GHC 9.10.3, cabal-install 3.16.1.0, GHCup 0.2.6.2. The link step prints `ld: warning: -U option is redundant when using -undefined dynamic_lookup`; the build still succeeds and the server works. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands; GHC has an AArch64 macOS build [18]. See the GHCup note on LLVM in [../cli](../cli/README.md#platform-notes). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Same commands. Install the system packages GHCup lists first [19] (see [../cli](../cli/README.md#platform-notes)). |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install GHC and Cabal with GHCup's PowerShell command [4]. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs GHCup's bootstrap script from `get-ghcup.haskell.org` (non-interactive, without Stack) when `ghc` or `cabal` is missing. It installs GHC and Cabal into `~/.ghcup`. If another GHC version is found, it runs `ghcup install ghc 9.10.3 --set`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install GHC or Cabal: if either is missing it prints GHCup's PowerShell command [4] and stops. If another GHC version is found, it runs `ghcup install ghc 9.10.3 --set`. WSL not verified; it behaves like Linux. |
+
+**GHCup's bootstrap script is not digest-checked.** GHCup's install page
+gives no checksum for it: it points to the script's source code, and offers
+GPG checks only for a manual install of the binaries [31]. So `install.sh`
+saves the script to `~/.cache/hello-world-haskell/bootstrap-haskell.sh` and
+shows the path, so you can read it before you answer `y` to run it.
 
 ## Expected output
 ```text
@@ -264,3 +278,4 @@ Scotty.
 18. GHC 9.10.3 download page (binary distributions). GHC developers, haskell.org. <https://www.haskell.org/ghc/download_ghc_9_10_3.html> (accessed 2026-11-01)
 19. GHCup: System requirements. haskell.org. <https://www.haskell.org/ghcup/install/reqs/> (accessed 2026-11-01)
 20. Haskell 2010 Language Report, Chapter 41: System.IO (41.4.3 Buffering Operations). haskell.org. <https://www.haskell.org/onlinereport/haskell2010/haskellch41.html> (accessed 2026-11-01)
+31. GHCup: Installation. haskell.org. <https://www.haskell.org/ghcup/install/> (accessed 2026-11-19)

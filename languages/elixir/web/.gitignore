@@ -1,0 +1,7 @@
+# Created by mix: compiled code (_build/) and downloaded dependencies (deps/).
+# `mix new` writes these two lines (and a few more) into its generated
+# .gitignore. mix.lock is NOT ignored: it pins the dependency versions.
+/_build/
+/deps/
+# If the Erlang VM crashes, it writes this file.
+erl_crash.dump

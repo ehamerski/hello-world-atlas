@@ -1,0 +1,13 @@
+source: languages/csharp/meta.yml
+source_sha: 19a8913ea640150b992f0beaef6584fde8e1ffc8
+year_note: "anunciada em 2000-06-26; ECMA-334 em dezembro de 2001; C# 1.0 lançado em janeiro de 2002"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "Desde as instruções de nível superior, um programa C# pode caber em uma única linha. As chaves ainda procuram trabalho novo."
+  dictionary:
+    - term: "C#"
+      definition: "uma nota musical um semitom acima do Dó, e uma linguagem com o mesmo senso de direção."

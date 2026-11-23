@@ -50,9 +50,10 @@ const short = (r: (typeof rows)[number]) => (r.label === 'cli' ? r.language : `$
 <StarlightPage frontmatter={{ title: ui['facts.title'], description: ui['facts.description'] }}
   headings={[{ depth: 2, slug: 'method', text: ui['facts.method'] }, { depth: 2, slug: 'machine', text: ui['facts.machine'] }]} lang={translated ? tag : 'en'}>
   {!translated && <FallbackContentNotice />}
-  <p set:html={inline(ui['facts.intro'])} />
+  <p set:html={inline(format(ui['facts.intro'], { date: facts.measuredOn }))} />
 
   <h2 id="method">{ui['facts.method']}</h2>
+  <p set:html={inline(ui['facts.methodScript'])} />
   <ul>
     {['Lines', 'Files', 'Deps', 'Steps', 'Build', 'Time'].map((k) => <li set:html={inline(format(ui[`facts.method${k}`], { runs: facts.runs }))} />)}
   </ul>

@@ -1,0 +1,40 @@
+# languages/simula/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Simula"
+year: 1967
+year_note: "Simula 67 (classes, subclasses, virtual quantities) presented in May 1967; Nygaard started the work around 1960/61 and Dahl joined in January 1962; Common Base accepted in 1968"
+designers:
+  - "Ole-Johan Dahl"
+  - "Kristen Nygaard"
+paradigms:
+  - "object-oriented"
+influenced_by:
+  - language: "ALGOL 60"
+    title: "Dahl, O.-J. and Nygaard, K. SIMULA: an ALGOL-based simulation language. Communications of the ACM 9(9), 1966"
+    url: "https://doi.org/10.1145/365813.365819"
+    quote: "ALGOL-based simulation language"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "GNU Cim 5.1 (Simula 67 compiled to C)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "Portable Simula Revisited is documented as the alternative; not used because its license is not published"
+sources:
+  - title: "Krogdahl, S. The Birth of Simula. University of Oslo"
+    url: "https://www.mn.uio.no/english/services/it/simula/bibliography/history/sk-the-birth-of-simula.pdf"
+  - title: "Dahl, O.-J., Myhrhaug, B. and Nygaard, K. SIMULA 67 Common Base Language. Norwegian Computing Center, report NR 743, 1968"
+    url: "https://www.softwarepreservation.org/projects/ALGOL/manual/NR_report_743_Dahl_Myhrhaug_Nygaard_Simula-67-Common-Base-Language.pdf"
+  - title: "ACM A. M. Turing Award 2001: Kristen Nygaard"
+    url: "https://awards.acm.org/award_winners/nygaard_5916220"
+  - title: "ACM A. M. Turing Award 2001: Kristen Nygaard (archived copy, 2025-10-14)"
+    url: "https://web.archive.org/web/20251014165846/https://awards.acm.org/award_winners/nygaard_5916220"
+  - title: "Crossref metadata record for Dahl and Nygaard, SIMULA: an ALGOL-based simulation language, Communications of the ACM 9(9), 1966"
+    url: "https://api.crossref.org/works/10.1145/365813.365819"
+# humor: one light line for the Off the record page.
+humor:
+  line: "In 1967 Simula 67 gave programmers classes, and every object-oriented language since has been arguing with them about it."
+  dictionary:
+    - term: "Simula"
+      definition: "the grandparent of object-oriented programming, still waiting for its grandchildren to say thank you."

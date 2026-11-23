@@ -17,7 +17,7 @@ close the window.
 ## Prerequisites
 | Tool | Version used (macOS Intel) | Why it is needed |
 |---|---|---|
-| Go 1.22 or newer | Go 1.27.3 (Homebrew) | compiles the program; downloads Fyne |
+| Go 1.25 or newer | Go 1.27.3 (Homebrew) | compiles the program; downloads Fyne |
 | A C compiler | Apple clang 21.0.0 (Command Line Tools 26.6) | Fyne contains C code that `go build` compiles through **cgo** |
 | Fyne | v2.8.2 (pinned in `go.mod`) | the GUI toolkit; downloaded by `go build`, not by `install.sh` |
 | Linux only: graphics headers | not verified | OpenGL, X11, and Wayland development packages (see Platform notes) |
@@ -25,7 +25,16 @@ close the window.
 Fyne's README says: "you will need Go version 1.22 or later, a C compiler
 and your system's development tools" [1]. Its Quick Start explains why the
 C compiler is there: it is needed "to connect with system graphics
-drivers" [2]. Fyne v2.8.2 was the latest release on 2026-10-31 [3].
+drivers" [2]. Fyne v2.8.2 was the latest release on 2026-10-31 [3]. Fyne itself
+needs Go 1.22, but `go.mod` here says `go 1.25.0` because it pins
+`golang.org/x/image` v0.43.0, a patched version of an indirect dependency
+that needs Go 1.25 (its own `go.mod` says `go 1.25.0`). v0.43.0 is the
+release that fixes the Go vulnerability reports
+[GO-2026-4815](https://pkg.go.dev/vuln/GO-2026-4815),
+[GO-2026-5032](https://pkg.go.dev/vuln/GO-2026-5032),
+[GO-2026-5062](https://pkg.go.dev/vuln/GO-2026-5062) and
+[GO-2026-5066](https://pkg.go.dev/vuln/GO-2026-5066), all in the TIFF decoder
+of that module (Fyne links the package in; this program decodes no image files).
 
 On macOS, Fyne's Quick Start says to install Xcode and then the Command
 Line Tools with `xcode-select --install` [2]. The test machine has only the
@@ -41,7 +50,7 @@ Command Line Tools (no Xcode app), and they were enough.
 ## Scripts explained
 | Script | What it does | Why it is needed |
 |---|---|---|
-| `install.sh` | 1. Checks for Go 1.22+ (`go env GOVERSION`). 2. Checks for a C compiler: `xcrun --find clang` on macOS, `gcc` plus the OpenGL/X11 headers on Linux, `gcc` from MSYS2 on Windows. 3. Checks that cgo is on (`go env CGO_ENABLED` is `1`). For anything missing, the script shows the install command and runs it only if you answer `y`. | Fyne needs cgo, and cgo needs a C compiler. Fyne itself is not installed here, for the same reason Maven downloads JavaFX in [../../java/desktop](../../java/desktop/): it is a library of this project, not a tool on your computer. |
+| `install.sh` | 1. Checks for Go 1.25+ (`go env GOVERSION`). 2. Checks for a C compiler: `xcrun --find clang` on macOS, `gcc` plus the OpenGL/X11 headers on Linux, `gcc` from MSYS2 on Windows. 3. Checks that cgo is on (`go env CGO_ENABLED` is `1`). For anything missing, the script shows the install command and runs it only if you answer `y`. | Fyne needs cgo, and cgo needs a C compiler. Fyne itself is not installed here, for the same reason Maven downloads JavaFX in [../../java/desktop](../../java/desktop/): it is a library of this project, not a tool on your computer. |
 | `build.sh` | Runs `go build -o bin/hello-desktop .` | The first build downloads Fyne and its dependencies into Go's module cache, checks them against `go.sum`, compiles Fyne's C code, and links one executable. "The first run has to compile some C-code and can thus take longer than usual. Subsequent builds reuse the cache and will be much faster" [2]. On the test machine, the first build took about 55 seconds. |
 | `run.sh` | Runs `./bin/hello-desktop`. `--verify` sets `TF_VERIFY=1`: the app prints the label's text once it is running and quits after about 2 seconds. | The executable already contains Fyne. Only the operating system's own libraries are loaded at run time: on macOS, `otool -L bin/hello-desktop` lists Cocoa, AppKit, and OpenGL. |
 
@@ -138,8 +147,8 @@ Open [`main.go`](main.go) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Go 1.27.3, Fyne v2.8.2, Apple clang 21.0.0 (Command Line Tools only, no Xcode app). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands: `brew install go` and `xcode-select --install` [2]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Fyne's Quick Start lists `sudo apt-get install golang gcc libgl1-mesa-dev xorg-dev libwayland-dev libxkbcommon-dev` [2]. `install.sh` offers the same packages except `golang`, because the distribution's Go may be older than 1.22; install Go from go.dev instead (see [../cli](../cli/README.md#platform-notes)). Fyne's page has the commands for Fedora, Arch, and other distributions [2]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Fyne recommends MSYS2: in the "MSYS2 MinGW 64-bit" shell run `pacman -Syu`, then `pacman -S git mingw-w64-x86_64-toolchain mingw-w64-x86_64-go`, and add `C:\msys64\mingw64\bin` to `PATH` [2]. Fyne's README warns: "The first compilation of Fyne on Windows can take up to 10 minutes" [1]. Executables need `.exe`: `go build -o bin\hello-desktop.exe .`. Under WSL, a window needs WSLg or an X server. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Go: if Go 1.25 or newer is missing it prints the go.dev archive steps [6] and stops. It installs `gcc libgl1-mesa-dev xorg-dev libwayland-dev libxkbcommon-dev` with apt when `gcc` or the graphics headers are missing [2]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Go or a C compiler: when Go 1.25 or newer or `gcc` is missing it prints the `winget` Go command or the MSYS2 steps [2] and stops. Fyne's README warns: "The first compilation of Fyne on Windows can take up to 10 minutes" [1]. WSL not verified; it behaves like Linux, and a window needs WSLg or an X server. |
 
 ## Expected output
 `./run.sh` opens this window (on the test machine, macOS was in dark mode,

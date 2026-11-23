@@ -1,0 +1,52 @@
+# languages/smalltalk/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Smalltalk"
+year: 1972
+year_note: "Smalltalk-72, the first version, created at Xerox PARC; Smalltalk-80 (the release version) 1980-83"
+designers:
+  - "Adele Goldberg"
+  - "Dan Ingalls"
+  - "Ted Kaehler"
+  - "Larry Tesler"
+  - "Xerox PARC"
+paradigms:
+  - "object-oriented"
+# influenced_by: each influence cited with the exact words of its source.
+influenced_by:
+  - language: "Simula"
+    title: "Early History of Smalltalk. Ingalls, D. ACM SIGPLAN Notices, 1997."
+    url: "https://dl.acm.org/doi/10.1145/234286.1057820"
+    quote: "Smalltalk's design was profoundly influenced by Simula's notion of objects with their own state and behavior."
+  - language: "Lisp"
+    title: "Early History of Smalltalk. Ingalls, D. ACM SIGPLAN Notices, 1997."
+    url: "https://dl.acm.org/doi/10.1145/234286.1057820"
+    quote: "Lisp's ideas on dynamic typing, late binding, and interactive evaluation shaped Smalltalk's design."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "GNU Smalltalk (gst)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Pharo 14, Morphic"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Pharo 14, Zinc HTTP"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "Smalltalk-80: The Language. Goldberg, A. and Robson, D. Addison-Wesley, 1983"
+    url: "https://archive.org/details/smalltalk-80"
+  - title: "The Early History of Smalltalk. Alan C. Kay, ACM SIGPLAN Notices 28(3), 1993"
+    url: "https://worrydream.com/EarlyHistoryOfSmalltalk/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Smalltalk gave the world objects, messages, and the IDE. The world took the ideas and forgot the language."
+  dictionary:
+    - term: "Smalltalk"
+      definition: "a language in which everything is an object, even the number 1, which is surprised to discover it can do math."

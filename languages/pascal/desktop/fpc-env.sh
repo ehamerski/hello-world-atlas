@@ -32,4 +32,13 @@ FPC_DIR=${FPC_DIR:-$HOME/.local/fpc-$FPC_VERSION}
 if [ -x "$FPC_DIR/bin/fpc" ]; then
     PATH=$FPC_DIR/bin:$PATH
 fi
+# Windows: install.sh installs Lazarus with Chocolatey, which brings Free
+# Pascal 3.2.2 in C:\lazarus\fpc\3.2.2\bin\x86_64-win64 (not on PATH). Source:
+# the package's install script, https://community.chocolatey.org/packages/lazarus
+# ("lazarus-4.0-fpc-3.2.2-win64.exe", default folder C:\lazarus).
+FPC_WIN_BIN=/c/lazarus/fpc/$FPC_VERSION/bin/x86_64-win64
+if [ -f "$FPC_WIN_BIN/fpc.exe" ]; then
+    PATH=$FPC_WIN_BIN:$PATH
+fi
 export FPC_DIR PATH
+return 0

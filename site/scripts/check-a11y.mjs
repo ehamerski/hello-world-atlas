@@ -36,6 +36,11 @@ const PAGES = {
   home: '/', languages: '/languages/', python: '/languages/python/',
   comparator: '/compare/side-by-side/', facts: '/facts/', genealogy: '/genealogy/',
   about: '/about/', 'off-the-record': '/off-the-record/', 'pt-br-home': '/pt-br/',
+  // The Languages page in other states: table view with applied filters (and
+  // the filter panel open), no result, and the translated site's filters.
+  'languages-table': '/languages/?q=s&paradigm=functional,logic&view=table&sort=oldest',
+  'languages-empty': '/languages/?q=zzzz',
+  'pt-br-languages': '/pt-br/languages/?page=english&sort=most',
 };
 
 const args = process.argv.slice(2);

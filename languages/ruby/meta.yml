@@ -1,0 +1,69 @@
+# languages/ruby/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Ruby"
+year: 1995
+year_note: "conceived 1993-02-24; Ruby 0.95 posted to Japanese newsgroups in December 1995, the first public release"
+designers:
+  - "Yukihiro Matsumoto"
+paradigms:
+  - "object-oriented"
+  - "imperative"
+  - "functional"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Perl"
+    title: "About Ruby. Ruby community"
+    url: "https://www.ruby-lang.org/en/about/"
+    quote: "blended parts of his favorite languages (Perl, Smalltalk, Eiffel, Ada, and Lisp) to form a new language that balanced functional programming with imperative programming"
+  - language: "Smalltalk"
+    title: "About Ruby. Ruby community"
+    url: "https://www.ruby-lang.org/en/about/"
+    quote: "blended parts of his favorite languages (Perl, Smalltalk, Eiffel, Ada, and Lisp) to form a new language that balanced functional programming with imperative programming"
+  - language: "Eiffel"
+    title: "About Ruby. Ruby community"
+    url: "https://www.ruby-lang.org/en/about/"
+    quote: "blended parts of his favorite languages (Perl, Smalltalk, Eiffel, Ada, and Lisp) to form a new language that balanced functional programming with imperative programming"
+  - language: "Ada"
+    slug: "ada"
+    title: "About Ruby. Ruby community"
+    url: "https://www.ruby-lang.org/en/about/"
+    quote: "blended parts of his favorite languages (Perl, Smalltalk, Eiffel, Ada, and Lisp) to form a new language that balanced functional programming with imperative programming"
+  - language: "Lisp"
+    title: "About Ruby. Ruby community"
+    url: "https://www.ruby-lang.org/en/about/"
+    quote: "blended parts of his favorite languages (Perl, Smalltalk, Eiffel, Ada, and Lisp) to form a new language that balanced functional programming with imperative programming"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Ruby (`ruby`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Ruby/Tk (`tk` gem), Tcl/Tk"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Sinatra, Puma"
+    run: "http://localhost:8080/"
+    status: "verified"
+  - folder: "web-rails"
+    kind: "web"
+    label: "Rails"
+    toolchain: "Ruby on Rails, Puma"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "About Ruby. Ruby community"
+    url: "https://www.ruby-lang.org/en/about/"
+  - title: "Ruby FAQ: What is the history of Ruby? A summary of a posting by Yukihiro Matsumoto, ruby-talk:00382, 1999-06-04. Ruby community"
+    url: "https://www.ruby-lang.org/en/documentation/faq/1/"
+# humor: one light line for the Off the record page and the box at the end of the
+# language page (languages/README.md#humor-keys).
+humor:
+  line: "Ruby is named after a birthstone, and the jewelry theme never stopped: a library is a gem, and the file that lists them is a Gemfile."
+  dictionary:
+    - term: "gem"
+      definition: "a Ruby library, which, unlike the stone, installs with one command and usually costs nothing."

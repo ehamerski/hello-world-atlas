@@ -109,8 +109,8 @@ source into an executable before `run.sh` can start it.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Homebrew `php` 8.5.11. |
 | macOS Apple Silicon | ⚠️ not verified | Same command as Intel (`brew install php`); Homebrew builds `php` for Apple Silicon [8]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y php-cli`. The package "provides the /usr/bin/php command interpreter" [14]. Debian stable ships PHP 8.4 [14], which runs this program unchanged. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Download the "VS17 x64 Non Thread Safe" ZIP [11]. The manual recommends non-thread-safe (NTS) builds for "command-line scripts" [15]. Unzip it (e.g. to `C:\php`) and add that folder to `PATH`. Then `./run.sh` works in Git Bash; in PowerShell or Command Prompt (`cmd`), run `php hello.php`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `php-cli` with apt when `php` is missing [14]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install PHP: if `php` is missing it prints the steps for the "VS17 x64 Non Thread Safe" ZIP from windows.php.net [11] and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

@@ -104,8 +104,8 @@ view (see [../../python/cli](../../python/cli/README.md#why-there-is-no-build-st
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Node.js 26.8.2 (nvm). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands as Intel (`brew install node`). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | The distribution's own `nodejs` package may be an old version. Install a current LTS as shown on nodejs.org [6]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id OpenJS.NodeJS.LTS -e` [10], or the installer from nodejs.org [6]. Native (PowerShell / `cmd`): `node hello.js`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Node.js: if `node` is missing it prints the nodejs.org steps [6] and stops. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Node.js: if `node` is missing it prints `winget install --id OpenJS.NodeJS.LTS -e` [10] and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

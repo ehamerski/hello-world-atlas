@@ -17,9 +17,9 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | PHP 8.5 command-line interpreter (`php hello.php`) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | `php` CLI | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop version](#why-there-is-no-desktop-version) | – |
-| web | [web/](web/) | plain PHP on PHP's built-in web server (`php -S`) | ✅ verified on macOS Intel |
+| web | [web/](web/) | PHP built-in server (`php -S`) | ✅ |
 
 ## History
 "Created in 1994 by Rasmus Lerdorf, the very first incarnation of PHP was

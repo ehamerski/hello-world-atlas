@@ -88,7 +88,7 @@ Hello, World!
 
 ## Sources
 1. Q&A: What makes a bestselling textbook? (Introduction to Algorithms). MIT News, 2022-02-23. <https://news.mit.edu/2022/qa-what-makes-bestselling-textbook-introduction-algorithms-0223> (accessed 2026-11-02)
-2. Cormen, T. H. `clrscode`: LaTeX packages for CLRS pseudocode. Dartmouth College. <https://www.cs.dartmouth.edu/~thc/clrscode/> (accessed 2026-11-02)
-3. Cormen, T. H. Using the clrscode3e Package in LaTeX 2e (manual). Dartmouth College. <https://www.cs.dartmouth.edu/~thc/clrscode/clrscode3e.pdf> (accessed 2026-11-02)
-4. clrscode.sty (package for the 2nd edition). Dartmouth College. <https://www.cs.dartmouth.edu/~thc/clrscode/clrscode.sty> (accessed 2026-11-02)
+2. Cormen, T. H. `clrscode`: LaTeX packages for CLRS pseudocode. Dartmouth College. <https://web.archive.org/web/20250210061943/https://www.cs.dartmouth.edu/~thc/clrscode/> (accessed 2026-11-02)
+3. Cormen, T. H. Using the clrscode3e Package in LaTeX 2e (manual). Dartmouth College. <https://web.archive.org/web/20250328084750/https://www.cs.dartmouth.edu/~thc/clrscode/clrscode3e.pdf> (accessed 2026-11-02)
+4. clrscode.sty (package for the 2nd edition). Dartmouth College. <https://web.archive.org/web/20240422115246/https://www.cs.dartmouth.edu/~thc/clrscode/clrscode.sty> (accessed 2026-11-02)
 5. clrscode4e.sty (package for the 4th edition). MIT Press. <https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/11599/clrscode4e.sty> (accessed 2026-11-02)

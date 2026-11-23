@@ -115,8 +115,8 @@ Open [`public/index.php`](public/index.php) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Homebrew `php` 8.5.11. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands as Intel (`brew install php`). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y php-cli`. The built-in server is part of the `php` command, so no Apache package is needed [9]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install the "VS17 x64 Non Thread Safe" ZIP from php.net and add it to `PATH` [10]. In Git Bash, `./run.sh` works. In PowerShell or Command Prompt (`cmd`), run `php -S 127.0.0.1:8080 -t public`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `php-cli` with apt when `php` is missing. The built-in server is part of the `php` command, so no Apache package is needed [9]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install PHP: if `php` is missing it prints the steps for the "VS17 x64 Non Thread Safe" ZIP from windows.php.net [10] and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 `./run.sh` (the server keeps running until Ctrl+C):

@@ -1,0 +1,24 @@
+# hello.a68 - ALGOL 68 Hello World.
+  The hash symbol starts a comment and the next hash symbol ends it. The same
+  symbol opens and closes the comment, so the Algol 68 Genie manual says
+  comments cannot nest. Two other pairs do the same job: CO ... CO and
+  COMMENT ... COMMENT. Comments can sit almost anywhere, but not in the
+  middle of a symbol. #
+
+# A program is a particular program: an enclosed clause that runs inside the
+  standard environment. The Genie manual shows that a one-line program is
+  complete, so there is no main function and no BEGIN ... END around it. #
+
+# print is a procedure of the standard prelude, the library that every
+  Algol 68 program can use without importing anything. It takes one
+  argument: a row of values to write. #
+# That is why the call has two pairs of parentheses: the inner pair builds
+  the row, here the string "Hello, World!" followed by new line, and the
+  outer pair is the procedure call. A string is written between double
+  quotes. new line is a value of the standard prelude that starts a new
+  line, so the output ends with a newline and the shell prompt does not
+  follow the text. #
+print (("Hello, World!", new line))
+
+# Compared with C or Pascal: there is no main function, no braces, no
+  semicolon after the last statement, and no include line. #

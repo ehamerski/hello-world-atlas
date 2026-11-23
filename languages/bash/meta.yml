@@ -1,0 +1,33 @@
+# languages/bash/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Bash"
+other_names:
+  - "Bourne Again SHell"
+year: 1989
+year_note: "Brian Fox announced the beta release (version 0.99) on gnu.announce in June 1989; its ancestor, the Bourne shell, is described in a 1978 paper"
+designers:
+  - "Brian Fox"
+paradigms:
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "GNU Bash 5.3.20 (Homebrew formula `bash`), interpreted: no build step"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "interpreted script run by `bash hello.sh`; also runs under the macOS system Bash 3.2.57"
+sources:
+  - title: "Bash is in beta release! Brian Fox, forwarded by Leonard H. Tower Jr., gnu.announce, June 1989 (Google Groups archive)"
+    url: "https://groups.google.com/group/gnu.announce/msg/a509f48ffb298c35?hl=en"
+  - title: "Bash Reference Manual, 1.1 What is Bash?. GNU Project"
+    url: "https://www.gnu.org/software/bash/manual/bash.html"
+  - title: "Bash home page. GNU Project"
+    url: "https://www.gnu.org/software/bash/"
+  - title: "Homebrew formula bash"
+    url: "https://formulae.brew.sh/formula/bash"
+humor:
+  line: "Bash is the Bourne Again SHell, a pun on the shell it replaced, and an unquoted variable still splits a file name at the first space it meets."
+  dictionary:
+    - term: "Bash"
+      definition: "a shell that was born again, and still treats a space in a file name as a personal attack."

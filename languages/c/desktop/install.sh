@@ -21,8 +21,9 @@
 #       build itself took about 3.5 minutes (2026-10-31), plus Homebrew's time.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://formulae.brew.sh/formula/gtk4
 #   https://www.gtk.org/docs/installations/linux
@@ -38,17 +39,12 @@ cd -- "$(dirname -- "$0")"
 # confirm, fix_developer_dir.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# On Windows: MSYS2's UCRT64 tools first on PATH, and msys2_ensure.
+# shellcheck source=../msys2-env.sh
+. ../msys2-env.sh
 # GTK4_VERSION, GTK4_SHA256, GTK4_PREFIX, PKG_CONFIG_PATH.
 # shellcheck source=gtk4-env.sh
 . ./gtk4-env.sh
-
-# windows_hint - print the manual MSYS2 install commands on Windows, where
-# this script does not install anything itself.
-windows_hint() {
-    explain "Install MSYS2 (https://www.msys2.org/), then in the 'MSYS2 UCRT64' shell:"
-    explain "    pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-pkgconf mingw-w64-ucrt-x86_64-gtk4"
-    explain "and add C:\\msys64\\ucrt64\\bin to PATH. Reopen Git Bash."
-}
 
 # build_gtk4_from_source - macOS Intel only: build GTK from GNOME's
 # release tarball into $GTK4_PREFIX with meson and ninja.
@@ -92,14 +88,17 @@ build_gtk4_from_source() {
 step "1/3 Check the C compiler"
 explain "WHY: 'cc' compiles hello.c (see ../cli/install.sh for the details)."
 fix_developer_dir
-if has_cmd cc && cc --version >/dev/null 2>&1; then
+if [ "$TF_OS" = windows ]; then
+    # Not just any 'cc': it must be the gcc that built MSYS2's libraries.
+    msys2_ensure "gcc" gcc
+    ok "C compiler found: $(gcc --version 2>&1 | head -n 1)"
+elif has_cmd cc && cc --version >/dev/null 2>&1; then
     ok "C compiler found: $(cc --version 2>&1 | head -n 1)"
 else
     case "$TF_OS" in
         macos-*) install_pkg "Apple's Command Line Tools (clang)" xcode-select --install || exit 1
                  fail "Finish Apple's installer window, then run ./install.sh again." ;;
         linux)   install_pkg "gcc (build-essential)" sudo apt-get install -y build-essential || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
         *)       fail "Unknown OS. Install gcc or clang with your package manager." ;;
     esac
 fi
@@ -107,20 +106,28 @@ fi
 step "2/3 Check pkg-config"
 explain "WHY: 'pkg-config --cflags --libs gtk4' prints the -I, -L and -l flags for GTK"
 explain "     and the roughly 20 libraries under it (GLib, Pango, Cairo, ...)."
-if has_cmd pkg-config; then
+if [ "$TF_OS" = windows ]; then
+    # Not the Perl script of the same name that other Windows tools bring.
+    msys2_ensure "pkg-config (pkgconf)" pkgconf
+    ok "pkg-config found: $(pkg-config --version)"
+elif has_cmd pkg-config; then
     ok "pkg-config found: $(pkg-config --version)"
 else
     case "$TF_OS" in
         macos-*) has_cmd brew || fail "Homebrew is missing. Install it from https://brew.sh first."
                  install_pkg "pkg-config (pkgconf)" brew install pkgconf || exit 1 ;;
         linux)   install_pkg "pkg-config" sudo apt-get install -y pkg-config || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
         *)       fail "Unknown OS. Install pkg-config with your package manager." ;;
     esac
 fi
 
 step "3/3 Check GTK 4"
 explain "WHY: GTK 4 is the GUI library hello.c calls (gtk_application_new, gtk_label_new...)."
+# On Windows the library comes from MSYS2 (package list:
+# https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-gtk4).
+if [ "$TF_OS" = windows ]; then
+    msys2_ensure "GTK 4" gtk4
+fi
 if pkg-config --exists gtk4; then
     ok "GTK found: version $(pkg-config --modversion gtk4) ($(pkg-config --variable=prefix gtk4))"
 else
@@ -134,7 +141,6 @@ else
         linux)
             # The -dev package holds the headers and the .pc file for pkg-config.
             install_pkg "GTK 4 (development files)" sudo apt-get install -y libgtk-4-dev || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
         *)       fail "Unknown OS. See https://www.gtk.org/docs/installations/" ;;
     esac
     pkg-config --exists gtk4 \

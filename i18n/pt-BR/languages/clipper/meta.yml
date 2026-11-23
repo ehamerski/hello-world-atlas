@@ -1,0 +1,11 @@
+source: languages/clipper/meta.yml
+source_sha: 14e6406450777f261eb0e8a1564ae4fa68d84909
+year_note: "primeira versão chamada \"Winter 85\" (um compilador dBASE da Nantucket); a história dos fundadores vem de um relato histórico de terceiros"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "O Clipper imprime com `??`, de modo que todo Hello World chega com um ar levemente inseguro."
+  dictionary:
+    - term: "Clipper"
+      definition: "um compilador de programas dBASE que virou uma linguagem própria, assim como um apelido acaba no passaporte."

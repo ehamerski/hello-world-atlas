@@ -135,8 +135,8 @@ Open [`hello.cpp`](hello.cpp) next to this list and
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | Apple clang 21.0.0 (Command Line Tools, no Xcode app), CMake 4.4.5 from Homebrew. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. The executable is built for arm64. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y build-essential cmake` [14][15]. `c++` is `g++` there; GCC's default dialect is `-std=gnu++20` [1], which CMake replaces with `-std=c++20`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install MSYS2 [16]; in the "MSYS2 UCRT64" shell run `pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake` and add `C:\msys64\ucrt64\bin` to `PATH`. Then `cmake -S . -B build -G "MinGW Makefiles"` and `cmake --build build`; the program is `build\hello-cli.exe`. With Visual Studio's compiler (MSVC), remove the GCC/Clang warning flags from `CMakeLists.txt`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential` (when `c++` is missing) and `cmake` (when missing) with apt [14][15]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `gcc`, `cmake` and `ninja` with `pacman` when missing [16]. CMake uses the Ninja generator. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

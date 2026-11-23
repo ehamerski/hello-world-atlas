@@ -33,7 +33,7 @@ Maven "you don't have to download the JavaFX SDK" [1].
 | Script | What it does | Why it is needed |
 |---|---|---|
 | `install.sh` | 1. Runs `javac -version` and checks that the version is 21 or newer. 2. Checks that `mvn` is on `PATH`. If one is missing, it shows the install command and runs it only if you answer `y`. | Same toolchain as [../cli](../cli/README.md#scripts-explained). JavaFX needs no separate install. |
-| `build.sh` | Runs `mvn --batch-mode --quiet package`. This compiles `HelloApp.java` into `target/hello-desktop.jar` and copies the JavaFX JAR files into `target/lib/`. | The JVM runs bytecode, so the code must be compiled first. `copy-dependencies` "copies the files for a project's dependencies from the repository to a directory" [6]; `run.sh` needs them in a known folder. |
+| `build.sh` | Runs `mvn --batch-mode --quiet package`. This compiles `HelloApp.java` into `target/hello-desktop.jar` and copies the JavaFX JAR files into `target/lib/`. | The JVM runs bytecode, so the code must be compiled first. `copy-dependencies` "copies the files for a project's dependencies from the repository to a directory" [6]; `run.sh` needs them in a known folder. The first build downloads Maven's plugins and the libraries in `pom.xml` from Maven Central into `~/.m2/repository`; later builds reuse them. |
 | `run.sh` | Runs `java --module-path target/lib --add-modules javafx.controls -cp target/hello-desktop.jar com.example.hello.HelloApp`. With `--verify`, sets `TF_VERIFY=1`: the app prints `Hello, World!` once the window is shown and quits after about 2 s. | JavaFX is a set of Java **modules**. This is the command openjfx.io gives for running a JavaFX app from the command line: `java --module-path $PATH_TO_FX --add-modules javafx.controls HelloFX` [1]. The self-check lets `scripts/verify-all.sh` test the window without waiting for you. |
 
 ## Folder structure
@@ -130,8 +130,8 @@ this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Temurin 21.0.8, Maven 3.9.16, JavaFX 21.0.13 (`mac` JAR files). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. Maven picks the `mac-aarch64` JavaFX JAR files [7]. Use an arm64 JDK (the `temurin@21` cask installs one on Apple Silicon). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Install as in [../cli](../cli/README.md#platform-notes). Maven picks the `linux` JAR files [7]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install as in [../cli](../cli/README.md#platform-notes). Maven picks the `win` JAR files [7]. On Windows `--module-path` uses `;` between entries, but a single folder (`target/lib`) needs none. Native PowerShell: `mvn package`, then `java --module-path target\lib --add-modules javafx.controls -cp target\hello-desktop.jar com.example.hello.HelloApp`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `openjdk-21-jdk` and `maven` with apt when missing. Maven picks the `linux` JAR files [7]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` puts the JDK from `JAVA_HOME_21_X64` on PATH when that variable is set. It does not install a JDK or Maven: if one is missing it prints the `winget` Temurin 21 command or the Maven zip steps and stops. Maven picks the `win` JAR files [7]. |
 
 ## Expected output
 `./run.sh` opens a small window titled "Hello, World!" with the text

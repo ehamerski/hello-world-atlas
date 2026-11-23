@@ -28,7 +28,7 @@ data. The two parts talk over HTTP.
 ## Prerequisites
 | Tool | Version used (macOS Intel) | Why it is needed |
 |---|---|---|
-| .NET SDK 10 | 10.0.403 (ASP.NET Core 10.0.14), in `~/.dotnet` | compiles and runs the back end; ASP.NET Core comes with it |
+| .NET SDK 10 | 10.0.404 (ASP.NET Core 10.0.15), in `~/.dotnet` | compiles and runs the back end; ASP.NET Core comes with it |
 | Node.js (^22.22.3, ^24.15.0, or ^26.0.0) with npm | Node.js 26.8.2, npm 12.2.1 | runs the Angular CLI; npm installs the front end's packages |
 | Angular | `@angular/core` 22.2.4, `@angular/cli` and `@angular/build` 22.2.5, TypeScript 6.0.3 (`frontend/package-lock.json`) | the UI framework, its build tool and the TypeScript compiler; installed by `install.sh` with `npm ci` |
 | `curl` | system `curl` | only for `./run.sh --verify` and for testing by hand |
@@ -215,10 +215,10 @@ web-angular/
 ## Platform notes
 | Platform | Status | Notes |
 |---|---|---|
-| macOS Intel | ✅ verified (2026-11-01) | .NET SDK 10.0.403, Node.js 26.8.2, npm 12.2.1, Angular 22.2. |
+| macOS Intel | ✅ verified (2026-11-20) | .NET SDK 10.0.404, Node.js 26.8.2, npm 12.2.1, Angular 22.2. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. `brew install node` for Node.js. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | .NET as in [../cli](../cli/README.md#platform-notes). The distribution's own `nodejs` package may be older than Angular 22 needs [1]; install a current Long Term Support (LTS) release from <https://nodejs.org/en/download>. `run.sh --verify` looks for `google-chrome` or `chromium` on `PATH` and skips the browser check if neither is found. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id Microsoft.DotNet.SDK.10 -e` and `winget install --id OpenJS.NodeJS.LTS -e`. Native PowerShell, in two terminals: `cd backend; dotnet build -c Release; dotnet bin\Release\net10.0\hello-api.dll` and `cd frontend; npm ci; npx ng serve`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs Microsoft's `dotnet-install.sh` (channel 10.0) into `~/.dotnet` when no .NET 10 SDK is found [2]. It does not install Node.js: if a supported version is missing it prints the nodejs.org steps and stops. It runs `npm ci` in `frontend` when Angular is not installed there. `run.sh --verify` looks for `google-chrome` or `chromium` on `PATH` and skips the browser check if neither is found. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install the SDK: if no .NET 10 SDK is found it prints `winget install --id Microsoft.DotNet.SDK.10 -e` and stops. It does not install Node.js: if a supported version is missing it prints `winget install --id OpenJS.NodeJS.LTS -e` and stops. It runs `npm ci` in `frontend` when Angular is not installed there. |
 
 ## Expected output
 `./run.sh --verify`:

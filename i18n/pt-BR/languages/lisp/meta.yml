@@ -1,0 +1,13 @@
+source: languages/lisp/meta.yml
+source_sha: 55dc9014eaded0b6800c9c8d49d2bfc45cff3f2a
+year_note: "O Lisp em si: implementação iniciada no outono de 1958 (artigo de McCarthy em abril de 1960); Common Lisp: esforço a partir de 1981, CLtL em 1984, ANSI X3.226-1994"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "web"
+    run: "http://localhost:8080/"
+humor:
+  line: "O Hello World termina em `))`, o jeito Lisp de dizer \"e está decidido\"."
+  dictionary:
+    - term: "Common Lisp"
+      definition: "uma linguagem em que o código é dado, o dado é código e todo arquivo termina em `)))`."

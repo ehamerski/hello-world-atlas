@@ -1,0 +1,52 @@
+---
+// site/src/components/SiteTitle.astro - Starlight's site title link, with a
+// short title (site.shortTitle) in place of the full one on screens
+// narrower than 400 px, where the full title would be cut off. The site has
+// no logo, so Starlight's logo markup is left out.
+// Overriding a component: https://starlight.astro.build/guides/overriding-components/
+import { LOCALES } from '../../i18n.mjs';
+import uiByLocale from '../generated/ui.json';
+
+const { siteTitle, siteTitleHref, lang } = Astro.locals.starlightRoute;
+const locale = LOCALES.find((l) => l.tag === lang) || LOCALES[0];
+const { strings: ui } = uiByLocale[locale.tag as keyof typeof uiByLocale];
+---
+
+<a href={siteTitleHref} class="site-title sl-flex">
+  <span class="title-full" translate="no">{siteTitle}</span>
+  <span class="title-short" translate="no" aria-hidden="true">{ui['site.shortTitle']}</span>
+</a>
+
+<style>
+  .site-title {
+    align-items: center;
+    font-size: var(--sl-text-h4);
+    font-weight: 600;
+    color: var(--sl-color-text-accent);
+    text-decoration: none;
+    white-space: nowrap;
+    min-width: 0;
+  }
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .title-short {
+    display: none;
+  }
+  /* The full title stays in the accessibility tree (visually hidden), so a
+     screen reader reads the same name at every width. */
+  @media (max-width: 25rem) {
+    .title-full {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .title-short {
+      display: inline;
+    }
+  }
+</style>

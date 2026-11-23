@@ -12,7 +12,7 @@ paradigms:
 categories:
   - folder: "cli"
     kind: "cli"
-    toolchain: "gfortran"
+    toolchain: "GFortran (`gfortran`)"
     run: "prints `Hello, World!`"
     status: "verified"
 sources:

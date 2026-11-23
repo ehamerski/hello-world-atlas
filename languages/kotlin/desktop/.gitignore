@@ -1,0 +1,4 @@
+# Output of Gradle and the Kotlin compiler
+build/
+.gradle/
+.kotlin/

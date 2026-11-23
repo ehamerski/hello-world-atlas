@@ -127,7 +127,7 @@ terms:
   - term: build
     definition: (verb) To turn source code into a program that can run; (noun) the result of that step.
     do_not_translate: false
-    translations: { pt-BR: compilar / build }
+    translations: { pt-BR: "compilar (verb) / build (noun, e.g. build de produção)" }
 
   - term: package manager
     definition: A program that installs software and its dependencies, for example Homebrew, apt or npm.
@@ -265,3 +265,114 @@ terms:
     definition: An image of the screen, used to show the window or the web page of an implementation.
     do_not_translate: false
     translations: { pt-BR: captura de tela }
+
+  - term: assembler
+    definition: A program that translates assembly language into machine code.
+    do_not_translate: false
+    translations: { pt-BR: montador }
+
+  - term: handler
+    definition: A function that the program calls when an event or a request arrives. Code identifiers keep their names.
+    do_not_translate: false
+    translations: { pt-BR: tratador }
+
+  - term: namespace
+    definition: A named scope that groups identifiers so that equal names do not clash.
+    do_not_translate: false
+    translations: { pt-BR: "espaço de nomes (namespace on first use)" }
+
+  - term: bottle
+    definition: A prebuilt Homebrew package.
+    do_not_translate: true
+    translations: { pt-BR: bottle }
+
+  - term: callback
+    definition: A function passed to other code, which calls it later.
+    do_not_translate: true
+    translations: { pt-BR: callback }
+
+  - term: binding
+    definition: A library that lets one language call a library written in another.
+    do_not_translate: true
+    translations: { pt-BR: binding }
+
+  - term: widget
+    definition: One element of a graphical interface, such as a button or a label.
+    do_not_translate: true
+    translations: { pt-BR: widget }
+
+  - term: toolkit
+    definition: A library of widgets for building graphical interfaces.
+    do_not_translate: true
+    translations: { pt-BR: toolkit }
+
+  - term: crate
+    definition: A Rust package, the unit that Cargo builds and publishes.
+    do_not_translate: true
+    translations: { pt-BR: crate }
+
+  - term: headless
+    definition: Said of a program that runs without showing a window.
+    do_not_translate: true
+    translations: { pt-BR: headless }
+
+  - term: pull request
+    definition: A request to merge one branch of a repository into another.
+    do_not_translate: true
+    translations: { pt-BR: pull request }
+
+  - term: fork
+    definition: A copy of a repository under another account.
+    do_not_translate: true
+    translations: { pt-BR: fork }
+
+  - term: commit
+    definition: One recorded change in a git repository.
+    do_not_translate: true
+    translations: { pt-BR: commit }
+
+  - term: branch
+    definition: A line of development in a git repository.
+    do_not_translate: true
+    translations: { pt-BR: branch }
+
+  # pt-BR: feminine article (a gem, as gems).
+  - term: gem
+    definition: A Ruby package, installed with the gem command or Bundler.
+    do_not_translate: true
+    translations: { pt-BR: gem }
+
+  - term: native extension
+    definition: A library module written in C (or another compiled language) that a scripting language loads at run time.
+    do_not_translate: false
+    translations: { pt-BR: extensão nativa }
+
+  - term: controller
+    definition: In Rails and other MVC frameworks, the class whose actions answer HTTP requests.
+    do_not_translate: true
+    translations: { pt-BR: controller }
+
+  - term: action
+    definition: In Rails, a public method of a controller that answers one route.
+    do_not_translate: true
+    translations: { pt-BR: action }
+
+  - term: model
+    definition: In Rails and other MVC frameworks, the class that holds data and its rules.
+    do_not_translate: true
+    translations: { pt-BR: model }
+
+  - term: view
+    definition: In Rails and other MVC frameworks, the template that renders the response.
+    do_not_translate: true
+    translations: { pt-BR: view }
+
+  - term: railtie
+    definition: The Rails class that a framework part or a gem uses to hook into the boot of a Rails application.
+    do_not_translate: true
+    translations: { pt-BR: railtie }
+
+  - term: full-stack
+    definition: Said of a framework that covers every layer of a web application, from the database to the HTML.
+    do_not_translate: true
+    translations: { pt-BR: full-stack }

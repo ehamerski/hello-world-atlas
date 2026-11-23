@@ -111,8 +111,8 @@ Open [`app.py`](app.py) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Python 3.14.10 (Homebrew), Flask 3.1.3. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands as Intel. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Debian ships the venv module for the system Python as a separate `python3-venv` package [14]; `install.sh` installs it together with `python3`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install Python with the Python install manager [11]. `install.sh` and `run.sh` find `.venv/Scripts/` automatically; in Git Bash use `PYTHON=python ./install.sh`. Native PowerShell: `py -3 -m venv .venv`, `.venv\Scripts\activate`, `pip install -r requirements.txt`, `flask --app app run --port 8080` [2][3]. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `python3` and `python3-venv` with apt when missing [14]. It creates `.venv` and installs Flask from `requirements.txt` with pip. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Python: if the interpreter (`PYTHON`, default `python3`) is missing it prints the `winget` and `py install 3.14` steps and stops. [11] It creates `.venv` (it finds `.venv/Scripts/` automatically) and installs Flask from `requirements.txt` with pip. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 `./run.sh` (the server keeps running until Ctrl+C):

@@ -1,0 +1,13 @@
+source: languages/perl/meta.yml
+source_sha: 3415e4ed90454ea89b252b47bb458ec82857626b
+year_note: "Perl 1.000 lançado em 1987-12-18 por Larry Wall; o Perl 5.000 veio em 1994-10-17"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "A documentação do Perl avisa que o nome não é uma sigla; escrever PERL em maiúsculas é, portanto, o único erro de que o próprio FAQ tem certeza."
+  dictionary:
+    - term: "Perl"
+      definition: "uma linguagem cujo lema promete mais de uma maneira de fazer a mesma coisa, inclusive mais de uma maneira de escrever a mesma linha."

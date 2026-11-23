@@ -17,7 +17,10 @@ See also: [paradigms](../../docs/paradigms.md#<imperative | object-oriented | fu
 other languages).
 
 ## Implementations
-<!-- One row per category folder. Dropped categories stay in the table. -->
+<!-- One row per category folder. Dropped categories stay in the table.
+     Toolchain and Status come from meta.yml: the toolchain text as it is,
+     the status as the icon of the generated tables (✅ verified,
+     🔶 compromise, ⚠️ not verified, 📄 documented). -->
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
 | cli | [cli/](cli/) | <...> | ✅ |

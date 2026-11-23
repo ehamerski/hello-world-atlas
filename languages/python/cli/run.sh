@@ -11,8 +11,9 @@
 #                           cli program it does the same thing)
 #       PYTHON=python ./run.sh   use another interpreter command (Windows)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu

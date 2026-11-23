@@ -1,0 +1,11 @@
+source: languages/prolog/meta.yml
+source_sha: a669b5ae21136ba2cfa94b66fa35114a37aac040
+year_note: "Colaboração Colmerauer–Kowalski e primeiro sistema (Prolog 0, de Roussel) em 1972; Prolog I no final de 1973; ISO/IEC 13211-1 em 1995"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "Peça ao Prolog que diga olá no prompt e ele diz, depois responde `true.`, caso ainda houvesse dúvida."
+  dictionary:
+    - term: "Prolog"
+      definition: "programação em lógica: o programa declara o que é verdadeiro, e o computador descobre o resto, tentando antes todo o resto."

@@ -10,8 +10,9 @@
 #       ./run.sh --verify   self-check used by scripts/verify-all.sh (for a
 #                           cli program it does exactly the same thing)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -21,10 +22,12 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# shellcheck source=../use-msys2-sbcl.sh
+. ../use-msys2-sbcl.sh
 
-[ -x bin/hello-cli ] || fail "bin/hello-cli is missing. Run ./build.sh first."
+[ -x "bin/hello-cli$EXE" ] || fail "bin/hello-cli$EXE is missing. Run ./build.sh first."
 
 step "Run the program"
 explain "WHY: bin/hello-cli is a saved Lisp image plus the SBCL runtime; the"
 explain "     operating system runs it, and the image calls MAIN."
-./bin/hello-cli
+"./bin/hello-cli$EXE"

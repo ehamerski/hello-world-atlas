@@ -16,8 +16,8 @@
 #         and ^26.0.0.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified); Linux and Windows (Git Bash) verified in
+# CI; macOS Apple Silicon and WSL are documented but NOT verified.
 # Sources for the install commands:
 #   https://learn.microsoft.com/dotnet/core/tools/dotnet-install-script
 #   https://learn.microsoft.com/dotnet/core/install/windows
@@ -51,18 +51,26 @@ export DOTNET_CLI_TELEMETRY_OPTOUT DOTNET_NOLOGO NG_CLI_ANALYTICS
 # The oldest SDK major version that can build net10.0 projects.
 SDK_MIN=10
 
+# DOTNET_INSTALL_SHA256 is the SHA-256 digest of https://dot.net/v1/dotnet-install.sh
+# as it was downloaded on 2026-11-10 and again on 2026-11-19 (Microsoft's installer
+# script). If Microsoft changes the script, install.sh stops with a checksum
+# mismatch; check the new script, then update this value.
+DOTNET_INSTALL_SHA256=082f7685e156738a1b2e2ed8381a621870d4ce8e8c59278034556f05c186eb2e
+
 # sdk_ok succeeds if "dotnet --list-sdks" shows an SDK of version 10 or
-# newer. Each line looks like: 10.0.403 [/Users/you/.dotnet/sdk]
+# newer. Each line looks like: 10.0.404 [/Users/you/.dotnet/sdk]
 sdk_ok() {
     has_cmd dotnet || return 1
     dotnet --list-sdks 2>/dev/null | awk -F. -v min="$SDK_MIN" '$1 >= min { f = 1 } END { exit !f }'
 }
 
-# install_dotnet downloads Microsoft's install script to a temporary file
-# and runs it (see ../cli/install.sh for the details).
+# install_dotnet downloads Microsoft's install script to a temporary file,
+# checks its SHA-256 digest and runs it (see ../cli/install.sh for the details).
 install_dotnet() {
     id_script=$(mktemp)
     curl -fsSL https://dot.net/v1/dotnet-install.sh -o "$id_script"
+    echo "$DOTNET_INSTALL_SHA256  $id_script" | shasum -a 256 -c - \
+        || fail "Checksum mismatch for dotnet-install.sh: see DOTNET_INSTALL_SHA256 in install.sh."
     bash "$id_script" --channel 10.0 --install-dir "$HOME/.dotnet"
     rm -f "$id_script"
     PATH="$HOME/.dotnet:$PATH"; export PATH
@@ -86,7 +94,8 @@ else
     case "$TF_OS" in
         macos-intel|macos-arm|linux)
             explain "Microsoft's dotnet-install.sh (https://dot.net/v1/dotnet-install.sh)"
-            explain "installs the SDK into ~/.dotnet, no sudo needed. It runs:"
+            explain "installs the SDK into ~/.dotnet, no sudo needed. Its SHA-256 digest is"
+            explain "checked first (DOTNET_INSTALL_SHA256 above). It runs:"
             explain "    bash dotnet-install.sh --channel 10.0 --install-dir \$HOME/.dotnet"
             install_pkg "the .NET $SDK_MIN SDK" install_dotnet || exit 1 ;;
         windows)

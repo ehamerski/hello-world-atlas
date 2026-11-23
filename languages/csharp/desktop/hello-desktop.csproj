@@ -20,12 +20,12 @@
   <ItemGroup>
     <!-- Exact versions, so every student builds with the same Avalonia. -->
     <!-- The core: controls such as Window and TextBlock. -->
-    <PackageReference Include="Avalonia" Version="12.1.4" />
+    <PackageReference Include="Avalonia" Version="12.1.6" />
     <!-- The desktop backends (macOS, Windows, Linux X11) and
          UsePlatformDetect(), which picks the right one at run time. -->
-    <PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.6" />
     <!-- The Fluent theme: without a theme, controls are not drawn. -->
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.6" />
   </ItemGroup>
 
 </Project>

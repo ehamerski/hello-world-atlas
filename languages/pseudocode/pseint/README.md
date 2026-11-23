@@ -99,8 +99,8 @@ as `scripts/verify-all.sh` does.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-02) | `pseint-mi64-20250314.tgz`; interpreter at `pseint.app/Contents/Resources/pseint`. |
 | macOS Apple Silicon | ⚠️ not verified | `install.sh` uses `pseint-ma64-20250314.tgz` [4]; same layout assumed. |
-| Linux | ⚠️ not verified | `install.sh` uses `pseint-l64-20250314.tgz` [4]; interpreter assumed at `pseint/bin/pseint`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Unzip `pseint-w64-20250314.zip` [4] and run `PSEINT=/c/<folder>/pseint/pseint.exe ./run.sh` (the command `install.sh` prints). The Windows Subsystem for Linux (WSL) behaves like Linux. |
+| Linux | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` downloads `pseint-l64-20250314.tgz` [4] from SourceForge, checks its SHA-256, and unpacks it into `~/.local/pseint-20250314`. The interpreter is `pseint/bin/pseint`. It needs `curl`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` downloads `pseint-w64-20250314.zip` [4] from SourceForge, checks its SHA-256, and unpacks it with Windows `tar.exe` into `~/.local/pseint-20250314`. The interpreter is `pseint/pseint.exe`. It needs `curl`. WSL (Windows Subsystem for Linux) not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

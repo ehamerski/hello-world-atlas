@@ -1,13 +1,11 @@
-# Published files hold no work notes (same patterns as scripts/check-product.sh).
+# Published files hold no work notes (the word patterns of scripts/check-product.sh).
 extends: existence
 message: "'%s' is an internal work note; it does not belong in a published file."
 level: error
 ignorecase: true
 nonword: true
 tokens:
-  - 'MYA-\d+'
   - 'gate G\d'
   - 'plan §'
   - '\brev \d'
-  - 'TwinForge'
   - '\bsub-task'

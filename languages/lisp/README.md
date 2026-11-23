@@ -41,9 +41,9 @@ Hello World here is a single function call with a side effect: it prints.
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | SBCL 2.6.10 (Homebrew) · `sb-ext:save-lisp-and-die` saves a standalone executable | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | SBCL | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop version](#why-there-is-no-desktop-version) | – |
-| web | [web/](web/) | Hunchentoot web server, loaded with Quicklisp, on SBCL 2.6.10 | ✅ verified on macOS Intel |
+| web | [web/](web/) | Hunchentoot (Quicklisp), SBCL | ✅ |
 
 ## History
 Two papers tell this story from the inside: McCarthy's own *History of

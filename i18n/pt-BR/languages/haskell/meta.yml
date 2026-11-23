@@ -1,0 +1,11 @@
+source: languages/haskell/meta.yml
+source_sha: 959a2e9c4d183967658a6a60148c88ba30515443
+year_note: "comitê formado na FPCA '87 (setembro de 1987); nome escolhido em janeiro de 1988; Relatório Haskell 1.0 (editado por Hudak e Wadler) publicado em 1990-04-01"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "Imprimir é um efeito colateral, então Haskell exige que o Hello World o declare em seu tipo: `IO ()`."
+  dictionary:
+    - term: "Haskell"
+      definition: "uma linguagem tão preguiçosa que esta definição só é avaliada quando alguém precisar dela."

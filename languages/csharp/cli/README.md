@@ -19,7 +19,7 @@ Java version.
 ## Prerequisites
 | Tool | Version used (macOS Intel) | Why it is needed |
 |---|---|---|
-| .NET SDK 10 | 10.0.403 (runtime 10.0.14), installed with `dotnet-install.sh` into `~/.dotnet` | the C# compiler, MSBuild, the .NET runtime and the base class library (`Console`) |
+| .NET SDK 10 | 10.0.404 (runtime 10.0.15), installed with `dotnet-install.sh` into `~/.dotnet` | the C# compiler, MSBuild, the .NET runtime and the base class library (`Console`) |
 | `curl` and `bash` | system versions | only if `install.sh` has to download the SDK |
 
 ## Quick start
@@ -32,7 +32,7 @@ Java version.
 ## Scripts explained
 | Script | What it does | Why it is needed |
 |---|---|---|
-| `install.sh` | Checks `dotnet --list-sdks` for an SDK of version 10 or newer. If none is found, on macOS/Linux it offers Microsoft's `dotnet-install.sh --channel 10.0` (into `~/.dotnet`, without `sudo`); on Windows it prints the `winget` command. It runs nothing without your `y`. | One package, the SDK, contains everything a C# program needs. |
+| `install.sh` | Checks `dotnet --list-sdks` for an SDK of version 10 or newer. If none is found, on macOS/Linux it offers Microsoft's `dotnet-install.sh --channel 10.0` (into `~/.dotnet`, without `sudo`), and checks the script's SHA-256 digest before it runs it; on Windows it prints the `winget` command. It runs nothing without your `y`. | One package, the SDK, contains everything a C# program needs. |
 | `build.sh` | Runs `dotnet build -c Release --disable-build-servers` and prints the command. | Restores the project, then compiles `Program.cs` to IL in `bin/Release/net10.0/hello-cli.dll`. |
 | `run.sh` | Runs `dotnet bin/Release/net10.0/hello-cli.dll`. `--verify` does the same (a CLI program ends by itself). | The `.dll` holds IL, so the .NET runtime has to load it, compile it to machine code while the program runs (JIT compilation), and run it. |
 
@@ -43,6 +43,12 @@ the newest .NET 10 SDK; `--channel LTS` would pick the newest LTS release,
 which was the same release on 2026-11-01 [2]. The scripts do not change `PATH` and do
 not set `DOTNET_ROOT` [2]. That is why every script here adds
 `~/.dotnet` to `PATH` when `dotnet` is not already on it.
+
+**How the script is checked.** `install.sh` compares the downloaded
+`dotnet-install.sh` with the digest in `DOTNET_INSTALL_SHA256`: the output of `shasum -a 256` on the script downloaded from
+<https://dot.net/v1/dotnet-install.sh> on 2026-11-10 and again on
+2026-11-19. If Microsoft changes the script, `install.sh` stops with a
+checksum mismatch; check the new script, then update the value.
 
 Microsoft cautions: "The intended use of the scripts is for
 Continuous Integration (CI) scenarios" and "To set up a development
@@ -152,10 +158,10 @@ Open [`Program.cs`](Program.cs) and [`hello-cli.csproj`](hello-cli.csproj).
 ## Platform notes
 | Platform | Status | Notes |
 |---|---|---|
-| macOS Intel | ✅ verified (2026-11-01) | .NET SDK 10.0.403 (x64) from `dotnet-install.sh` into `~/.dotnet`. The supported macOS versions for .NET 10 are 14, 15, and 26 [14]. |
+| macOS Intel | ✅ verified (2026-11-20) | .NET SDK 10.0.404 (x64) from `dotnet-install.sh` into `~/.dotnet`. The supported macOS versions for .NET 10 are 14, 15, and 26 [14]. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands; the script picks the Arm64 SDK. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | The same `dotnet-install.sh` works without `sudo` [2]. Microsoft also documents distribution packages: see <https://learn.microsoft.com/dotnet/core/install/linux> [15]. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id Microsoft.DotNet.SDK.10 -e` in PowerShell. Native commands: `dotnet build -c Release` and `dotnet bin\Release\net10.0\hello-cli.dll` (or `bin\Release\net10.0\hello-cli.exe`). WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` runs Microsoft's `dotnet-install.sh` (channel 10.0) into `~/.dotnet` when no .NET 10 SDK is found [2]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install the SDK: if no .NET 10 SDK is found it prints `winget install --id Microsoft.DotNet.SDK.10 -e` and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

@@ -1,0 +1,15 @@
+<!-- logback.xml - logging settings, read by logback when the server starts.
+     Without this file logback prints every DEBUG message of Netty, which
+     buries the one line that matters: "Responding at http://127.0.0.1:8080".
+     This file prints the INFO level and above. -->
+<configuration>
+    <!-- An appender decides where the messages go; here, the terminal. -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{20} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

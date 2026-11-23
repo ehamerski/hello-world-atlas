@@ -16,8 +16,9 @@
 #         registry. Vite requires Node.js 20.19+ or 22.12+.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://formulae.brew.sh/cask/temurin@21
 #   https://formulae.brew.sh/formula/maven
@@ -35,6 +36,9 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, TF_OS, has_cmd, install_pkg.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# Windows runners: select JDK 21 (see use-runner-jdk.sh).
+# shellcheck source=../../../scripts/use-runner-jdk.sh
+. ../../../scripts/use-runner-jdk.sh
 
 # The oldest Java version the backend compiles for (<java.version> in
 # backend/pom.xml). Java 21 is a long-term support (LTS) release.

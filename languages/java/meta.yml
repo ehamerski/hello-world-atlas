@@ -52,8 +52,8 @@ categories:
 sources:
   - title: "Java Technology: The Early Years. Jon Byous, Sun Microsystems, 1998 (Internet Archive copy)"
     url: "https://web.archive.org/web/20051230031802/http://java.sun.com/features/1998/05/birthday.html"
-  - title: "JavaSoft ships Java 1.0 (Sun Microsystems press release, 1996-01-23, archived in the java-interest mailing list). MIT"
-    url: "https://diswww.mit.edu/charon.mit.edu/java-interest/5056"
+  - title: "JavaSoft Ships Java 1.0 (Sun Microsystems press release, 1996-01-23; Internet Archive copy of the tech-insider.org transcript)"
+    url: "https://web.archive.org/web/20221231225635/https://www.tech-insider.org/java/research/1996/0123.html"
 # humor: one light line for the Off the record page and the box at the
 # end of the language page (languages/README.md#humor-keys).
 humor:

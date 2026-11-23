@@ -111,18 +111,6 @@ h1#_top,
   overflow-wrap: anywhere;
 }
 
-/* ------------------------------------------------------- the footer
-   The "Off the record" link (src/components/Footer.astro). */
-.footer-extra {
-  margin-block: 1rem 0;
-  text-align: center;
-  font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
-}
-.footer-extra a {
-  color: var(--sl-color-gray-2);
-}
-
 /* ------------------------------------------------- the printed page */
 @media print {
   /* Paper is white: print the light colors whatever the screen theme is.
@@ -150,7 +138,8 @@ h1#_top,
   .download-zip,
   .filters,
   .sl-anchor-link,
-  .footer-extra,
+  .header-links,
+  .breadcrumb,
   starlight-theme-select,
   starlight-lang-select,
   .comparator-controls,

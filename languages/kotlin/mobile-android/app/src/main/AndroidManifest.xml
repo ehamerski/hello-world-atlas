@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AndroidManifest.xml - the app's description for Android. The system reads it
+  before it runs any code: it lists the activities (screens), the name shown
+  under the launcher icon, and which screen starts when the user taps the icon.
+  Manifest reference: https://developer.android.com/guide/topics/manifest/manifest-intro
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+      android:label is the name under the launcher icon. The theme is the
+      Android system theme without an action bar, because Compose draws the
+      whole screen itself.
+    -->
+    <application
+        android:label="Hello, World!"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <!--
+          One activity: the screen that Compose fills. exported="true" lets the
+          launcher start it. The intent-filter below says: start this activity
+          when the user taps the app's icon (LAUNCHER).
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

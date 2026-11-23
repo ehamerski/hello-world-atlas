@@ -12,12 +12,15 @@
 # HOW:  ./install.sh       (run once; safe to run again)
 #       SWIPL=/path/to/swipl ./install.sh   check another swipl command
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://formulae.brew.sh/formula/swi-prolog
 #   https://www.swi-prolog.org/build/PPA.html
 #   https://www.swi-prolog.org/download/stable
+#   https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-swi-prolog-core
+#   https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-swi-prolog-packages
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -27,6 +30,8 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, TF_OS, has_cmd, install_pkg.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# shellcheck source=../use-msys2-swipl.sh
+. ../use-msys2-swipl.sh
 
 SWIPL=${SWIPL:-swipl}
 
@@ -55,11 +60,17 @@ case "$TF_OS" in
         # own package "swi-prolog-nox" works too, but may be older.
         install_pkg "SWI-Prolog" sudo apt-get install -y swi-prolog-nox || exit 1 ;;
     windows)
-        explain "Download the Windows installer (swipl-<version>-1.x64.exe) from"
-        explain "    https://www.swi-prolog.org/download/stable"
-        explain "or run in PowerShell:  winget install SWI-Prolog.SWI-Prolog"
-        explain "Select 'Add swipl to the system PATH', then reopen Git Bash."
-        exit 1 ;;
+        # MSYS2 comes with the GitHub windows-latest image. "core" is the
+        # Prolog system (swipl.exe); "packages" adds the libraries such as
+        # library(http/...). pacman -Sy refreshes the package lists first; -S
+        # --needed skips what is installed. The login shell (-l) sets MSYS2 up
+        # for pacman. use-msys2-swipl.sh puts C:\msys64\ucrt64\bin on PATH.
+        # Without MSYS2, use the installer on
+        # https://www.swi-prolog.org/download/stable
+        [ -x /c/msys64/usr/bin/bash.exe ] \
+            || fail "MSYS2 was not found in C:\\msys64. Install it from https://www.msys2.org/ or use the SWI-Prolog installer."
+        install_pkg "SWI-Prolog (MSYS2 packages)" /c/msys64/usr/bin/bash.exe -lc \
+            "pacman -Sy --noconfirm --needed mingw-w64-ucrt-x86_64-swi-prolog-core mingw-w64-ucrt-x86_64-swi-prolog-packages" || exit 1 ;;
     *)
         fail "Unknown OS. See https://www.swi-prolog.org/download/stable" ;;
 esac

@@ -20,10 +20,10 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Go 1.27 (`go build`) | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | Go 1.27 + Fyne v2.8.2 (needs a C compiler for cgo) | ✅ verified on macOS Intel |
-| web | [web/](web/) | Go 1.27 standard library: `net/http` + `html/template` | ✅ verified on macOS Intel |
-| web + separate front end | [web-vue/](web-vue/) | Go `net/http` JSON API + Vue 3.5 / Vite 8 front end | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | Go toolchain | ✅ |
+| desktop | [desktop/](desktop/) | Fyne | ✅ |
+| web | [web/](web/) | `net/http` + `html/template` (standard library) | ✅ |
+| web + separate front end | [web-vue/](web-vue/) | Go API + Vue (Vite) | ✅ |
 
 ## History
 Go was designed at Google. The FAQ gives the exact date of its start: "Robert

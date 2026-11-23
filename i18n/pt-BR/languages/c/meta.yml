@@ -1,0 +1,14 @@
+source: languages/c/meta.yml
+source_sha: 393cf4654e1261748ae8ab59ba4113520e4b5687
+year_note: "o C surgiu entre 1969 e 1973, com o período mais criativo em 1972; padronizado como ANSI X3.159-1989 / ISO/IEC 9899:1990"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  label: "C"
+  line: "O C confia plenamente no programador. O `printf` imprime o que lhe pedem para imprimir, inclusive o que ninguém pretendia pedir."
+  dictionary:
+    - term: "C"
+      definition: "uma linguagem que dá ao programador corda de sobra, e o endereço da corda."

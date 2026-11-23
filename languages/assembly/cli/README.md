@@ -201,8 +201,8 @@ and costs one `extern` and one `call`.
 |---|---|---|
 | macOS Intel (x86-64) | ✅ verified (2026-11-02) | NASM 3.02 (Homebrew), Apple clang 21.0.0, macOS 26.7.2. |
 | macOS Apple Silicon (arm64) | ⚠️ not verified | The CPU has a different instruction set (AArch64), so `hello.asm` cannot run natively. `build.sh` links it with `cc -arch x86_64`, which produces an x86-64 executable that Rosetta translates [16]. A native version must be rewritten in AArch64 assembly (Apple's ABI for it is described in [17]), and NASM cannot assemble AArch64. |
-| Linux x86-64 (ELF) | ⚠️ not verified | Same CPU, different OS: ELF objects (`-f elf64`), no leading underscore, and the Linux system-call interface is stable, so the usual Linux version uses `syscall` directly (below). `build.sh` stops on Linux. |
-| Windows x64 | ⚠️ not verified | Same CPU, but a different calling convention (Microsoft x64: first arguments in RCX, RDX, R8, R9, plus stack space the caller must reserve as a "shadow store" for four register parameters) [18] and a different object format (`-f win64`). Not provided. |
+| Linux x86-64 (ELF) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential` (when `cc` is missing) and `nasm` with apt. `build.sh` assembles `hello_linux.asm` with `nasm -f elf64` and links it with `cc`. |
+| Windows x64 | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs `gcc` and `nasm` (UCRT64) with `pacman` when missing. `build.sh` assembles `hello_windows.asm` with `nasm -f win64` and links it with `gcc`. |
 
 **Linux x86-64 variant (not verified).** It was checked only to assemble
 (`nasm -f elf64` on the dev machine), not linked or run:

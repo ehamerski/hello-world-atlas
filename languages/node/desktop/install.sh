@@ -20,8 +20,8 @@
 #       package.json).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified); Linux and Windows (Git Bash) verified in
+# CI; macOS Apple Silicon and WSL are documented but NOT verified.
 # Electron 45 needs macOS 13 (Ventura) or newer, or Windows 10 or newer.
 # Sources for the install commands:
 #   https://nodejs.org/en/download

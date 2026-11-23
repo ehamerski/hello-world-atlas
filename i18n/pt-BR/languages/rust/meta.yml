@@ -1,0 +1,13 @@
+source: languages/rust/meta.yml
+source_sha: 072661d3b05e496ab0dde8508ed5cfe45ffb3510
+year_note: "iniciado em 2006 como projeto pessoal de Graydon Hoare; investimento da Mozilla a partir de 2009; Rust 1.0 lançado em 2015-05-15"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "`println!` termina com ponto de exclamação porque é uma macro, não porque está empolgado. É, porém, seguro quanto à memória e um pouco empolgado."
+  dictionary:
+    - term: "Rust"
+      definition: "uma linguagem em que todo valor tem um dono, e o verificador de empréstimos (borrow checker) sabe quem é."

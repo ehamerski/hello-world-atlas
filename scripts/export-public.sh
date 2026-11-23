@@ -5,8 +5,9 @@
 # WHAT: takes the paths listed in scripts/public-paths.txt (an allowlist)
 #   at one commit or tag, and only those, and:
 #   - with --dry-run, prints the files it would export and changes nothing;
-#   - otherwise writes them into <target> and runs scripts/check-product.sh
-#     on the result.
+#   - otherwise writes them into <target>, checks that every language and
+#     category of languages/APPROVED.txt is in it (scripts/approved.py
+#     --export), and runs scripts/check-product.sh on the result.
 #   <target> is either a new or empty folder, or a clone of the public
 #   repository. In a clone, every file except .git/ is replaced by the
 #   export and staged with `git add -A`, so `git status` shows exactly what
@@ -48,6 +49,7 @@ done
 [ "$DRY_RUN" = 1 ] || [ -n "$TARGET" ] || fail "Give a target folder, or use --dry-run."
 
 require_cmd git "git is needed to read the committed files."
+require_cmd python3 "Install Python 3 from https://www.python.org/downloads/."
 git rev-parse --verify --quiet "$REF^{commit}" >/dev/null || fail "Not a commit or tag: $REF"
 
 # The allowlist, without comments and blank lines.
@@ -77,6 +79,9 @@ explain "git archive packs only committed files under the allowlisted paths."
 # shellcheck disable=SC2086
 git archive --format=tar "$REF" -- $PATHS | tar -x -f - -C "$TARGET"
 ok "$(find "$TARGET" -type f ! -path "$TARGET/.git/*" | wc -l | tr -d ' ') files written to $TARGET"
+
+python3 scripts/approved.py --export "$TARGET" ||
+    fail "The export misses an approved language or category (listed above)."
 
 scripts/check-product.sh "$TARGET"
 

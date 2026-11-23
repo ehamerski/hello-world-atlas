@@ -9,14 +9,15 @@
 #       compiler the Haskell community uses. GHCup is the installer that
 #       haskell.org recommends: it installs GHC and Cabal (the build tool
 #       ../web needs) and lets you switch between GHC versions.
-#       It is a "curl ... | sh" installer; the project's source policy allows
-#       this only because it is the vendor's documented installer (see
-#       https://www.haskell.org/ghcup/).
+#       GHCup's bootstrap script is the vendor's documented installer (see
+#       https://www.haskell.org/ghcup/). It is saved to a file first, so
+#       you can read it before it runs.
 # HOW:  ./install.sh       (run once; safe to run again)
 #       GHC=/path/to/ghc ./install.sh   check another compiler command
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://www.haskell.org/ghcup/
 #   https://www.haskell.org/ghcup/install/
@@ -26,7 +27,7 @@ set -eu
 
 # Run from this script's folder so relative paths work from anywhere.
 cd -- "$(dirname -- "$0")"
-# Shared helpers: step/explain/ok/fail, TF_OS, has_cmd, confirm.
+# Shared helpers: step/explain/ok/fail, TF_OS, has_cmd, install_pkg.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
 # Puts ~/.ghcup/bin on PATH.
@@ -35,7 +36,8 @@ cd -- "$(dirname -- "$0")"
 
 GHC=${GHC:-ghc}
 
-# install_ghcup - run GHCup's official bootstrap script without questions:
+# install_ghcup - save GHCup's official bootstrap script to a file, then run it
+# without questions:
 #   BOOTSTRAP_HASKELL_NONINTERACTIVE=1  use the defaults: the "recommended"
 #                                       GHC and Cabal versions
 #   BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1  skip Stack, a second build tool
@@ -43,16 +45,18 @@ GHC=${GHC:-ghc}
 # The script does not change your shell profile in this mode; ghcup-env.sh
 # adds ~/.ghcup/bin to PATH for these scripts instead.
 install_ghcup() {
-    explain "This downloads GHCup's bootstrap script from https://get-ghcup.haskell.org"
-    explain "and runs it. It installs GHC and Cabal into ~/.ghcup (no sudo):"
-    explain "    curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org \\"
-    explain "      | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1 sh"
-    confirm "Install GHC and Cabal with GHCup now?" \
-        || { warn "Skipped. Run the command above yourself, then re-run this script."; exit 1; }
+    ghcup_script=${XDG_CACHE_HOME:-$HOME/.cache}/hello-world-haskell/bootstrap-haskell.sh
+    explain "GHCup's bootstrap script (https://get-ghcup.haskell.org) is saved to a file"
+    explain "first, so you can read it before it runs. It installs GHC and Cabal"
+    explain "into ~/.ghcup (no sudo)."
     # --proto '=https' and --tlsv1.2 refuse plain HTTP and old TLS, as on
-    # the GHCup page; -sSf: quiet, but show errors and fail on HTTP errors.
-    curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org \
-        | BOOTSTRAP_HASKELL_NONINTERACTIVE=1 BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1 sh
+    # the GHCup page; -fsSL: quiet, but show errors and fail on HTTP errors.
+    install_pkg "GHCup's bootstrap script (download only)" \
+        curl --proto '=https' --tlsv1.2 -fsSL --create-dirs https://get-ghcup.haskell.org -o "$ghcup_script" \
+        || exit 1
+    explain "The script is saved in $ghcup_script; you can read it before the next step."
+    install_pkg "GHC and Cabal (GHCup)" env BOOTSTRAP_HASKELL_NONINTERACTIVE=1 \
+        BOOTSTRAP_HASKELL_INSTALL_NO_STACK=1 sh "$ghcup_script" || exit 1
     # ~/.ghcup/bin exists now: read ghcup-env.sh again to put it on PATH.
     . ./ghcup-env.sh
 }

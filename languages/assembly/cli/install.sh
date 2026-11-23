@@ -15,8 +15,10 @@
 # HOW:  ./install.sh       (run once; safe to run again)
 #
 # Platforms: macOS Intel (verified on the dev machine). hello.asm is x86-64
-# macOS code: on Apple Silicon, Linux and Windows the tools install, but the
-# program needs changes or Rosetta (see README.md, "Platform notes").
+# macOS code: on Apple Silicon it needs Rosetta (see README.md, "Platform
+# notes"); Linux and Windows use their own sources (hello_linux.asm,
+# hello_windows.asm), checked by GitHub Actions. On Windows, NASM and gcc
+# come from MSYS2 (https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-nasm).
 # Sources for the install commands:
 #   https://formulae.brew.sh/formula/nasm
 #   https://packages.debian.org/stable/nasm
@@ -31,12 +33,19 @@ cd -- "$(dirname -- "$0")"
 # fix_developer_dir.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# On Windows: MSYS2's UCRT64 tools (nasm, gcc) first on PATH (no effect elsewhere).
+# shellcheck source=../msys2-env.sh
+. ../msys2-env.sh
 
 step "1/2 Check the linker driver (cc)"
 explain "WHY: NASM only makes an object file. 'cc' calls the system linker (ld), which"
 explain "     joins it with the C library (where write() lives) into an executable."
 fix_developer_dir
-if has_cmd cc && cc --version >/dev/null 2>&1; then
+if [ "$TF_OS" = windows ]; then
+    # build.sh links with MSYS2's gcc (see ../msys2-env.sh).
+    msys2_ensure "gcc" gcc
+    ok "gcc found: $(gcc --version 2>&1 | head -n 1)"
+elif has_cmd cc && cc --version >/dev/null 2>&1; then
     ok "cc found: $(cc --version 2>&1 | head -n 1)"
 else
     warn "No working 'cc' was found."
@@ -54,6 +63,10 @@ fi
 
 step "2/2 Check the assembler (nasm)"
 explain "WHY: 'nasm' translates the instructions in hello.asm into machine code."
+if [ "$TF_OS" = windows ]; then
+    # https://packages.msys2.org/packages/mingw-w64-ucrt-x86_64-nasm
+    msys2_ensure "NASM" nasm
+fi
 if has_cmd nasm; then
     ok "NASM found: $(nasm -v)"
     ok "Toolchain is ready. Next: ./build.sh"
@@ -69,11 +82,6 @@ case "$TF_OS" in
     linux)
         # Debian/Ubuntu package "nasm". It needs sudo, which is shown.
         install_pkg "NASM" sudo apt-get install -y nasm || exit 1 ;;
-    windows)
-        explain "Download the installer from https://www.nasm.us/ (or, in MSYS2:"
-        explain "    pacman -S mingw-w64-ucrt-x86_64-nasm)"
-        explain "Note: Windows uses a different calling convention; see README.md."
-        exit 1 ;;
     *)
         fail "Unknown OS. Get NASM from https://www.nasm.us/." ;;
 esac

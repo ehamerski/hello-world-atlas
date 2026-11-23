@@ -1,0 +1,34 @@
+# languages/r/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "R"
+other_names:
+  - "GNU S"
+year: 1993
+year_note: "first binaries announced in August 1993; source released under the GNU General Public License in June 1995; version 1.0.0 released on 2000-02-29"
+designers:
+  - "Ross Ihaka"
+  - "Robert Gentleman"
+paradigms:
+  - "functional"
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "R 4.6.2 (`Rscript`, Homebrew formula built from source)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "interpreted; Rscript runs hello.R without a session"
+sources:
+  - title: "R: Past and Future History. Ross Ihaka, draft paper for Interface '98. Archived copy of the author's page at stat.auckland.ac.nz (Internet Archive)"
+    url: "https://web.archive.org/web/2020/https://www.stat.auckland.ac.nz/~ihaka/downloads/Interface98.pdf"
+  - title: "R FAQ. Kurt Hornik and the R Core Team. CRAN"
+    url: "https://cran.r-project.org/doc/FAQ/R-FAQ.html"
+  - title: "R 1.0.0 Release Statement. R Core Team. CRAN"
+    url: "https://cran.r-project.org/R-release-1.0.0.html"
+# humor: one light line for the Off the record page.
+humor:
+  line: "In R, the first element of a vector has index 1, which settles an old argument by ignoring it."
+  dictionary:
+    - term: "R"
+      definition: "a language named after its two authors and, in part, as a reply to the letter before it."

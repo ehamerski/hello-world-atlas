@@ -106,8 +106,8 @@ Pascal (see the [Pascal CLI](../../pascal/cli/)), with Portuguese keywords.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-02) | Node.js 26.8.2 from Homebrew. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands; `brew install node`. |
-| Linux | ⚠️ not verified | Install Node.js as shown on nodejs.org [10], then the same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id OpenJS.NodeJS.LTS -e` in PowerShell, then the same commands in Git Bash. Or use the original VisuAlg 3.0 editor [9]. WSL is the Windows Subsystem for Linux. |
+| Linux | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Node.js: if `node` or `npm` is missing it prints the nodejs.org steps [10] and stops. It runs `npm ci` to install Delégua when it is missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Node.js: if `node` or `npm` is missing it prints `winget install --id OpenJS.NodeJS.LTS -e` and stops. It runs `npm ci` to install Delégua when it is missing. The original VisuAlg 3.0 editor [9] is an alternative. WSL (Windows Subsystem for Linux) not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

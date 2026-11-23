@@ -13,8 +13,9 @@
 #       build on Intel Macs (see fpc-env.sh for the details).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://sourceforge.net/projects/freepascal/files/  (official FPC releases)
 #   https://packages.debian.org/stable/fpc
@@ -99,11 +100,16 @@ case "$TF_OS" in
         # sudo, which is shown.
         install_pkg "Free Pascal" sudo apt-get install -y fpc || exit 1 ;;
     windows)
-        explain "Download the Windows installer fpc-3.2.2.win32.and.win64.exe from"
-        explain "    https://sourceforge.net/projects/freepascal/files/Win32/3.2.2/"
-        explain "(or install Lazarus, which includes Free Pascal), then add the folder"
-        explain "that contains fpc.exe to PATH. Reopen Git Bash."
-        exit 1 ;;
+        # Chocolatey's "lazarus" package runs the official Lazarus installer
+        # (Lazarus 4.0 with Free Pascal 3.2.2) silently, and checks the
+        # SHA-256 of the download: https://community.chocolatey.org/packages/lazarus
+        # It has the same compiler (3.2.2) as the "freepascal" package, and
+        # ../desktop needs Lazarus anyway, so both folders use this package.
+        # Chocolatey needs an administrator terminal, which a CI runner is.
+        has_cmd choco || fail "Chocolatey (choco) is missing. Install it from https://chocolatey.org/install or download Free Pascal from https://sourceforge.net/projects/freepascal/files/Win32/3.2.2/"
+        install_pkg "Free Pascal 3.2.2 (with Lazarus 4.0)" choco install -y --no-progress lazarus --version=4.0.0 || exit 1
+        # Read fpc-env.sh again: it now finds C:\lazarus\fpc\...\fpc.exe.
+        . ./fpc-env.sh ;;
     *)
         fail "Unknown OS. See https://sourceforge.net/projects/freepascal/files/" ;;
 esac

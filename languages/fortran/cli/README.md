@@ -124,8 +124,8 @@ Open [`hello.f90`](hello.f90) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | GFortran 16.2.0 from Homebrew `gcc` 16.2.0, built from source (no Intel bottle) [3]. |
 | macOS Apple Silicon | ⚠️ not verified | `brew install gcc` installs a pre-built bottle [3]. Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y gfortran` [13][4]. Same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install MSYS2, then in the "MSYS2 UCRT64" shell `pacman -S mingw-w64-ucrt-x86_64-gcc-fortran` [14], and add `C:\msys64\ucrt64\bin` to `PATH`. Name the output `bin/hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `gfortran` with apt when missing [13][4]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install a compiler: if `gfortran` is missing it prints the MSYS2 steps (`pacman -S mingw-w64-ucrt-x86_64-gcc-fortran`) [14] and stops. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

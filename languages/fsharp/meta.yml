@@ -1,0 +1,24 @@
+# languages/fsharp/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "F#"
+year: 2002
+year_note: "Don Syme started F# at Microsoft Research Cambridge in 2002 (first release 2002-06-04); F# 2.0, the first officially supported version, shipped with Visual Studio 2010"
+designers:
+  - "Don Syme"
+paradigms:
+  - "functional"
+  - "multi-paradigm"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: ".NET 10 SDK (`dotnet`), F# 10"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "The Early History of F#. Don Syme, Proceedings of the ACM on Programming Languages 4 (HOPL), 2020. Author's PDF on fsharp.org"
+    url: "https://fsharp.org/history/hopl-final/hopl-fsharp.pdf"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "In F#, Hello World is a single line, and the indentation is the only part that can hurt your feelings."

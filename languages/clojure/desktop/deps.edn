@@ -1,0 +1,14 @@
+;; deps.edn - Clojure desktop: the project file of the Clojure CLI.
+;;
+;; The whole file is one map written in EDN (Extensible Data Notation), the
+;; data format that is a subset of Clojure's own syntax.
+;; Reference: https://clojure.org/reference/deps_and_cli
+
+{;; :paths lists the source folders that are put on the classpath. The
+ ;; namespace hello.core is found in src/hello/core.clj.
+ :paths ["src"]
+
+ ;; :deps is empty: Swing is part of the JDK (the java.desktop module), so
+ ;; Clojure reaches it through Java interop and needs no library. Compare
+ ;; ../../java/desktop, where Maven has to download JavaFX.
+ :deps {}}

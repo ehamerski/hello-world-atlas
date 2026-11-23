@@ -19,8 +19,9 @@
 # HOW:  ./build.sh                         (after ./install.sh; run again after editing)
 #       QB64PE=/path/to/qb64pe ./build.sh  use another QB64-PE
 #
-# Platforms: macOS Intel (verified on the development machine); macOS Apple
-# Silicon, Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the development machine); Linux and
+# Windows (Git Bash) verified in CI; macOS Apple Silicon and WSL are
+# documented but NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu

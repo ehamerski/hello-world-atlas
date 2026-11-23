@@ -1,0 +1,48 @@
+# languages/lua/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Lua"
+year: 1993
+year_note: "born in 1993 at Tecgraf, PUC-Rio; first public release, Lua 1.1, in July 1994"
+designers:
+  - "Roberto Ierusalimschy"
+  - "Luiz Henrique de Figueiredo"
+  - "Waldemar Celes"
+paradigms:
+  - "multi-paradigm"
+  - "imperative"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Scheme"
+    title: "The Evolution of Lua. Roberto Ierusalimschy, Luiz Henrique de Figueiredo, Waldemar Celes. HOPL III, ACM, 2007"
+    url: "https://www.lua.org/doc/hopl.pdf"
+    quote: "Semantically, Lua has many similarities with Scheme,"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Lua 5.5"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "LÖVE 11.5 (LuaJIT, Lua 5.1 dialect)"
+    run: "window"
+    status: "compromise"
+    note: "LÖVE embeds LuaJIT, so it runs the Lua 5.1 dialect, not Lua 5.5 like cli and web"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Pegasus, LuaRocks"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "The Evolution of Lua. Roberto Ierusalimschy, Luiz Henrique de Figueiredo, Waldemar Celes. HOPL III, ACM, 2007"
+    url: "https://www.lua.org/doc/hopl.pdf"
+  - title: "Lua: authors. Lua.org, PUC-Rio"
+    url: "https://www.lua.org/authors.html"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "Lua offers one data structure, the table, and asks it to be the array, the record, the module, and the class. The table never complains."
+  dictionary:
+    - term: "Lua"
+      definition: "a language whose manual says that tables are the sole data-structuring mechanism, and whose programmers answer every question about structure with one more table."

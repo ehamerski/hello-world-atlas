@@ -1,8 +1,8 @@
 {
-  "measuredOn": "2026-11-03",
+  "measuredOn": "2026-11-19",
   "runs": 5,
   "machine": {
-    "os": "macOS 26.7.2 (x64)",
+    "os": "macOS 26.7.3 (x64)",
     "cpu": "Intel(R) Core(TM) i5-1038NG7 CPU @ 2.00GHz, 8 logical cores",
     "memory": "16 GiB",
     "node": "v26.8.2"
@@ -16,19 +16,41 @@
       "files": 3,
       "deps": 0,
       "steps": 3,
-      "buildBytes": 484451,
-      "runMs": 43
+      "buildBytes": 484315,
+      "runMs": 81
+    },
+    "algol68/cli": {
+      "kind": "cli",
+      "file": "hello.a68",
+      "codeLines": 1,
+      "commentLines": 20,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 129
     },
     "assembly/cli": {
       "kind": "cli",
       "file": "hello.asm",
       "codeLines": 18,
       "commentLines": 73,
-      "files": 1,
+      "files": 3,
       "deps": 0,
       "steps": 4,
       "buildBytes": 13058,
-      "runMs": 48
+      "runMs": 71
+    },
+    "bash/cli": {
+      "kind": "cli",
+      "file": "hello.sh",
+      "codeLines": 1,
+      "commentLines": 24,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 87
     },
     "basic/cli": {
       "kind": "cli",
@@ -39,7 +61,7 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 1475309,
-      "runMs": 404
+      "runMs": 298
     },
     "c/cli": {
       "kind": "cli",
@@ -50,7 +72,7 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 8440,
-      "runMs": 52
+      "runMs": 46
     },
     "c/desktop": {
       "kind": "desktop",
@@ -83,7 +105,40 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 1175968,
-      "runMs": 52
+      "runMs": 84
+    },
+    "clojure/cli": {
+      "kind": "cli",
+      "file": "src/hello/core.clj",
+      "codeLines": 3,
+      "commentLines": 24,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 1761
+    },
+    "clojure/desktop": {
+      "kind": "desktop",
+      "file": "src/hello/core.clj",
+      "codeLines": 25,
+      "commentLines": 55,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "clojure/web": {
+      "kind": "web",
+      "file": "src/hello/core.clj",
+      "codeLines": 9,
+      "commentLines": 26,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
     },
     "cobol/cli": {
       "kind": "cli",
@@ -94,7 +149,7 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 9272,
-      "runMs": 61
+      "runMs": 65
     },
     "cpp/cli": {
       "kind": "cli",
@@ -104,8 +159,8 @@
       "files": 2,
       "deps": 0,
       "steps": 4,
-      "buildBytes": 729651,
-      "runMs": 48
+      "buildBytes": 326771,
+      "runMs": 63
     },
     "cpp/desktop": {
       "kind": "desktop",
@@ -137,8 +192,8 @@
       "files": 2,
       "deps": 0,
       "steps": 3,
-      "buildBytes": 269556,
-      "runMs": 136
+      "buildBytes": 269350,
+      "runMs": 164
     },
     "csharp/desktop": {
       "kind": "desktop",
@@ -173,6 +228,138 @@
       "buildBytes": null,
       "runMs": null
     },
+    "dart/cli": {
+      "kind": "cli",
+      "file": "hello.dart",
+      "codeLines": 3,
+      "commentLines": 15,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 720
+    },
+    "dart/web": {
+      "kind": "web",
+      "file": "server.dart",
+      "codeLines": 12,
+      "commentLines": 19,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "dart/mobile-flutter": {
+      "kind": "mobile",
+      "file": "lib/main.dart",
+      "codeLines": 18,
+      "commentLines": 29,
+      "files": 39,
+      "deps": 0,
+      "steps": 7,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "dbase/cli": {
+      "kind": "cli",
+      "file": "hello.prg",
+      "codeLines": 3,
+      "commentLines": 16,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 1176024,
+      "runMs": 42
+    },
+    "delphi/cli": {
+      "kind": "cli",
+      "file": "hello.pas",
+      "codeLines": 5,
+      "commentLines": 18,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 419856,
+      "runMs": 46
+    },
+    "delphi/desktop": {
+      "kind": "desktop",
+      "file": "hello.lpr",
+      "codeLines": 45,
+      "commentLines": 29,
+      "files": 2,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "eiffel/cli": {
+      "kind": "cli",
+      "file": "hello.e",
+      "codeLines": 25,
+      "commentLines": 23,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 2179226,
+      "runMs": 42
+    },
+    "elixir/cli": {
+      "kind": "cli",
+      "file": "hello.exs",
+      "codeLines": 1,
+      "commentLines": 30,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 530
+    },
+    "elixir/web": {
+      "kind": "web",
+      "file": "lib/hello_web/router.ex",
+      "codeLines": 13,
+      "commentLines": 24,
+      "files": 3,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "erlang/cli": {
+      "kind": "cli",
+      "file": "hello.erl",
+      "codeLines": 4,
+      "commentLines": 37,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 399
+    },
+    "erlang/desktop": {
+      "kind": "desktop",
+      "file": "hello_wx.erl",
+      "codeLines": 33,
+      "commentLines": 57,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "erlang/web": {
+      "kind": "web",
+      "file": "hello_httpd.erl",
+      "codeLines": 31,
+      "commentLines": 57,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
     "fortran/cli": {
       "kind": "cli",
       "file": "hello.f90",
@@ -182,7 +369,18 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 8840,
-      "runMs": 57
+      "runMs": 39
+    },
+    "fsharp/cli": {
+      "kind": "cli",
+      "file": "hello.fs",
+      "codeLines": 1,
+      "commentLines": 25,
+      "files": 2,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 3123220,
+      "runMs": 112
     },
     "go/cli": {
       "kind": "cli",
@@ -193,7 +391,7 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 2508672,
-      "runMs": 60
+      "runMs": 41
     },
     "go/desktop": {
       "kind": "desktop",
@@ -237,14 +435,14 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 1442922,
-      "runMs": 82
+      "runMs": 58
     },
     "haskell/web": {
       "kind": "web",
       "file": "app/Main.hs",
       "codeLines": 13,
       "commentLines": 40,
-      "files": 3,
+      "files": 4,
       "deps": 3,
       "steps": 4,
       "buildBytes": null,
@@ -258,8 +456,8 @@
       "files": 2,
       "deps": 0,
       "steps": 3,
-      "buildBytes": 3762,
-      "runMs": 242
+      "buildBytes": 3755,
+      "runMs": 183
     },
     "java/desktop": {
       "kind": "desktop",
@@ -305,6 +503,61 @@
       "buildBytes": null,
       "runMs": null
     },
+    "julia/cli": {
+      "kind": "cli",
+      "file": "hello.jl",
+      "codeLines": 1,
+      "commentLines": 10,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 655
+    },
+    "kotlin/cli": {
+      "kind": "cli",
+      "file": "hello.kt",
+      "codeLines": 3,
+      "commentLines": 21,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 5740598,
+      "runMs": 204
+    },
+    "kotlin/desktop": {
+      "kind": "desktop",
+      "file": "src/main/kotlin/Main.kt",
+      "codeLines": 18,
+      "commentLines": 33,
+      "files": 3,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "kotlin/web": {
+      "kind": "web",
+      "file": "src/main/kotlin/Main.kt",
+      "codeLines": 17,
+      "commentLines": 33,
+      "files": 4,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "kotlin/mobile-android": {
+      "kind": "mobile",
+      "file": "app/src/main/java/com/example/hello/MainActivity.kt",
+      "codeLines": 28,
+      "commentLines": 34,
+      "files": 6,
+      "deps": 0,
+      "steps": 8,
+      "buildBytes": null,
+      "runMs": null
+    },
     "lisp/cli": {
       "kind": "cli",
       "file": "hello.lisp",
@@ -314,16 +567,49 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 36147144,
-      "runMs": 53
+      "runMs": 50
     },
     "lisp/web": {
       "kind": "web",
       "file": "server.lisp",
       "codeLines": 18,
-      "commentLines": 49,
+      "commentLines": 50,
       "files": 1,
       "deps": 0,
       "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "lua/cli": {
+      "kind": "cli",
+      "file": "hello.lua",
+      "codeLines": 1,
+      "commentLines": 17,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 40
+    },
+    "lua/desktop": {
+      "kind": "desktop",
+      "file": "conf.lua",
+      "codeLines": 5,
+      "commentLines": 9,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "lua/web": {
+      "kind": "web",
+      "file": "app.lua",
+      "codeLines": 8,
+      "commentLines": 31,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
       "buildBytes": null,
       "runMs": null
     },
@@ -336,7 +622,7 @@
       "deps": 0,
       "steps": 1,
       "buildBytes": null,
-      "runMs": 145
+      "runMs": 129
     },
     "node/desktop": {
       "kind": "desktop",
@@ -360,6 +646,50 @@
       "buildBytes": null,
       "runMs": null
     },
+    "objectivec/cli": {
+      "kind": "cli",
+      "file": "hello.m",
+      "codeLines": 7,
+      "commentLines": 22,
+      "files": 1,
+      "deps": 0,
+      "steps": 2,
+      "buildBytes": 12928,
+      "runMs": 41
+    },
+    "objectivec/desktop": {
+      "kind": "desktop",
+      "file": "hello.m",
+      "codeLines": 44,
+      "commentLines": 28,
+      "files": 1,
+      "deps": 0,
+      "steps": 2,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "objectivec/web": {
+      "kind": "web",
+      "file": "server.m",
+      "codeLines": 84,
+      "commentLines": 43,
+      "files": 1,
+      "deps": 0,
+      "steps": 2,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "ocaml/cli": {
+      "kind": "cli",
+      "file": "hello.ml",
+      "codeLines": 1,
+      "commentLines": 13,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 391067,
+      "runMs": 36
+    },
     "pascal/cli": {
       "kind": "cli",
       "file": "hello.pas",
@@ -369,16 +699,49 @@
       "deps": 0,
       "steps": 3,
       "buildBytes": 417840,
-      "runMs": 44
+      "runMs": 36
     },
     "pascal/desktop": {
       "kind": "desktop",
       "file": "mainunit.pas",
-      "codeLines": 33,
-      "commentLines": 29,
+      "codeLines": 37,
+      "commentLines": 34,
       "files": 4,
       "deps": 0,
       "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "perl/cli": {
+      "kind": "cli",
+      "file": "hello.pl",
+      "codeLines": 3,
+      "commentLines": 16,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 46
+    },
+    "perl/desktop": {
+      "kind": "desktop",
+      "file": "hello.pl",
+      "codeLines": 15,
+      "commentLines": 36,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "perl/web": {
+      "kind": "web",
+      "file": "app.pl",
+      "codeLines": 6,
+      "commentLines": 28,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
       "buildBytes": null,
       "runMs": null
     },
@@ -391,7 +754,7 @@
       "deps": 0,
       "steps": 1,
       "buildBytes": null,
-      "runMs": 358
+      "runMs": 152
     },
     "php/web": {
       "kind": "web",
@@ -413,7 +776,7 @@
       "deps": 0,
       "steps": 1,
       "buildBytes": null,
-      "runMs": 160
+      "runMs": 70
     },
     "prolog/web": {
       "kind": "web",
@@ -435,7 +798,7 @@
       "deps": 1,
       "steps": 1,
       "buildBytes": null,
-      "runMs": 707
+      "runMs": 534
     },
     "pseudocode/pseint": {
       "kind": "cli",
@@ -446,7 +809,7 @@
       "deps": 0,
       "steps": 1,
       "buildBytes": null,
-      "runMs": 46
+      "runMs": 38
     },
     "pseudocode/clrs": {
       "kind": "cli",
@@ -469,7 +832,7 @@
       "deps": 0,
       "steps": 1,
       "buildBytes": null,
-      "runMs": 111
+      "runMs": 85
     },
     "python/desktop": {
       "kind": "desktop",
@@ -493,6 +856,83 @@
       "buildBytes": null,
       "runMs": null
     },
+    "qcl/cli": {
+      "kind": "cli",
+      "file": "hello.qcl",
+      "codeLines": 21,
+      "commentLines": 2,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 0,
+      "runMs": 43
+    },
+    "r/cli": {
+      "kind": "cli",
+      "file": "hello.R",
+      "codeLines": 1,
+      "commentLines": 10,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 336
+    },
+    "racket/cli": {
+      "kind": "cli",
+      "file": "hello.rkt",
+      "codeLines": 2,
+      "commentLines": 23,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 238
+    },
+    "ruby/cli": {
+      "kind": "cli",
+      "file": "hello.rb",
+      "codeLines": 1,
+      "commentLines": 18,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 159
+    },
+    "ruby/desktop": {
+      "kind": "desktop",
+      "file": "hello.rb",
+      "codeLines": 16,
+      "commentLines": 31,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "ruby/web": {
+      "kind": "web",
+      "file": "app.rb",
+      "codeLines": 6,
+      "commentLines": 27,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "ruby/web-rails": {
+      "kind": "web",
+      "file": "config.ru",
+      "codeLines": 18,
+      "commentLines": 40,
+      "files": 2,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
     "rust/cli": {
       "kind": "cli",
       "file": "src/main.rs",
@@ -501,8 +941,8 @@
       "files": 2,
       "deps": 0,
       "steps": 3,
-      "buildBytes": 838637,
-      "runMs": 65
+      "buildBytes": 838609,
+      "runMs": 40
     },
     "rust/desktop": {
       "kind": "desktop",
@@ -525,6 +965,160 @@
       "steps": 3,
       "buildBytes": null,
       "runMs": null
+    },
+    "scala/cli": {
+      "kind": "cli",
+      "file": "hello.scala",
+      "codeLines": 2,
+      "commentLines": 24,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 3057,
+      "runMs": 618
+    },
+    "simula/cli": {
+      "kind": "cli",
+      "file": "hello.sim",
+      "codeLines": 15,
+      "commentLines": 2,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 17690,
+      "runMs": 39
+    },
+    "smalltalk/cli": {
+      "kind": "cli",
+      "file": "hello.st",
+      "codeLines": 1,
+      "commentLines": 22,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": 56
+    },
+    "smalltalk/desktop": {
+      "kind": "desktop",
+      "file": "hello.st",
+      "codeLines": 12,
+      "commentLines": 38,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "smalltalk/web": {
+      "kind": "web",
+      "file": "server.st",
+      "codeLines": 9,
+      "commentLines": 38,
+      "files": 1,
+      "deps": 0,
+      "steps": 1,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "swift/cli": {
+      "kind": "cli",
+      "file": "hello.swift",
+      "codeLines": 1,
+      "commentLines": 15,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 9280,
+      "runMs": 37
+    },
+    "swift/desktop": {
+      "kind": "desktop",
+      "file": "hello.swift",
+      "codeLines": 25,
+      "commentLines": 17,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "swift/web": {
+      "kind": "web",
+      "file": "Sources/App/main.swift",
+      "codeLines": 11,
+      "commentLines": 0,
+      "files": 2,
+      "deps": 0,
+      "steps": 2,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "swift/mobile-ios": {
+      "kind": "mobile",
+      "file": "hello.swift",
+      "codeLines": 21,
+      "commentLines": 21,
+      "files": 2,
+      "deps": 0,
+      "steps": 9,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "typescript/cli": {
+      "kind": "cli",
+      "file": "src/hello.ts",
+      "codeLines": 2,
+      "commentLines": 13,
+      "files": 3,
+      "deps": 2,
+      "steps": 3,
+      "buildBytes": 34024200,
+      "runMs": 106
+    },
+    "typescript/web": {
+      "kind": "web",
+      "file": "src/server.ts",
+      "codeLines": 9,
+      "commentLines": 23,
+      "files": 3,
+      "deps": 2,
+      "steps": 3,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "visual-basic/cli": {
+      "kind": "cli",
+      "file": "Program.vb",
+      "codeLines": 5,
+      "commentLines": 15,
+      "files": 2,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 269533,
+      "runMs": 2225
+    },
+    "visual-basic/web": {
+      "kind": "web",
+      "file": "Program.vb",
+      "codeLines": 13,
+      "commentLines": 20,
+      "files": 2,
+      "deps": 0,
+      "steps": 4,
+      "buildBytes": null,
+      "runMs": null
+    },
+    "zig/cli": {
+      "kind": "cli",
+      "file": "hello.zig",
+      "codeLines": 4,
+      "commentLines": 22,
+      "files": 1,
+      "deps": 0,
+      "steps": 3,
+      "buildBytes": 5643926,
+      "runMs": 60
     }
   }
 }

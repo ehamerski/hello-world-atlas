@@ -20,10 +20,10 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | .NET SDK 10.0.403 (C# 14), base class library only (`Console`) | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | .NET SDK 10 + Avalonia 12.1.4 (NuGet) | ✅ verified on macOS Intel |
-| web | [web/](web/) | .NET SDK 10 + ASP.NET Core 10 (Minimal API, Kestrel) | ✅ verified on macOS Intel |
-| web-angular | [web-angular/](web-angular/) | ASP.NET Core 10 API + Angular 22.2 front end (Node.js, Angular CLI) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | .NET 10 SDK | ✅ |
+| desktop | [desktop/](desktop/) | Avalonia | ✅ |
+| web | [web/](web/) | ASP.NET Core | ✅ |
+| web-angular | [web-angular/](web-angular/) | ASP.NET Core API + Angular | ✅ |
 
 All four target **.NET 10** (`net10.0`), the current Long Term Support
 release [3], and are built with the `dotnet` command. The SDK is

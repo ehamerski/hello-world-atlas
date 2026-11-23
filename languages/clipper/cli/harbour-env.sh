@@ -2,7 +2,7 @@
 # harbour-env.sh - Clipper cli: where Harbour is, shared by install.sh and
 #                  build.sh (sourced, not run: it only sets variables)
 #
-# WHAT: sets HB_VERSION, HB_SRC_SHA256 and HB_DIR, and puts $HB_DIR/bin
+# WHAT: sets HB_VERSION, HB_SRC_SHA256, HB_WIN_SHA256 and HB_DIR, and puts $HB_DIR/bin
 #       first on PATH when install.sh installed Harbour there.
 # WHY:  Harbour (the open-source successor of Clipper) has no up-to-date
 #       package on macOS. Homebrew's "harbour" formula still ships 3.0.0
@@ -22,9 +22,16 @@
 # shellcheck disable=SC2034  # HB_SRC_SHA256 is used by install.sh
 HB_VERSION=3.2.0
 HB_SRC_SHA256=48cdab059c8b933ab033868e6cbaa33f5e09a80d42c3d7e5b8299a957ab2989e
+# Windows: the project's ready-made build for the MinGW-w64 C compiler. It
+# holds Harbour only (no C compiler: the Windows image of GitHub Actions has
+# MinGW-w64 gcc already). SHA-256 as published for the asset on
+# https://github.com/harbour/core/releases/tag/v3.2.0 (GitHub releases API).
+# shellcheck disable=SC2034  # used by install.sh
+HB_WIN_SHA256=d579c6cca2f242face0f08302880953d7dbe1a8d16747c795977f5325060fe6a
 # Override with: HB_DIR=/some/dir ./install.sh (and the same for build.sh)
 HB_DIR=${HB_DIR:-$HOME/.local/harbour-$HB_VERSION}
-if [ -x "$HB_DIR/bin/hbmk2" ]; then
+# On Windows the file is hbmk2.exe.
+if [ -x "$HB_DIR/bin/hbmk2" ] || [ -x "$HB_DIR/bin/hbmk2.exe" ]; then
     PATH=$HB_DIR/bin:$PATH
 fi
 export HB_DIR PATH

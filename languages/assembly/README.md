@@ -21,7 +21,7 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | NASM 3.02 (`nasm -f macho64`) + Apple clang 21 as linker driver, x86-64 macOS | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | NASM + `cc` (macOS x86-64) | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version) | – |
 | web | – | not implemented, same section | – |
 

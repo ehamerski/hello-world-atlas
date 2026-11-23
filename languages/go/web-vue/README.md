@@ -182,8 +182,8 @@ web-vue/
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Go 1.27.3, Node.js 26.8.2, npm 12.2.1, Vue 3.5.44, Vite 8.3.5. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. `brew install go node` [17][18]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Go from the official archive, as in [../cli](../cli/README.md#platform-notes). The distribution's own `nodejs` package may be older than Vite needs; install a current LTS from <https://nodejs.org/en/download> [19]. `run.sh --verify` looks for `google-chrome` or `chromium` on `PATH` and skips the browser check if neither is found. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id GoLang.Go -e` and `winget install --id OpenJS.NodeJS.LTS -e`. Native PowerShell, in two terminals: `cd backend; go build -o bin\hello-api.exe .; .\bin\hello-api.exe` and `cd frontend; npm ci; npm run build; npx vite preview`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Go: if Go 1.22 or newer is missing it prints the go.dev archive steps [6] and stops. It does not install Node.js: if a supported version is missing it prints the nodejs.org steps and stops. It runs `npm ci` in `frontend` when Vite is not installed there. `run.sh --verify` looks for `google-chrome` or `chromium` on `PATH` and skips the browser check if neither is found. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Go: if Go 1.22 or newer is missing it prints `winget install --id GoLang.Go -e` [12] and stops. It does not install Node.js: if a supported version is missing it prints `winget install --id OpenJS.NodeJS.LTS -e` and stops. It runs `npm ci` in `frontend` when Vite is not installed there. |
 
 ## Expected output
 `./run.sh --verify`:

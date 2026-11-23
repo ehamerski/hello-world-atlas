@@ -1,0 +1,31 @@
+# languages/eiffel/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Eiffel"
+year: 1986
+year_note: "designed in 1985; first commercial implementation released in 1986 (ECMA-367, 2006)"
+designers:
+  - "Bertrand Meyer"
+  - "Jean-Marc Nerson"
+paradigms:
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Gobo Eiffel 26.03 (gec, Homebrew bottle)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "Design by Contract (require, ensure) in the source; EiffelStudio not used"
+sources:
+  - title: "ECMA-367, Eiffel: Analysis, Design and Programming Language, 2nd edition, June 2006. ECMA International"
+    url: "https://www.ecma-international.org/wp-content/uploads/ECMA-367_2nd_edition_june_2006.pdf"
+  - title: "Gobo Eiffel"
+    url: "https://www.gobosoft.com/"
+  - title: "Homebrew formula gobo"
+    url: "https://formulae.brew.sh/formula/gobo"
+# humor: one light line for the Off the record page.
+humor:
+  line: "Eiffel programs come with a contract, and the compiler reads it before your program is allowed to run."
+  dictionary:
+    - term: "Eiffel"
+      definition: "a language where your methods sign a contract before they are allowed to run."

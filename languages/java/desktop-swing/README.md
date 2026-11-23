@@ -36,7 +36,7 @@ where Maven has to download JavaFX.
 | Script | What it does | Why it is needed |
 |---|---|---|
 | `install.sh` | 1. Runs `javac -version` and checks that the version is 21 or newer. 2. Checks that `mvn` is on `PATH`. If one is missing, it shows the install command and runs it only if you answer `y`. | Same toolchain as [../cli](../cli/README.md#scripts-explained). Swing needs no separate install. |
-| `build.sh` | Runs `mvn --batch-mode --quiet package`. This compiles `HelloSwing.java` into `target/hello-swing.jar`. | The JVM runs bytecode, so the code must be compiled first. There is no `target/lib/`, because there are no libraries to copy. |
+| `build.sh` | Runs `mvn --batch-mode --quiet package`. This compiles `HelloSwing.java` into `target/hello-swing.jar`. | The JVM runs bytecode, so the code must be compiled first. There is no `target/lib/`, because there are no libraries to copy. The first build downloads Maven's plugins from Maven Central into `~/.m2/repository`; later builds reuse them. |
 | `run.sh` | Runs `java -jar target/hello-swing.jar`. With `--verify`, sets `TF_VERIFY=1`: the app prints `Hello, World!` once the window is shown and closes after about 2 s. | `java -jar` starts the class named in the manifest of the JAR file (`Main-Class`, set in `pom.xml`). No `--module-path` is needed because Swing is in the JDK. The self-check lets `scripts/verify-all.sh` test the window without waiting for you. |
 
 ## Folder structure
@@ -203,8 +203,8 @@ This is guidance drawn from the facts above, not a rule from Oracle:
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-02) | Temurin 21.0.8, Maven 3.9.16. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. Use an arm64 JDK (the `temurin@21` cask installs one on Apple Silicon). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Install as in [../cli](../cli/README.md#platform-notes). Needs a graphical desktop session; a server without a display cannot open the window. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install as in [../cli](../cli/README.md#platform-notes). Native PowerShell: `mvn package`, then `java -jar target\hello-swing.jar`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `openjdk-21-jdk` and `maven` with apt when missing. A window needs a graphical session. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` puts the JDK from `JAVA_HOME_21_X64` on PATH when that variable is set. It does not install a JDK or Maven: if one is missing it prints the `winget` Temurin 21 command or the Maven zip steps and stops. |
 
 ## Expected output
 `./run.sh` opens a small window titled "Hello, World!" with the text

@@ -18,9 +18,9 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Standard | Status |
 |---|---|---|---|---|
-| cli | [cli/](cli/) | Apple clang 21 (`cc`) | **C89** (`-std=c89 -pedantic-errors`) | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | `cc` + GTK 4.24 (`pkg-config gtk4`) | C99 (`-std=c99 -pedantic`) | ✅ verified on macOS Intel |
-| web | [web/](web/) | `cc` + GNU libmicrohttpd 1.0.10 | C99 (`-std=c99 -pedantic-errors`) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | system C compiler, `-std=c89` | **C89** (`-std=c89 -pedantic-errors`) | ✅ |
+| desktop | [desktop/](desktop/) | GTK 4, `-std=c99` | C99 (`-std=c99 -pedantic`) | ✅ |
+| web | [web/](web/) | GNU libmicrohttpd, `-std=c99` | C99 (`-std=c99 -pedantic-errors`) | ✅ |
 
 "ANSI C" means the C of the first standard, ANSI X3.159-1989, which ISO
 published unchanged as ISO/IEC 9899:1990 [2]. Every folder is compiled in
@@ -167,6 +167,6 @@ no section that explains a missing category.
 8. Programming Language (Linux kernel documentation). The kernel development community. <https://docs.kernel.org/process/programming-language.html> (accessed 2026-10-31)
 9. SQLite home page. SQLite. <https://www.sqlite.org/index.html> (accessed 2026-10-31)
 10. The GTK Project (home page). GNOME. <https://www.gtk.org/> (accessed 2026-10-31)
-11. GNU libmicrohttpd. GNU Project. <https://www.gnu.org/software/libmicrohttpd/> (accessed 2026-10-31)
+11. GNU libmicrohttpd. GNU Project. <https://www.gnu.org/software/libmicrohttpd/> (accessed 2026-10-31; archived copy: <https://web.archive.org/web/20261113123927/http://www.gnu.org/software/libmicrohttpd/>, accessed 2026-11-22)
 12. Package `fmt`. The Go Authors. <https://pkg.go.dev/fmt> (accessed 2026-10-31)
 13. Class Formatter (Java SE 21 API). Oracle. <https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Formatter.html> (accessed 2026-10-31)

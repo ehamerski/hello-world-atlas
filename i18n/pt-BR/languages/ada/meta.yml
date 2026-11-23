@@ -1,0 +1,11 @@
+source: languages/ada/meta.yml
+source_sha: ab414c2401d28d4d4ce5963fe8889c92ad3ff5b8
+year_note: "Programa do DoD iniciado em 1974; requisitos Steelman em 1978; nome Ada em 1979; Ada 83 publicado como MIL-STD-1815 em 1983, ISO 8652:1987"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "O compilador Ada verifica tanto antes de o programa poder rodar que um Hello World que compila já passou, de certo modo, por uma revisão."
+  dictionary:
+    - term: "Ada"
+      definition: "uma linguagem que lê o contrato antes de começar o trabalho e o lê de novo em tempo de execução."

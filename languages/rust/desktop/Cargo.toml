@@ -19,4 +19,11 @@ publish = false
 # uses each system's own graphics API (Metal on macOS). "0.37" means any 0.37.x
 # release, never 0.38 (Cargo's default "caret" rule; before 1.0, the second
 # number is the one that may break your code).
-eframe = "0.37"
+# Default features are turned off and the list below is the default list
+# minus "accesskit" (screen-reader bridge), "wayland" (native Wayland window
+# decorations), "winit/default" and "web_screen_reader" (web only). The first three pull crates (zbus,
+# zvariant, ttf-parser) that have open security advisories with no patched
+# release. Without them Linux uses X11 (also under Wayland through
+# XWayland) and has no AT-SPI screen-reader support; macOS and Windows are
+# unaffected.
+eframe = { version = "0.37", default-features = false, features = ["clipboard", "default_fonts", "links", "system_fonts", "wgpu", "x11"] }

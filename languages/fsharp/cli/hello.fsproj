@@ -1,0 +1,24 @@
+<!--
+  hello.fsproj - F# cli: the project file. MSBuild (run by "dotnet build")
+  reads it to know what to compile and how. It plays the role of Java's
+  pom.xml. Unlike the C# and VB.NET projects of this repository, which have
+  no file list, this one names its source files in a Compile item.
+  The last file in the list holds the entry point of an executable.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Exe: build a program with an entry point (not a library). -->
+    <OutputType>Exe</OutputType>
+    <!-- net10.0 = .NET 10. It comes with F# 10. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- The name of the file that dotnet runs: build/hello.dll. -->
+    <AssemblyName>hello</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The source files, in the order the compiler reads them. One here. -->
+    <Compile Include="hello.fs" />
+  </ItemGroup>
+
+</Project>

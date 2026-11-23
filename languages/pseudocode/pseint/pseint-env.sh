@@ -29,7 +29,8 @@ PSEINT_VERSION=20250314
 PSEINT_DIR=${PSEINT_DIR:-$HOME/.local/pseint-$PSEINT_VERSION}
 
 # Archive name, checksum and interpreter path differ per OS:
-#   mi64 = macOS Intel 64-bit, ma64 = macOS Apple Silicon, l64 = Linux 64-bit.
+#   mi64 = macOS Intel 64-bit, ma64 = macOS Apple Silicon, l64 = Linux 64-bit,
+#   w64 = Windows 64-bit.
 case "$TF_OS" in
     macos-intel)
         PSEINT_PKG=pseint-mi64-$PSEINT_VERSION.tgz
@@ -43,6 +44,14 @@ case "$TF_OS" in
         PSEINT_PKG=pseint-l64-$PSEINT_VERSION.tgz
         PSEINT_SHA256=871312634da8e1a0e45b0badbdcb8a0e67dbe51e4bf8cf5fe3ff37fd9817191b
         PSEINT_BIN=$PSEINT_DIR/pseint/bin/pseint ;;
+    windows)
+        # w64 = Windows 64-bit; the zip needs no installer. Its SHA-256 is the
+        # one SourceForge lists for the file (checked 2026-11-04) and it
+        # matched the downloaded file. The zip holds pseint/pseint.exe (the
+        # interpreter), its DLLs and pseint/wxPSeInt.exe (the editor).
+        PSEINT_PKG=pseint-w64-$PSEINT_VERSION.zip
+        PSEINT_SHA256=239240506153fa4228aa258ed584a309bedc03e95393edb734d1cfe20efd6255
+        PSEINT_BIN=$PSEINT_DIR/pseint/pseint.exe ;;
     *)
         PSEINT_PKG=''; PSEINT_SHA256=''; PSEINT_BIN='' ;;
 esac

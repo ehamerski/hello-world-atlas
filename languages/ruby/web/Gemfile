@@ -1,0 +1,17 @@
+# Gemfile - the libraries (gems) this web app needs.
+#
+# Bundler reads this file: "bundle install" downloads the gems listed here
+# and writes the exact versions it chose to Gemfile.lock. Both files are
+# committed, so every reader gets the same versions.
+
+# Where Bundler downloads gems from.
+source "https://rubygems.org"
+
+# Sinatra, the web framework. "=" pins the exact version.
+gem "sinatra", "= 4.2.1"
+
+# Sinatra does not include a web server. Its README tells you to install
+# "sinatra rackup puma": Puma is the server (the default one, see its
+# "-s" option), and rackup is the library that lets Sinatra start it.
+gem "rackup", "= 2.3.1"
+gem "puma", "= 8.1.1"

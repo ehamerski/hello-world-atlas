@@ -12,8 +12,9 @@
 #                           prints "Hello, World!" once the window is shown
 #                           and closes itself after about 2 seconds
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -24,14 +25,17 @@ cd -- "$(dirname -- "$0")"
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
 
-[ -x bin/hello-desktop ] || fail "bin/hello-desktop is missing. Run ./build.sh first."
+# On Windows the compiler adds ".exe": the program is bin/hello-desktop.exe.
+BIN=bin/hello-desktop
+[ "$TF_OS" = windows ] && BIN=bin/hello-desktop.exe
+[ -x "$BIN" ] || fail "$BIN is missing. Run ./build.sh first."
 
 step "Open the Hello World window"
 explain "WHY: the LCL, compiled into bin/hello-desktop, opens the window and draws the label."
 if is_verify "$@"; then
     explain "Self-check: the app prints the label text and closes after ~2 seconds."
-    TF_VERIFY=1 ./bin/hello-desktop
+    TF_VERIFY=1 "./$BIN"
 else
     explain "Close the window to end the program."
-    ./bin/hello-desktop
+    "./$BIN"
 fi

@@ -1,0 +1,147 @@
+# .github/workflows/ci-matrix.yml - run every implementation on Linux and
+# Windows.
+#
+# WHAT: one job per language folder (languages/<language>) and per operating
+#   system (ubuntu-latest, windows-latest). Each job runs
+#       scripts/verify-all.sh --install languages/<language>
+#   which is the same check as on the maintainer's Mac (install.sh, then
+#   build.sh, then run.sh --verify for each category), except that install.sh
+#   may install what is missing without asking: the runner is a throwaway
+#   virtual machine. Desktop programs only build and run their headless
+#   self-check (--verify); on Linux they draw into a virtual X display (Xvfb).
+#   Folders that cannot run on one OS are listed, with the reason and a
+#   source, in ci/skip.yml; verify-all.sh prints them as [SKIP].
+# WHY:  the macOS check proves only macOS. This workflow turns the "not
+#   verified" Linux and Windows rows of each README's Platform notes into
+#   checked results where a runner can run the toolchain.
+# WHEN: only by hand (Actions tab > "ci-matrix" > Run workflow): every
+#   language, or only the ones typed in the "languages" box. Minutes cost
+#   money on a private repository, and a full run has two jobs per
+#   language, so no push or tag starts it by itself.
+#   No macOS runner: they cost more, and the maintainer's Mac already runs
+#   verify-all.sh before each merge.
+#
+# References:
+#   Workflow syntax:   https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+#   Matrix from JSON:  https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/run-job-variations
+#   bash on Windows is Git Bash: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#defaultsrunshell
+#   Runner images:     https://github.com/actions/runner-images
+#   Caching:           https://github.com/actions/cache
+#   Billing:           https://docs.github.com/en/billing/concepts/product-billing/github-actions
+
+name: ci-matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      languages:
+        description: 'Language folders to run, separated by spaces (empty: all)'
+        required: false
+        default: ''
+
+# Read-only token: the checks change nothing in the repository.
+# https://docs.github.com/en/actions/reference/security/secure-use#use-the-principle-of-least-privilege
+permissions:
+  contents: read
+
+# A newer run on the same ref cancels the older one, so no minutes are
+# spent on a result nobody reads.
+concurrency:
+  group: ci-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Which languages to run, as a JSON list for the matrix below.
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      languages: ${{ steps.list.outputs.languages }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - id: list
+        env:
+          ONLY: ${{ inputs.languages }}
+        run: |
+          # Every language folder (each one has a meta.yml).
+          all=$(cd languages && printf '%s\n' */ | sed 's|/$||')
+          langs=${ONLY:-$all}
+          echo "Languages: $langs"
+          # $langs is split on purpose: one name per line for printf.
+          # shellcheck disable=SC2086
+          json=$(printf '%s\n' $langs | python3 -c 'import json,sys; print(json.dumps([l for l in sys.stdin.read().split() if l]))')
+          echo "languages=$json" >> "$GITHUB_OUTPUT"
+
+  verify:
+    needs: plan
+    if: needs.plan.outputs.languages != '[]'
+    strategy:
+      # One failing language must not cancel the others.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        language: ${{ fromJSON(needs.plan.outputs.languages) }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    name: ${{ matrix.language }} (${{ matrix.os }})
+    env:
+      # Seconds per step; first-time toolchain installs take longer than
+      # the 300 s default of verify-all.sh.
+      TF_VERIFY_TIMEOUT: '1800'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Toolchains and packages that install.sh downloads into the home
+      # folder are kept between runs. The key changes when an install.sh or
+      # a lock file of this language changes.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/hello-world-*
+            ~/.local
+            ~/.npm
+            ~/.m2/repository
+            ~/.gradle/caches
+            ~/.nuget/packages
+            ~/go/pkg/mod
+            ~/.cargo/registry
+          key: tf-${{ runner.os }}-${{ matrix.language }}-${{ hashFiles(format('languages/{0}/**/install.sh', matrix.language), format('languages/{0}/**/package-lock.json', matrix.language), format('languages/{0}/**/go.sum', matrix.language), format('languages/{0}/**/Cargo.lock', matrix.language), format('languages/{0}/**/requirements*.txt', matrix.language)) }}
+          restore-keys: tf-${{ runner.os }}-${{ matrix.language }}-
+
+      # install.sh uses apt-get on Linux; refresh the package lists once.
+      # Xvfb gives desktop programs a display to draw into.
+      # A download that stalls on the package mirror is dropped after 60 s
+      # without data and tried again (apt.conf(5): Acquire::Retries and the
+      # http Timeout option): https://manpages.ubuntu.com/manpages/noble/man5/apt.conf.5.html
+      # Compose Desktop (the Kotlin desktop app) draws with Skiko; on Xvfb it
+      # sometimes got no OpenGL context and its window never closed.
+      # SKIKO_RENDER_API=SOFTWARE makes Skiko draw on the CPU instead:
+      # https://github.com/JetBrains/skiko/blob/master/skiko/src/jvmMain/kotlin/org/jetbrains/skiko/SkikoProperties.kt
+      - name: Prepare Linux
+        if: runner.os == 'Linux'
+        run: |
+          printf 'Acquire::Retries "5";\nAcquire::http::Timeout "60";\n' \
+            | sudo tee /etc/apt/apt.conf.d/80-ci-retries >/dev/null
+          sudo apt-get update -q
+          sudo apt-get install -y -q xvfb
+          echo "SKIKO_RENDER_API=SOFTWARE" >> "$GITHUB_ENV"
+
+      - name: verify-all.sh --install languages/${{ matrix.language }}
+        run: |
+          if [ "$RUNNER_OS" = Linux ]; then
+            xvfb-run -a scripts/verify-all.sh --install "languages/${{ matrix.language }}"
+          else
+            scripts/verify-all.sh --install "languages/${{ matrix.language }}"
+          fi
+
+      - name: Show the logs
+        if: always()
+        run: |
+          for f in .verify/*.log; do
+            [ -f "$f" ] || continue
+            echo "::group::$f"; cat "$f"; echo "::endgroup::"
+          done

@@ -1,0 +1,11 @@
+source: languages/assembly/meta.yml
+source_sha: 72293398cb174891eb7ef5753659cf172fb4de22
+year_note: "assembly em geral: Initial Orders do EDSAC, primeiro montador em uso (1949-05-06); família x86 a partir do Intel 8086 (1978); x86-64 a partir da AMD (2003)"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "O Hello World deste repositório tem 18 linhas de instruções e diretivas e 73 linhas de comentários que as explicam. A proporção não é acidente; é a linguagem."
+  dictionary:
+    - term: "Assembly"
+      definition: "aquilo em que um programa compilado se transforma no fim, e que poucas pessoas querem ler no fim."

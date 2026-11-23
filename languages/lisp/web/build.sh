@@ -20,8 +20,9 @@
 #       build is the same on every computer.
 # HOW:  ./build.sh             (after ./install.sh; run again after editing)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -33,6 +34,7 @@ cd -- "$(dirname -- "$0")"
 . ../../../scripts/common.sh
 # QUICKLISP_HOME.
 # shellcheck source=quicklisp-env.sh
+. ../use-msys2-sbcl.sh
 . ./quicklisp-env.sh
 
 SBCL=${SBCL:-sbcl}
@@ -43,7 +45,7 @@ require_cmd "$SBCL" "SBCL compiles the libraries and server.lisp."
 [ -f "$QUICKLISP_HOME/setup.lisp" ] \
     || fail "Quicklisp is not installed in $QUICKLISP_HOME (run ./install.sh first)."
 
-step "2/2 Load Hunchentoot and server.lisp, save the image as bin/hello-web"
+step "2/2 Load Hunchentoot and server.lisp, save the image as bin/hello-web$EXE"
 explain "WHY: quickload downloads Hunchentoot and the libraries it needs"
 explain "     the first time; save-lisp-and-die writes everything into one executable."
 mkdir -p bin
@@ -51,10 +53,10 @@ mkdir -p bin
 set -x
 "$SBCL" --non-interactive --no-sysinit --no-userinit \
     --eval '(push :hunchentoot-no-ssl *features*)' \
-    --load "$QUICKLISP_HOME/setup.lisp" \
+    --load "$QUICKLISP_NATIVE/setup.lisp" \
     --eval '(ql:quickload :hunchentoot)' \
     --load server.lisp \
-    --eval '(sb-ext:save-lisp-and-die "bin/hello-web" :executable t :toplevel (function hello-web:main))'
+    --eval '(sb-ext:save-lisp-and-die "bin/hello-web'"$EXE"'" :executable t :toplevel (function hello-web:main))'
 { set +x; } 2>/dev/null
 
-ok "Built bin/hello-web with $("$SBCL" --version). Next: ./run.sh"
+ok "Built bin/hello-web$EXE with $("$SBCL" --version). Next: ./run.sh"

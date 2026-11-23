@@ -31,7 +31,7 @@ edition 2024, which Rust 1.85.0 stabilized on 2025-02-20 [9].
 ## Scripts explained
 | Script | What it does | Why it is needed |
 |---|---|---|
-| `install.sh` | Runs `rustc --version` and checks that `cargo` exists and Rust is 1.85 or newer. If not, it shows the official rustup command (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \| sh` [10]) and runs it only if you answer `y`. On Windows it prints the winget command. | Rust is compiled. rustup "installs rustc, cargo, rustup and other standard tools to Cargo's bin directory", `$HOME/.cargo/bin` on Unix [11], so no `sudo` is needed. |
+| `install.sh` | Runs `rustc --version` and checks that `cargo` exists and Rust is 1.85 or newer. If not, it downloads the script behind the official rustup command (`https://sh.rustup.rs` [10]) to a file and shows its path, then runs it with `sh` only if you answer `y`. It asks before the download too. On Windows it prints the winget command. | Rust is compiled. rustup "installs rustc, cargo, rustup and other standard tools to Cargo's bin directory", `$HOME/.cargo/bin` on Unix [11], so no `sudo` is needed. |
 | `build.sh` | Runs `cargo build --release --locked` | `--release`: "Build optimized artifacts with the release profile" [4]; the result goes to `target/release` instead of `target/debug` [2]. `--locked`: "Asserts that the exact same dependencies and versions are used as when the existing Cargo.lock file was originally generated" [4]. |
 | `run.sh` | Runs `./target/release/hello-cli`. `--verify` does the same (a CLI program ends by itself). | The executable is machine code, so the operating system runs it directly: no interpreter, no JVM, and Rust does not have to be installed on the computer that runs it. |
 
@@ -114,8 +114,15 @@ Open [`src/main.rs`](src/main.rs) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Rust 1.98.1 from Homebrew (rustup also works, see above). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. The executable is then built for arm64 (`aarch64-apple-darwin`). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | rustup, same command as macOS [10]. Rust also needs "a linker, which is a program that Rust uses to join its compiled outputs into one file"; on Ubuntu, "you can install the build-essential package" [15]. The distribution's `rustc` package may be older than 1.85. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | `winget install --id Rustlang.Rustup -e` [13], or `rustup-init.exe` from [10]. For the default MSVC toolchain "Rust requires a linker, libraries and Windows API import libraries", and "rustup-init will offer to automatically install the prerequisites" (Visual Studio Build Tools) [14]. The executable is `target\release\hello-cli.exe`; these scripts do not handle the `.exe` suffix. Native commands (PowerShell): `cargo build --release --locked`, then `.\target\release\hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` downloads the rustup installer script from `https://sh.rustup.rs` [10] and runs it when Rust 1.85 or newer is missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Rust: if Rust 1.85 or newer is missing it prints `winget install --id Rustlang.Rustup -e` [13] and stops. rustup needs the Visual Studio C++ Build Tools [14]. WSL not verified; it behaves like Linux. |
+
+**The rustup script is not digest-checked.** rustup publishes SHA-256
+files for the `rustup-init` programs, but not for the `rustup-init.sh`
+script behind `https://sh.rustup.rs` [20], and that script changes with each
+rustup release. So `install.sh` saves it to
+`~/.cache/hello-world-rust/rustup-init.sh` and shows the path, so you can
+read the script before you answer `y` to run it.
 
 ## Expected output
 ```text
@@ -144,3 +151,4 @@ The program itself prints only the last line; the other lines come from
 13. Rustlang.Rustup manifests. microsoft/winget-pkgs (GitHub). <https://github.com/microsoft/winget-pkgs/tree/master/manifests/r/Rustlang/Rustup> (accessed 2026-10-31)
 14. The rustup book: Windows MSVC prerequisites. The Rust Project. <https://rust-lang.github.io/rustup/installation/windows-msvc.html> (accessed 2026-10-31)
 15. The Rust Programming Language, ch. 1.1 "Installation". The Rust Project. <https://doc.rust-lang.org/book/ch01-01-installation.html> (accessed 2026-10-31)
+20. The rustup book: Other installation methods. The Rust Project. <https://rust-lang.github.io/rustup/installation/other.html> (accessed 2026-11-19)

@@ -1,0 +1,48 @@
+# languages/clojure/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Clojure"
+year: 2007
+year_note: "Rich Hickey began the work in 2005; announced 2007-10-17 as an alpha; Clojure 1.0 released May 2009"
+designers:
+  - "Rich Hickey"
+paradigms:
+  - "functional"
+  - "concurrent"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Lisp"
+    slug: "lisp"
+    title: "A History of Clojure (abstract). Rich Hickey, Proc. ACM Program. Lang. 4, HOPL, 2020"
+    url: "https://doi.org/10.1145/3386321"
+    quote: "Clojure is a dialect of Lisp, but is not a direct descendant of any prior Lisp."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Clojure CLI 1.12.6.1673"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "desktop"
+    kind: "desktop"
+    label: "Swing"
+    toolchain: "Swing via Java interop, Clojure CLI"
+    run: "window"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    label: "Ring"
+    toolchain: "Ring + Jetty, Clojure CLI"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "A History of Clojure. Rich Hickey, Proc. ACM Program. Lang. 4, HOPL, Article 71, 2020 (author's PDF, Internet Archive copy of download.clojure.org)"
+    url: "https://web.archive.org/web/2023/https://download.clojure.org/papers/clojure-hopl-iv-final.pdf"
+  - title: "Rationale. Rich Hickey, clojure.org"
+    url: "https://clojure.org/about/rationale"
+# humor: one light line for the Off the record page and the box at the end of
+# the language page (languages/README.md#humor-keys).
+humor:
+  line: "A Clojure Hello World is one line, and Lisp keeps its promise about parentheses: it opens one at the start and closes it at the end. The JVM wakes up first, then the program says hello and leaves."
+  dictionary:
+    - term: "Clojure"
+      definition: "a Lisp that moved into the Java Virtual Machine and took its parentheses along."

@@ -19,8 +19,9 @@
 # HOW:  ./build.sh             (after ./install.sh; run again after editing)
 #       CC=gcc ./build.sh      use another compiler
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -30,6 +31,9 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, require_cmd, fix_developer_dir.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# On Windows: MSYS2's UCRT64 tools and DLLs first on PATH (no effect elsewhere).
+# shellcheck source=../msys2-env.sh
+. ../msys2-env.sh
 
 CC=${CC:-cc}
 
@@ -46,10 +50,15 @@ explain "     'long long'); pkg-config adds where microhttpd.h and the library a
 mkdir -p bin
 # The pkg-config output is deliberately not quoted: it is a list of flags
 # that the shell must split into separate words.
+# Windows: htons() and friends live in Winsock (ws2_32.dll), which the Windows
+# build of microhttpd.h uses, so the linker must be told to add it.
+# https://learn.microsoft.com/en-us/windows/win32/winsock/winsock-functions
+extra_libs=''
+[ "$TF_OS" = windows ] && extra_libs=-lws2_32
 set -x
-# shellcheck disable=SC2046
+# shellcheck disable=SC2046,SC2086
 "$CC" -std=c99 -pedantic-errors -Wall -Wextra $(pkg-config --cflags libmicrohttpd) \
-    -o bin/hello-web hello.c $(pkg-config --libs libmicrohttpd)
+    -o bin/hello-web hello.c $(pkg-config --libs libmicrohttpd) $extra_libs
 { set +x; } 2>/dev/null
 
 ok "Built bin/hello-web with libmicrohttpd $(pkg-config --modversion libmicrohttpd). Next: ./run.sh"

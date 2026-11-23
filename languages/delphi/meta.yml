@@ -1,0 +1,53 @@
+# languages/delphi/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Delphi (Object Pascal dialect)"
+year: 1995
+year_note: "Delphi 1.0 launched by Borland on 14 February 1995 (16-bit Windows); Delphi 13.2 by Embarcadero is the current version"
+designers:
+  - "Anders Hejlsberg"
+paradigms:
+  - "imperative"
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Free Pascal 3.2.2 in Delphi mode (`{$mode delphi}`)"
+    run: "prints `Hello, World!`"
+    status: "compromise"
+    note: "Delphi dialect compiled by Free Pascal 3.2.2 in Delphi mode; Embarcadero Delphi itself is not used"
+  - folder: "desktop"
+    kind: "desktop"
+    toolchain: "Lazarus 4.8 (LCL, Cocoa) with Free Pascal 3.2.2"
+    run: "window"
+    status: "compromise"
+    note: "Delphi dialect built with Lazarus 4.8 and Free Pascal 3.2.2; Embarcadero Delphi itself is not used"
+sources:
+  - title: "Celebrating the 30th Anniversary of Delphi Version 1.0's Launch, Embarcadero blog, 14 February 2025"
+    url: "https://blogs.embarcadero.com/celebrating-the-30th-anniversary-of-delphi-version-1-0s-launch/"
+  - title: "Celebrating Delphi's anniversary. Embarcadero"
+    url: "https://delphi.embarcadero.com/"
+  - title: "Microsoft's Anders Hejlsberg Receives Prestigious Excellence in Programming Award, Microsoft News, 11 April 2001"
+    url: "https://news.microsoft.com/source/2001/04/11/microsofts-anders-hejlsberg-receives-prestigious-excellence-in-programming-award/"
+  - title: "Delphi product page. Embarcadero"
+    url: "https://www.embarcadero.com/products/delphi"
+  - title: "25 years of Delphi, The Register, 14 February 2020"
+    url: "https://www.theregister.com/software/2020/02/14/25-years-of-delphi-and-no-oracle-in-sight-not-a-visual-basic-killer-but-hard-to-kill/360875"
+  - title: "Free Pascal Reference Guide, chapter 6: Classes"
+    url: "https://www.freepascal.org/docs-html/ref/refch6.html"
+  - title: "Free Pascal User's Guide (compiler modes)"
+    url: "https://gitlab.com/freepascal.org/fpc/documentation/-/blob/main/tex/user.tex"
+  - title: "Lazarus home page"
+    url: "https://www.lazarus-ide.org/"
+  - title: "Free Pascal home page"
+    url: "https://www.freepascal.org/"
+  - title: "TIOBE Index for November 2026"
+    url: "https://www.tiobe.com/tiobe-index/"
+  - title: "2026 Stack Overflow Developer Survey: programming languages (data)"
+    url: "https://survey.stackoverflow.co/2026/technology/data/languages"
+# humor: one light line for the Off the record page.
+humor:
+  line: "Delphi is the language that makes you feel productive before you have finished reading the form designer."
+  dictionary:
+    - term: "Delphi"
+      definition: "an oracle that answers every question with a form, a label and a button you did not ask for."

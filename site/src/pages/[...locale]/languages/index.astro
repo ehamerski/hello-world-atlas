@@ -1,19 +1,22 @@
 ---
-// site/src/pages/[...locale]/languages/index.astro - the language cards, with
-// filters by paradigm, era (decade of first appearance) and category.
+// site/src/pages/[...locale]/languages/index.astro - the language cards (or a
+// table), with a name search, a sort order and filters by paradigm, first
+// release (decade), platform and, on translated sites, page language.
 // The data comes from every languages/<lang>/meta.yml, through
 // src/generated/languages.json; the labels come from site/site-ui.yml (or its
 // translation), through src/generated/ui.json. Both are written by
-// scripts/generate.mjs, one entry per locale.
+// scripts/generate.mjs, one entry per locale. The search, filter and sort
+// rules are in src/scripts/language-finder.ts.
 // [...locale] makes one page per locale: /languages/ for English and
 // /<dir>/languages/ for the others. https://docs.astro.build/en/guides/routing/#rest-parameters
 // StarlightPage wraps a custom page in the site layout:
 // https://starlight.astro.build/guides/pages/#custom-pages
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import FallbackContentNotice from '@astrojs/starlight/components/FallbackContentNotice.astro';
-import { LOCALES, format } from '../../../../i18n.mjs';
+import { LOCALES, ROOT_LOCALE, format } from '../../../../i18n.mjs';
 import languagesByLocale from '../../../generated/languages.json';
 import uiByLocale from '../../../generated/ui.json';
+import { FILTERS, SORTS, VIEWS, values, type Filter } from '../../../scripts/language-finder.ts';
 
 export function getStaticPaths() {
   return LOCALES.map((l) => ({ params: { locale: l.dir || undefined }, props: { tag: l.tag } }));
@@ -22,62 +25,297 @@ export function getStaticPaths() {
 const { tag } = Astro.props;
 const languages = languagesByLocale[tag as keyof typeof languagesByLocale];
 const { strings: ui, translated } = uiByLocale[tag as keyof typeof uiByLocale];
-const sorted = (values: string[]) => [...new Set(values)].sort();
-const paradigms = sorted(languages.flatMap((l) => l.paradigms));
-const eras = sorted(languages.map((l) => l.era));
-const kinds = sorted(languages.flatMap((l) => l.kinds));
+const untranslated = languages.filter((l) => !l.translated).length;
+// A label the locale has not translated yet is still English: mark it so
+// a screen reader reads it as English (WCAG 3.1.2).
+const english = uiByLocale[ROOT_LOCALE.tag as keyof typeof uiByLocale].strings;
+const langOf = (key: string) => (tag !== ROOT_LOCALE.tag && translated && ui[key] === english[key] ? 'en' : undefined);
+
+// The values of each filter, with their labels, in a fixed order: paradigms
+// alphabetically, decades from the oldest, platforms as in the README tables.
+const KIND_ORDER = ['cli', 'desktop', 'web', 'web-frontend', 'mobile'];
+const label: Record<Filter, (v: string) => string> = {
+  paradigm: (v) => v,
+  released: (v) => (v === 'undated' ? ui['cards.noSingleYear'] : v),
+  platform: (v) => ui[`cards.kind.${v}`] ?? v,
+  page: (v) => ui[`cards.page.${v}`],
+};
+const order: Record<Filter, (a: string, b: string) => number> = {
+  paradigm: (a, b) => a.localeCompare(b, 'en'),
+  released: (a, b) => (a === 'undated' ? 1 : b === 'undated' ? -1 : a.localeCompare(b)),
+  platform: (a, b) => KIND_ORDER.indexOf(a) - KIND_ORDER.indexOf(b),
+  page: (a, b) => b.localeCompare(a),
+};
+const legend: Record<Filter, string> = {
+  paradigm: ui['cards.paradigm'], released: ui['cards.released'],
+  platform: ui['cards.platform'], page: ui['cards.pageLanguage'],
+};
+// On the English site every page is in English: nothing to filter.
+const shownFilters = FILTERS.filter((f) => f !== 'page' || tag !== ROOT_LOCALE.tag);
+const options = Object.fromEntries(shownFilters.map((f) => [f,
+  [...new Set(languages.flatMap((l) => values(l, f)))].sort(order[f])
+    .map((v) => ({ value: v, label: label[f](v) }))]));
+const platforms = (kinds: string[]) => kinds.map(label.platform).join(', ');
+const year = (y: number | null) => y ?? ui['cards.noSingleYear'];
+const implementations = (n: number) => `${n} ${ui[n > 1 ? 'cards.implementations' : 'cards.implementation']}`;
+const paradigmsPage = Astro.url.pathname.replace(/languages\/$/, 'paradigms/');
+
+// What the script needs: the data and the labels it writes.
+const finderData = {
+  languages: languages.map(({ slug, name, otherNames, year, paradigms, kinds, implementations, translated }) =>
+    ({ slug, name, otherNames, year, paradigms, kinds, implementations, translated })),
+  filters: shownFilters,
+  legend,
+  labels: Object.fromEntries(shownFilters.map((f) => [f, Object.fromEntries(options[f].map((o) => [o.value, o.label]))])),
+  sorts: Object.fromEntries(SORTS.map((s) => [s, ui[`cards.sort.${s}`]])),
+  ui: Object.fromEntries(['shown', 'empty', 'emptySearch', 'alsoCalled', 'tableCaption', 'searchChip', 'remove', 'copied', 'copyFailed']
+    .map((k) => [k, ui[`cards.${k}`]])),
+};
 ---
 
 {/* Until the locale has a site-ui.yml the strings are English: say so in lang. */}
 <StarlightPage frontmatter={{ title: ui['cards.title'], description: ui['cards.description'] }} lang={translated ? tag : 'en'}>
   {!translated && <FallbackContentNotice />}
   <p>{format(ui['cards.intro'], { count: languages.length })}</p>
-  <form class="filters" id="filters">
-    <label>{ui['cards.paradigm']}
-      <select name="paradigm"><option value="">{ui['cards.all']}</option>{paradigms.map((p) => <option>{p}</option>)}</select>
-    </label>
-    <label>{ui['cards.era']}
-      <select name="era"><option value="">{ui['cards.all']}</option>{eras.map((e) => <option>{e}</option>)}</select>
-    </label>
-    <label>{ui['cards.category']}
-      <select name="kind"><option value="">{ui['cards.all']}</option>{kinds.map((k) => <option>{k}</option>)}</select>
-    </label>
-  </form>
-  <p id="count" aria-live="polite" data-template={ui['cards.shown']}></p>
-  <div class="cards not-content">
+  {untranslated > 0 && <p>{format(ui['cards.partial'], { count: untranslated, total: languages.length })}</p>}
+
+  {/* Shown by the script: without JavaScript every card stays visible. */}
+  <div class="filters not-content" id="finder" lang={langOf('cards.search')} hidden>
+    <div class="finder-row">
+      <div class="finder-field">
+        <label for="finder-q">{ui['cards.search']}</label>
+        <input type="search" id="finder-q" size="24" autocomplete="off" spellcheck="false" aria-describedby="finder-q-hint" />
+        <span id="finder-q-hint" class="finder-hint">{ui['cards.searchHint']}</span>
+      </div>
+      <div class="finder-field">
+        <label for="finder-sort">{ui['cards.sort']}</label>
+        <select id="finder-sort">{SORTS.map((s) => <option value={s}>{ui[`cards.sort.${s}`]}</option>)}</select>
+      </div>
+      <fieldset class="finder-view">
+        <legend>{ui['cards.view']}</legend>
+        {VIEWS.map((v) => <label><input type="radio" name="finder-view" value={v} checked={v === 'cards'} /> {ui[`cards.view.${v}`]}</label>)}
+      </fieldset>
+    </div>
+    <details class="finder-filters">
+      <summary>{ui['cards.filters']}</summary>
+      <p>{ui['cards.filtersIntro']} <a href={paradigmsPage}>{ui['cards.paradigmsLink']}</a>.</p>
+      <div class="finder-groups">
+        {shownFilters.map((f) => (
+          <fieldset>
+            <legend>{legend[f]}</legend>
+            {options[f].map((o) => (
+              <label><input type="checkbox" name={f} value={o.value} /> {o.label} <span class="finder-n" data-count={`${f}:${o.value}`}></span></label>
+            ))}
+          </fieldset>
+        ))}
+      </div>
+    </details>
+    <div class="finder-applied" id="finder-applied" hidden>
+      <span id="finder-applied-label">{ui['cards.applied']}:</span>
+      <ul aria-labelledby="finder-applied-label" id="finder-chips"></ul>
+      <button type="button" class="finder-clear">{ui['cards.clear']}</button>
+    </div>
+    <p class="finder-copy">
+      <button type="button" id="finder-copy">{ui['cards.copy']}</button>
+      <span id="finder-copied" role="status"></span>
+    </p>
+  </div>
+  <p id="count" aria-live="polite" lang={langOf('cards.shown')}></p>
+  <p class="finder-empty" id="finder-empty" lang={langOf('cards.empty')} hidden>
+    <span id="finder-empty-text"></span>
+    <button type="button" class="finder-clear">{ui['cards.clear']}</button>
+  </p>
+
+  <div class="cards not-content" id="finder-cards">
     {languages.map((l) => (
-      <a class="card" href={l.url}
-         data-paradigm={l.paradigms.join('|')} data-era={l.era} data-kind={l.kinds.join('|')}>
+      <a class="card" href={l.url} data-slug={l.slug}>
         <h2>{l.name}</h2>
-        <p>{l.year ?? ui['cards.noSingleYear']}{l.designers.length > 0 && ` · ${l.designers.join(', ')}`}</p>
+        <p class="finder-via" lang={langOf('cards.alsoCalled')} hidden></p>
+        <p>{year(l.year)}{l.designers.length > 0 && ` · ${l.designers.join(', ')}`}</p>
         <p>{l.paradigms.join(', ')}</p>
-        <p>{l.kinds.join(', ')} · {l.implementations} {ui[l.implementations > 1 ? 'cards.implementations' : 'cards.implementation']}</p>
+        <p><span lang={langOf('cards.kind.cli')}>{platforms(l.kinds)}</span> · {implementations(l.implementations)}</p>
+        {!l.translated && <p>{ui['cards.inEnglish']}</p>}
       </a>
     ))}
   </div>
+
+  <div class="finder-table" id="finder-table" role="region" aria-labelledby="finder-caption" tabindex="0" hidden>
+    <table>
+      <caption id="finder-caption" lang={langOf('cards.tableCaption')}>{format(ui['cards.tableCaption'], { sort: ui['cards.sort.name'].charAt(0).toLowerCase() + ui['cards.sort.name'].slice(1) })}</caption>
+      <thead lang={langOf('cards.col.language')}>
+        <tr>
+          <th scope="col" data-sort="name">{ui['cards.col.language']}</th>
+          <th scope="col" data-sort="oldest newest">{ui['cards.col.released']}</th>
+          <th scope="col">{ui['cards.col.paradigms']}</th>
+          <th scope="col">{ui['cards.col.platforms']}</th>
+          <th scope="col" data-sort="most">{ui['cards.col.implementations']}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {languages.map((l) => (
+          <tr data-slug={l.slug}>
+            <td><a href={l.url}>{l.name}</a> <span class="finder-via" lang={langOf('cards.alsoCalled')} hidden></span>{!l.translated && <span> ({ui['cards.inEnglish']})</span>}</td>
+            <td>{year(l.year)}</td>
+            <td>{l.paradigms.join(', ')}</td>
+            <td lang={langOf('cards.kind.cli')}>{platforms(l.kinds)}</td>
+            <td>{l.implementations}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <script type="application/json" id="finder-data" set:html={JSON.stringify(finderData)} />
 </StarlightPage>
 
 <script>
-  // Show only the cards that match every selected filter. Without
-  // JavaScript every card stays visible, so the page still works.
-  const form = document.getElementById('filters') as HTMLFormElement;
-  const count = document.getElementById('count')!;
-  const cards = [...document.querySelectorAll<HTMLElement>('.card')];
-  function apply() {
-    const data = new FormData(form);
-    let shown = 0;
-    for (const card of cards) {
-      const match = (['paradigm', 'era', 'kind'] as const).every((key) => {
-        const want = data.get(key);
-        return !want || card.dataset[key]!.split('|').includes(String(want));
-      });
-      card.hidden = !match;
-      if (match) shown++;
-    }
-    // The sentence comes from site-ui.yml (e.g. "{shown} of {total} shown").
-    count.textContent = count.dataset.template!
-      .replace('{shown}', String(shown)).replace('{total}', String(cards.length));
+  // Wires the controls to the rules of language-finder.ts. The state lives
+  // in the address (?q=…&paradigm=…&sort=…&view=…), so a list can be shared.
+  import { FILTERS, counts, fromQuery, matches, search, sortLangs, toQuery,
+    type Filter, type Lang, type State } from '../../../scripts/language-finder.ts';
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const data = JSON.parse($('finder-data').textContent!);
+  const langs: Lang[] = data.languages;
+  const filters: Filter[] = data.filters;
+  const fill = (text: string, values: Record<string, string | number>) =>
+    text.replace(/\{(\w+)\}/g, (all, k) => (k in values ? String(values[k]) : all));
+
+  const q = $<HTMLInputElement>('finder-q');
+  const sort = $<HTMLSelectElement>('finder-sort');
+  const count = $('count');
+  const chips = $('finder-chips');
+  const empty = $('finder-empty');
+  const cardBox = $('finder-cards');
+  const tableBox = $('finder-table');
+  const tbody = tableBox.querySelector('tbody')!;
+  const cards = new Map([...cardBox.querySelectorAll<HTMLElement>('[data-slug]')].map((e) => [e.dataset.slug!, e]));
+  const rows = new Map([...tbody.querySelectorAll<HTMLElement>('[data-slug]')].map((e) => [e.dataset.slug!, e]));
+  const boxes = [...document.querySelectorAll<HTMLInputElement>('#finder input[type=checkbox]')];
+  const viewRadios = [...document.querySelectorAll<HTMLInputElement>('input[name=finder-view]')];
+
+  const known = Object.fromEntries(FILTERS.map((f) => [f, new Set(Object.keys(data.labels[f] ?? {}))])) as Record<Filter, Set<string>>;
+  let state: State = fromQuery(location.search, known);
+
+  // State -> controls (on load, and after a chip or Clear all).
+  function showState() {
+    q.value = state.q;
+    sort.value = state.sort;
+    for (const r of viewRadios) r.checked = r.value === state.view;
+    for (const b of boxes) b.checked = state.filters[b.name as Filter].includes(b.value);
+    // Open the filters when the address ticks some of them.
+    if (filters.some((f) => state.filters[f].length)) document.querySelector('.finder-filters')!.setAttribute('open', '');
   }
-  form.addEventListener('change', apply);
-  apply();
+
+  // Controls -> state.
+  function readState() {
+    state = {
+      q: q.value,
+      sort: sort.value as State['sort'],
+      view: (viewRadios.find((r) => r.checked)?.value ?? 'cards') as State['view'],
+      filters: Object.fromEntries(FILTERS.map((f) => [f, boxes.filter((b) => b.name === f && b.checked).map((b) => b.value)])) as State['filters'],
+    };
+  }
+
+  let announce: number | undefined;
+  function update(delayStatus = false) {
+    const shown = sortLangs(langs, state.sort).filter((l) => matches(l, state));
+    const shownSet = new Set(shown.map((l) => l.slug));
+    for (const l of sortLangs(langs, state.sort)) {
+      const via = search(l, state.q)?.via;
+      for (const el of [cards.get(l.slug)!, rows.get(l.slug)!]) {
+        el.hidden = !shownSet.has(l.slug);
+        el.parentElement!.append(el);
+        const note = el.querySelector<HTMLElement>('.finder-via')!;
+        note.hidden = !via;
+        note.textContent = via ? (el.tagName === 'TR' ? `(${fill(data.ui.alsoCalled, { name: via })})` : fill(data.ui.alsoCalled, { name: via })) : '';
+      }
+    }
+    // With no result only the message shows, not an empty table.
+    cardBox.hidden = state.view !== 'cards' || shown.length === 0;
+    tableBox.hidden = state.view !== 'table' || shown.length === 0;
+
+    // The table says which column the list is sorted by.
+    const sortLabel = data.sorts[state.sort].charAt(0).toLowerCase() + data.sorts[state.sort].slice(1);
+    $('finder-caption').textContent = fill(data.ui.tableCaption, { sort: sortLabel });
+    for (const th of tableBox.querySelectorAll<HTMLElement>('th')) {
+      const by = (th.dataset.sort ?? '').split(' ');
+      if (by.includes(state.sort)) th.setAttribute('aria-sort', state.sort === 'name' || state.sort === 'oldest' ? 'ascending' : 'descending');
+      else th.removeAttribute('aria-sort');
+    }
+
+    // Counts: how many languages each value would show. A ticked value
+    // shows none: its languages are already in the list.
+    for (const f of filters) {
+      const n = counts(langs, state, f);
+      for (const span of document.querySelectorAll<HTMLElement>(`[data-count^="${f}:"]`)) {
+        const value = span.dataset.count!.slice(f.length + 1);
+        span.textContent = state.filters[f].includes(value) ? '' : `(${n.get(value) ?? 0})`;
+      }
+    }
+
+    // Applied search and filters, each with a button that removes it.
+    chips.replaceChildren();
+    const chip = (text: string, remove: () => void, key: string) => {
+      const li = document.createElement('li');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.key = key;
+      button.innerHTML = '<span></span><span class="sr-only"></span> <span aria-hidden="true">×</span>';
+      button.children[0].textContent = text;
+      button.children[1].textContent = ` (${data.ui.remove})`;
+      button.addEventListener('click', () => {
+        const next = (li.nextElementSibling ?? li.previousElementSibling)?.querySelector('button')?.dataset.key;
+        remove();
+        showState();
+        update();
+        // Keep the focus near where it was: the next chip, or the search box.
+        (chips.querySelector<HTMLElement>(`[data-key="${next}"]`) ?? q).focus();
+      });
+      li.append(button);
+      chips.append(li);
+    };
+    if (state.q.trim()) chip(`${data.ui.searchChip}: "${state.q.trim()}"`, () => { state.q = ''; }, 'q');
+    for (const f of filters) for (const v of state.filters[f]) {
+      chip(`${data.legend[f]}: ${data.labels[f][v]}`, () => { state.filters[f] = state.filters[f].filter((x) => x !== v); }, `${f}:${v}`);
+    }
+    $('finder-applied').hidden = chips.children.length === 0;
+
+    empty.hidden = shown.length > 0;
+    $('finder-empty-text').textContent = state.q.trim()
+      ? fill(data.ui.emptySearch, { q: state.q.trim() }) : data.ui.empty;
+
+    // The result line is read out by screen readers: while typing, only
+    // once the typing stops.
+    const text = fill(data.ui.shown, { shown: shown.length, total: langs.length, sort: sortLabel });
+    clearTimeout(announce);
+    if (delayStatus) announce = window.setTimeout(() => { count.textContent = text; }, 600);
+    else count.textContent = text;
+
+    history.replaceState(null, '', location.pathname + toQuery(state) + location.hash);
+  }
+
+
+  q.addEventListener('input', () => { readState(); update(true); });
+  for (const el of [sort, ...boxes, ...viewRadios]) el.addEventListener('change', () => { readState(); update(); });
+  for (const button of document.querySelectorAll<HTMLButtonElement>('.finder-clear')) {
+    button.addEventListener('click', () => {
+      state = { ...fromQuery('', known), view: state.view };
+      showState();
+      update();
+      q.focus();
+    });
+  }
+  $('finder-copy').addEventListener('click', async () => {
+    const status = $('finder-copied');
+    try {
+      await navigator.clipboard.writeText(location.href);
+      status.textContent = data.ui.copied;
+    } catch {
+      status.textContent = data.ui.copyFailed;
+    }
+  });
+
+  $('finder').hidden = false;
+  showState();
+  update();
 </script>

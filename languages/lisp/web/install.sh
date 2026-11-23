@@ -13,8 +13,9 @@
 # HOW:  ./install.sh       (run once; safe to run again)
 #       QUICKLISP_HOME=/path ./install.sh   use another Quicklisp folder
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://formulae.brew.sh/formula/sbcl
 #   https://www.sbcl.org/platform-table.html
@@ -30,6 +31,7 @@ cd -- "$(dirname -- "$0")"
 . ../../../scripts/common.sh
 # QUICKLISP_HOME, QUICKLISP_URL, QUICKLISP_SHA256.
 # shellcheck source=quicklisp-env.sh
+. ../use-msys2-sbcl.sh
 . ./quicklisp-env.sh
 
 SBCL=${SBCL:-sbcl}
@@ -64,12 +66,14 @@ confirm "Install Quicklisp into $QUICKLISP_HOME now?" \
 ql_tmp=$(mktemp -d)
 curl -fsSL -o "$ql_tmp/quicklisp.lisp" "$QUICKLISP_URL"
 # The checksum proves the file is exactly the one Quicklisp publishes.
-echo "$QUICKLISP_SHA256  $ql_tmp/quicklisp.lisp" | shasum -a 256 -c - \
+# macOS has shasum, Git Bash and Linux have sha256sum (Git Bash may have both).
+if has_cmd sha256sum; then ql_sha="sha256sum -c -"; else ql_sha="shasum -a 256 -c -"; fi
+echo "$QUICKLISP_SHA256  $ql_tmp/quicklisp.lisp" | $ql_sha \
     || fail "Checksum mismatch for quicklisp.lisp. Check https://www.quicklisp.org/beta/"
 # :path must end with "/" so Lisp reads it as a folder, not a file name.
 "$SBCL" --non-interactive --no-sysinit --no-userinit \
-    --load "$ql_tmp/quicklisp.lisp" \
-    --eval "(quicklisp-quickstart:install :path \"$QUICKLISP_HOME/\")"
+    --load "$(native_path "$ql_tmp")/quicklisp.lisp" \
+    --eval "(quicklisp-quickstart:install :path \"$QUICKLISP_NATIVE/\")"
 rm -rf "$ql_tmp"
 
 [ -f "$QUICKLISP_HOME/setup.lisp" ] || fail "Quicklisp was not installed. See the messages above."

@@ -1,0 +1,25 @@
+/*
+ * hello.qcl - QCL cli: Hello, World!
+ *
+ * WHAT: prints the text Hello, World!, using only the classical part of QCL.
+ * WHY:  QCL (Quantum Computation Language) has a classical control language
+ *       with procedures, and quantum operations are added to it. This file uses
+ *       only the classical part, so the program needs no qubits to print its line.
+ *       The syntax of procedure and print is the one in the examples that ship
+ *       with QCL (lib/deutsch.qcl in the source archive).
+ *
+ * Source: Bernhard Oemer, the QCL source archive (README: "QCL (Quantum Computation
+ * Language) ... a syntax derived from classical procedural languages like C or
+ * Pascal"; qcl.cc: "(c) Copyright by Bernhard Oemer, 1998"). See README.md.
+ *
+ * Output note: each print statement in QCL writes ": " before its text and a
+ * space after it, so the line printed is ": Hello, World! ". See README.md.
+ */
+
+// A procedure is a named block of classical statements. Its body is in braces.
+procedure hello() {
+    print "Hello, World!";
+}
+
+// Calling the procedure runs it. The statement ends with a semicolon.
+hello();

@@ -16,11 +16,11 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | JDK 21 (Temurin) + Maven | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | JDK 21 + Maven + JavaFX 21.0.13 | ✅ verified on macOS Intel |
-| desktop (Swing variant) | [desktop-swing/](desktop-swing/) | JDK 21 + Maven; Swing is part of the JDK | ✅ verified on macOS Intel |
-| web | [web/](web/) | JDK 21 + Maven + Spring Boot 4.1.2 | ✅ verified on macOS Intel |
-| web + separate front end | [web-react/](web-react/) | Spring Boot 4.1.2 API + React 19 / Vite 8 front end | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | JDK 21, Maven | ✅ |
+| desktop | [desktop/](desktop/) | JavaFX, Maven | ✅ |
+| desktop (Swing variant) | [desktop-swing/](desktop-swing/) | Swing (JDK), Maven | ✅ |
+| web | [web/](web/) | Spring Boot, Maven | ✅ |
+| web + separate front end | [web-react/](web-react/) | Spring Boot API + React (Vite) | ✅ |
 
 ## History
 Java started in 1991 at Sun Microsystems. Sun's own account says it "was
@@ -137,7 +137,7 @@ section.
 1. The Java Language Specification, Java SE 21 Edition, Chapter 1. Introduction. Oracle. <https://docs.oracle.com/javase/specs/jls/se21/html/jls-1.html> (accessed 2026-10-31)
 2. Java Technology: The Early Years. Jon Byous, Sun Microsystems, 1998 (Internet Archive copy). <https://web.archive.org/web/20051230031802/http://java.sun.com/features/1998/05/birthday.html> (accessed 2026-10-31)
 3. James Gosling. Computer History Museum. <https://computerhistory.org/profile/james-gosling/> (accessed 2026-10-31)
-4. JavaSoft ships Java 1.0 (Sun Microsystems press release, 1996-01-23, archived in the java-interest mailing list). MIT. <https://diswww.mit.edu/charon.mit.edu/java-interest/5056> (accessed 2026-10-31)
+4. JavaSoft Ships Java 1.0 (Sun Microsystems press release, 1996-01-23; Internet Archive copy of the tech-insider.org transcript). <https://web.archive.org/web/20221231225635/https://www.tech-insider.org/java/research/1996/0123.html> (accessed 2026-10-31)
 5. The Java Language Environment (white paper, May 1996). James Gosling and Henry McGilton, Sun Microsystems; hosted by Oracle. <https://www.oracle.com/java/technologies/language-environment.html> (accessed 2026-10-31)
 6. About the Java Technology (The Java Tutorials). Oracle. <https://docs.oracle.com/javase/tutorial/getStarted/intro/definition.html> (accessed 2026-10-31)
 7. JDK 8. OpenJDK. <https://openjdk.org/projects/jdk8/> (accessed 2026-10-31)

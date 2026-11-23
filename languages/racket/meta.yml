@@ -1,0 +1,35 @@
+# languages/racket/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Racket"
+other_names:
+  - "PLT Scheme"
+year: 1995
+year_note: "the PLT project began in 1995 as PLT Scheme; renamed Racket on 2010-06-07"
+designers:
+  - "PLT (the Racket project team)"
+paradigms:
+  - "functional"
+  - "object-oriented"
+  - "language-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Racket 9.3 CS (Minimal Racket, `racket hello.rkt`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "only cli: the Minimal Racket distribution has no graphical libraries"
+sources:
+  - title: "The Racket Manifesto. Matthias Felleisen, Robert Bruce Findler, Matthew Flatt, Shriram Krishnamurthi, Eli Barzilay, Jay McCarthy, Sam Tobin-Hochstadt. SNAPL 2015, LIPIcs, Schloss Dagstuhl. Author copy"
+    url: "https://www2.ccs.neu.edu/racket/pubs/manifesto.pdf"
+  - title: "Racket (announcement of 2010-06-07, formerly PLT Scheme). Eli Barzilay, Racket blog"
+    url: "https://blog.racket-lang.org/2010/06/racket.html"
+  - title: "The Racket Guide, chapter 1 Welcome to Racket. Racket project"
+    url: "https://docs.racket-lang.org/guide/intro.html"
+  - title: "Racket, the Programming Language (home page). Racket project"
+    url: "https://racket-lang.org/"
+humor:
+  line: "Racket lets you invent a new programming language in an afternoon, and the first program it runs is, of course, Hello, World!."
+  dictionary:
+    - term: "Racket"
+      definition: "a language for making languages, so that your next bug can be in a language nobody else has ever used."

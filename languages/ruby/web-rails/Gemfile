@@ -1,0 +1,26 @@
+# Gemfile - the libraries (gems) this Rails app needs.
+#
+# Bundler reads this file: "bundle install" downloads the gems listed here
+# and writes the exact versions it chose to Gemfile.lock. Both files are
+# committed, so every reader gets the same versions.
+
+# Where Bundler downloads gems from.
+source "https://rubygems.org"
+
+# Ruby on Rails is a set of gems, one per framework. The "rails" gem installs
+# all of them; this app needs only two, so it lists only these. "=" pins the
+# exact version; all Rails gems use the same version number.
+#   railties:   the core: Rails::Application, routing setup, the Rails boot
+#   actionpack: routing (ActionDispatch) and controllers (ActionController)
+# There is no database, so Active Record and its gems are left out.
+gem "railties", "= 8.1.4.1"
+gem "actionpack", "= 8.1.4.1"
+
+# A web server and the library that starts it from config.ru (the same pair
+# as in ../web, see its Gemfile).
+gem "rackup", "= 2.3.1"
+gem "puma", "= 8.1.1"
+
+# Windows has no time zone database of its own, so Rails needs this gem there
+# (the Gemfile that "rails new" writes has the same line). Other systems skip it.
+gem "tzinfo-data", "= 1.2026.6", platforms: %i[ windows ]

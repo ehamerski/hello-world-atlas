@@ -1,0 +1,11 @@
+source: languages/elixir/meta.yml
+source_sha: 3e25181de6c70fc1658983470ff6e3e5ceb71728
+year_note: "commit inicial em 2011-01-09; José Valim criou o Elixir em 2012 como um projeto de pesquisa e desenvolvimento dentro da Plataformatec; versão 0.5.0, a primeira versão após a reescrita, em 2012-05-25; versão 1.0 em 2014-09-18"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "A saudação ocupa uma linha, mas o servidor web por trás dela tem um supervisor, caso dizer olá algum dia termine mal."
+  dictionary:
+    - term: "Elixir"
+      definition: "uma linguagem com a aparência do Ruby e o motor do Erlang, que mantém um supervisor de prontidão para cada contratempo."

@@ -21,9 +21,9 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Node.js 26 (`node hello.js`), no packages | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | Electron 45.2.1 (npm), which bundles Chromium 156 and Node.js 24 | ✅ verified on macOS Intel |
-| web | [web/](web/) | Node.js 26 + Express 5.3.0 (npm) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | Node.js | ✅ |
+| desktop | [desktop/](desktop/) | Electron | ✅ |
+| web | [web/](web/) | Express | ✅ |
 
 ## History
 **JavaScript** came first. The ECMAScript standard says: "The language was

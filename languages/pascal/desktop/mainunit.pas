@@ -56,6 +56,15 @@ procedure TMainForm.FormShow(Sender: TObject);
 begin
   if GetEnvironmentVariable('TF_VERIFY') = '1' then
   begin
+    {$IFDEF WINDOWS}
+    { On Windows hello.lpi builds a GUI program (no console window). For
+      such programs Free Pascal leaves Output assigned but not open, so
+      WriteLn would fail. Rewrite opens it on the standard output handle
+      the parent gave us (here the pipe from run.sh). Source: rtl/win/
+      syswin.inc (SysInitStdIO) and rtl/win/sysfile.inc in FPC 3.2.2. }
+    if not IsConsole then
+      Rewrite(Output);
+    {$ENDIF}
     WriteLn(HelloLabel.Caption);
     Flush(Output);  { print now, not when the program ends }
     VerifyTimer.Enabled := True;

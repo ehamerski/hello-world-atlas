@@ -1,0 +1,15 @@
+source: languages/pseudocode/meta.yml
+source_sha: f12a9b6c5a05c77b3cff48921b1e054bc781f938
+year_note: "sem uma origem única; é uma família de notações: CLRS 1ª edição em 1990, projeto PSeInt registrado em 2004, Portugol Studio usado na UNIVALI desde 2011"
+categories:
+  - folder: "portugol"
+    run: "imprime `Hello, World!`"
+  - folder: "pseint"
+    run: "imprime `Hello, World!`"
+  - folder: "clrs"
+    run: "– (sem interpretador)"
+humor:
+  line: "O pseudocódigo do CLRS nunca travou em tempo de execução. Nunca foi executado."
+  dictionary:
+    - term: "Pseudocódigo"
+      definition: "uma linguagem em que `retorne a resposta` é uma instrução válida."

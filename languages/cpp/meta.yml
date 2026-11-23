@@ -2,6 +2,8 @@
 # scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
 # year and designers are cited in README.md; the same sources are below.
 name: "C++"
+other_names:
+  - "C with Classes"
 year: 1985
 year_note: "work began in 1979 as \"C with Classes\"; named C++ in 1983; first commercial release (Cfront) in October 1985; ISO standard in 1998"
 designers:

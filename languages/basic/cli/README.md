@@ -143,8 +143,8 @@ Open [`hello.bas`](hello.bas) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | QB64-PE 4.7.0 built by `install.sh` with Apple clang 21 (57 s). |
 | macOS Apple Silicon | ⚠️ not verified | Same macOS package and script; the package is compiled locally, so it targets the Mac's own CPU. |
-| Linux | ⚠️ not verified | Download `qb64pe_lnx-x64-4.7.0-GLFW.tar.gz` [7] and run `./setup_lnx.sh`; "Dependencies should be automatically installed. Required packages include OpenGL, ALSA and the GNU C++ Compiler" [1]. It uses `sudo` for those packages, so `install.sh` does not run it for you. Then use `QB64PE=/path/to/qb64pe ./build.sh`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Download `qb64pe_win-x64-4.7.0-GLFW.7z` [7] and "extract the package contents to a folder with full write permissions" [1]; add it to PATH. Name the output `bin/hello-cli.exe`. WSL behaves like Linux. |
+| Linux | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `build-essential x11-utils mesa-common-dev libglu1-mesa-dev libasound2-dev libpng-dev libcurl4-openssl-dev libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev` with apt, downloads `qb64pe_lnx-x64-4.7.0-GLFW.tar.gz` [7], checks its SHA-256, and builds it with `make OS=lnx BUILD_QB64=y` into `~/.local/qb64pe-4.7.0`. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` downloads `qb64pe_win-x64-4.7.0-GLFW.7z` [7], checks its SHA-256, and unpacks it with 7-Zip (`7z` on PATH or in `C:\Program Files\7-Zip`) into `~/.local/qb64pe-4.7.0`. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

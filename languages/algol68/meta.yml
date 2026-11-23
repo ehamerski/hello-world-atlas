@@ -1,0 +1,40 @@
+# languages/algol68/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "ALGOL 68"
+year: 1968
+year_note: "Report on the Algorithmic Language ALGOL 68 adopted by IFIP Working Group 2.1 on 1968-12-20 and published in 1969; the Revised Report was accepted in 1973 and published in 1975"
+designers:
+  - "A. van Wijngaarden"
+  - "B. J. Mailloux"
+  - "J. E. L. Peck"
+  - "C. H. A. Koster"
+paradigms:
+  - "imperative"
+influenced_by:
+  - language: "ALGOL 60"
+    title: "Revised Report on the Algorithmic Language ALGOL 68. A. van Wijngaarden et al., IFIP Working Group 2.1, edition with errata to 1978 (ALGOL Bulletin 47 supplement), section 0.2"
+    url: "https://www.softwarepreservation.org/projects/ALGOL/report/Algol68_revised_report-AB-600dpi.pdf"
+    quote: "Although influenced by the lessons learned from ALGOL 60"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Algol 68 Genie 3.13.4 interpreter, built from source"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "interpreted by a68g: no build step"
+sources:
+  - title: "van Wijngaarden, A. (ed.), Mailloux, B. J., Peck, J. E. L. and Koster, C. H. A. Report on the Algorithmic Language ALGOL 68. Numerische Mathematik 14, 79-218, 1969"
+    url: "https://link.springer.com/article/10.1007/BF02163002"
+  - title: "van Wijngaarden, A. et al. Revised report on the algorithmic language ALGOL 68. Acta Informatica 5, 1-236, 1975"
+    url: "https://link.springer.com/article/10.1007/BF00265077"
+  - title: "van Wijngaarden, A. et al. Revised Report on the Algorithmic Language ALGOL 68. IFIP Working Group 2.1, edition with errata to 1978 (ALGOL Bulletin 47 supplement)"
+    url: "https://www.softwarepreservation.org/projects/ALGOL/report/Algol68_revised_report-AB-600dpi.pdf"
+  - title: "Lindsey, C. H. A History of ALGOL 68. In History of Programming Languages II, ACM, 1996, pp. 27-84"
+    url: "https://algol68-lang.org/docs/lindsey-history-of-algol68.pdf"
+# humor: one light line for the Off the record page.
+humor:
+  line: "ALGOL 68 closes an `if` with `fi` and a `case` with `esac`, which is as close as a language gets to spelling backwards on purpose."
+  dictionary:
+    - term: "fi"
+      definition: "the end of an `if` in ALGOL 68, written the way the `if` looks from the other side."

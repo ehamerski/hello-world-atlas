@@ -13,9 +13,63 @@
 }
 .download-zip:hover { background: var(--sl-color-accent-high); }
 
-/* Language cards and their filters (src/pages/[...locale]/languages/index.astro). */
-.filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
-.filters label { display: flex; flex-direction: column; font-size: var(--sl-text-sm); }
+/* Language cards, the table view and the controls above them
+   (src/pages/[...locale]/languages/index.astro). Native controls only;
+   buttons are at least 24 px high (WCAG 2.2, 2.5.8 Target Size). */
+.filters { margin-block: 1rem; }
+.filters[hidden] { display: none; }
+.finder-row { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: flex-start; }
+.finder-field { display: flex; flex-direction: column; gap: 0.25rem; }
+.finder-field label, .filters legend { font-weight: 600; }
+.finder-hint { font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+.filters input[type='search'], .filters select {
+  min-height: 2.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--sl-color-gray-3);
+  border-radius: 0.25rem;
+  background: var(--sl-color-black);
+  color: var(--sl-color-white);
+  font: inherit;
+}
+.filters fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.finder-view label { display: inline-flex; align-items: center; gap: 0.25rem; min-height: 1.75rem; margin-inline-end: 1rem; }
+.filters button, .finder-empty button {
+  min-height: 1.75rem;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--sl-color-gray-3);
+  border-radius: 999px;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+  font: inherit;
+  cursor: pointer;
+}
+.filters :focus-visible, .finder-empty button:focus-visible, .finder-table:focus-visible {
+  outline: 2px solid var(--sl-color-accent-high);
+  outline-offset: 2px;
+}
+.finder-filters { margin-block: 1rem; }
+.finder-filters summary { font-weight: 600; cursor: pointer; }
+.finder-groups { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 0.5rem; }
+.finder-groups label { display: block; }
+.finder-n { color: var(--sl-color-gray-2); }
+.finder-applied { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-block: 0.75rem; }
+.finder-applied[hidden] { display: none; }
+.finder-applied ul { display: contents; list-style: none; }
+.finder-applied li { margin: 0; }
+.finder-copy { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin: 0; }
+.finder-empty button { margin-inline-start: 0.5rem; }
+/* The header row stays below the site's top bar while the table scrolls;
+   a link that gets the focus is scrolled clear of both (WCAG 2.2, 2.4.11).
+   On a narrow screen only the table scrolls sideways, not the page, and the
+   header row then scrolls with it. */
+.finder-table table { display: table; width: 100%; overflow: visible; }
+.finder-table th { position: sticky; top: var(--sl-nav-height); background: var(--sl-color-bg); }
+.finder-table td a { scroll-margin-top: 4.5rem; }
+@media (max-width: 50rem) {
+  .finder-table { overflow-x: auto; }
+  .finder-table th { position: static; }
+}
+.finder-table[hidden], .cards[hidden] { display: none; }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1rem; }
 .card {
   border: 1px solid var(--sl-color-gray-5);
@@ -95,6 +149,14 @@
 .data-table th, .data-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--sl-color-gray-5); text-align: start; vertical-align: top; }
 .data-table td.num, .data-table th.num { text-align: end; font-variant-numeric: tabular-nums; }
 .table-scroll { overflow-x: auto; }
+.table-scroll:focus-visible { outline: 2px solid var(--sl-color-accent-high); outline-offset: 2px; }
+.scroll-hint { margin: 0 0 0.5rem; font-size: var(--sl-text-sm); color: var(--sl-color-gray-2); }
+
+/* Links the pages build themselves (tables, lists and the filters, in
+   blocks Starlight leaves unstyled with not-content) get the color of the
+   links in the text instead of the browser's default blue. */
+main :is(.not-content, .filters) a:not([class]):not(svg a) { color: var(--sl-color-text-accent); }
+main :is(.not-content, .filters) a:not([class]):not(svg a):hover { color: var(--sl-color-white); }
 .chart { width: 100%; height: auto; color: var(--sl-color-gray-2); }
 .chart text { fill: currentColor; font-family: var(--__sl-font); font-size: 12px; }
 .chart .grid { stroke: var(--sl-color-gray-5); stroke-width: 1; }

@@ -1,0 +1,36 @@
+# languages/typescript/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "TypeScript"
+year: 2012
+year_note: "announced by Microsoft on 2012-10-01 with an early preview; version 1.0 on 2014-04-02"
+designers:
+  - "Anders Hejlsberg"
+paradigms:
+  - "multi-paradigm"
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Node.js + TypeScript 7.0.2 (`tsc`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Node.js + TypeScript 7.0.2 (`tsc`), `node:http`"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "TypeScript: JavaScript Development at Application Scale. Microsoft, 2012-10-01 (archive of an MSDN blog)"
+    url: "https://learn.microsoft.com/en-us/archive/blogs/somasegar/typescript-javascript-development-at-application-scale"
+  - title: "A 10x faster TypeScript. Anders Hejlsberg, TypeScript blog, 2025-03-11"
+    url: "https://devblogs.microsoft.com/typescript/typescript-native-port/"
+  - title: "Announcing TypeScript 1.0. TypeScript blog, 2014-04-02"
+    url: "https://devblogs.microsoft.com/typescript/announcing-typescript-1-0/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "TypeScript checks every type before the program runs, and then hands plain JavaScript to the runtime, which checks none of them."
+  dictionary:
+    - term: "TypeScript"
+      definition: "a language that finds your mistake at your desk, so that your users never have to."

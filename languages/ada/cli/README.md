@@ -149,8 +149,8 @@ prints `(style) bad indentation` (a warning; the build still succeeds).
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | Alire 2.1.1 (`alr-2.1.1-bin-x86_64-macos.zip`), GNAT 16.2.0, GPRbuild 26.0.1. Linking uses Apple's Command Line Tools. |
 | macOS Apple Silicon | ⚠️ not verified | `install.sh` picks `alr-2.1.1-bin-aarch64-macos.zip` [11]. Same commands. |
-| Linux (x86_64 / aarch64) | ⚠️ not verified | `install.sh` picks `alr-2.1.1-bin-x86_64-linux.zip` or `-aarch64-linux.zip`; an AppImage is also published [11]. `~/.local/bin` must be on PATH. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | "On Windows an installer is provided" [3]: `alr-2.1.1-installer-x86_64-windows.exe` [11]. Then `alr toolchain --select`, `alr build`, and run `bin\hello.exe`. WSL behaves like Linux. |
+| Linux (x86_64 / aarch64) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` downloads `alr-2.1.1-bin-x86_64-linux.zip` from the Alire releases, unpacks `alr` into `~/.local/bin`, and runs `alr -n toolchain --select` when no default toolchain is set. It needs `curl`, `unzip` and `~/.local/bin` on PATH. aarch64 (`alr-2.1.1-bin-aarch64-linux.zip`) and the AppImage stay not verified [11]. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` downloads `alr-2.1.1-bin-x86_64-windows.zip` [11], checks its SHA-256, unpacks it with PowerShell, copies `alr.exe` into `~/.local/bin`, and runs `alr -n toolchain --select` when no default toolchain is set. The `.exe` installer is not used. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

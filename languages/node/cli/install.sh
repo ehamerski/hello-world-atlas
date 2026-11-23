@@ -10,8 +10,8 @@
 #       nothing else: no npm packages, no package.json.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified); Linux and Windows (Git Bash) verified in
+# CI; macOS Apple Silicon and WSL are documented but NOT verified.
 # Sources for the install commands:
 #   https://nodejs.org/en/download
 #   https://formulae.brew.sh/formula/node

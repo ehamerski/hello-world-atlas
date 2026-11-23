@@ -25,6 +25,30 @@ In order of preference:
 Not accepted: blogs, forums, AI-generated text, or content farms as the
 only source of a fact. They may be linked as "further reading" only.
 
+Some facts need kinds of source that the list above does not name. They are
+accepted in these forms:
+- **Vendor documentation for platforms and toolchains**, for the `mobile`
+  category and for toolchains with no standard: for example the Android
+  SDK and Android Gradle plugin documentation (developer.android.com),
+  Apple's Xcode and SwiftUI documentation (developer.apple.com), and
+  Flutter's installation guide (docs.flutter.dev). A version number or a
+  requirement ("needs Gradle 9.6 or newer") cites the page of the vendor
+  that states it, and the README gives the version it actually ran.
+- **History papers and talks by a language's authors**, such as the HOPL
+  papers (History of Programming Languages conference, ACM SIGPLAN) and
+  doctoral theses. They are the best source for "why was this language
+  made". An author's own copy is cited when the publisher's page blocks
+  automated reading (see section 5).
+- **Source archives of the tool itself**, when a language has no website
+  of its own: for example the QCL source archive (the README inside it is
+  the source for what QCL says about itself) and the GNU Cim manual for
+  Simula. The archive and its version are named.
+- **Archives that preserve old standards and reports**, for languages from
+  before the web, such as the Simula 67 Common Base Language report held by
+  the Software Preservation Group.
+- **Package registries and release pages** for "the current version is":
+  the registry or the project's releases page, with the access date.
+
 ## 2. Rules for every claim
 - **Every factual claim has a citation**: dates, names, versions,
   "first", "most used", rankings, percentages.
@@ -37,6 +61,21 @@ only source of a fact. They may be linked as "further reading" only.
   are checked against the official docs or by actually running them.
 - **Quotes** (e.g. teachers' critical views in `pseudocode/`) are copied
   word for word, with author, publication and year.
+
+### Facts about ideas, not only about tools
+[Paradigms](paradigms.md) and [the AI essay](ai-new-paradigm.md) state
+claims about ideas: what the actor model is, where object orientation came
+from, what a contract in Eiffel promises. For those pages:
+- The claim is a **quote** or a close paraphrase of a primary source: the
+  paper that proposed the idea (for example Hewitt, Bishop and Steiger for
+  actors, 1973), the language's own documentation, or its author's account.
+- A **link between two ideas or languages** ("Objective-C's additions to C
+  are mostly based on Smalltalk") needs a source that says so. If no source
+  states the link, the page may still compare the two, and then it says
+  that the comparison is this repository's own, not a historical claim.
+- A **side remark** about a tool, such as "Qiskit is an open-source SDK",
+  cites the tool's own documentation and says no more than that page says.
+  Rankings and usage figures need a dated survey from section 1.
 
 ## 3. Rules for links
 - **HTTPS only.** Links must be publicly accessible, with no login or
@@ -65,6 +104,14 @@ Trustworthy sources also matter for the software a reader installs:
   removed.
 - `scripts/check-links.sh` checks every relative link and `#anchor`
   between the repository's own Markdown files.
+- The sources a language cites for its year, designers and paradigm live in
+  its `meta.yml` (`sources`). `scripts/gen-readme.py` and the site generator
+  read that file, so the **Sources** page of the website lists the same
+  sources as the language README, grouped by language, and
+  `scripts/check-language.sh` fails when the file is incomplete.
+- A paper may be a PDF that a tool cannot read in the browser. Its quotes
+  are checked against the text of the PDF, extracted on the maintainer's
+  machine (for example with `pdftotext`), never from a summary of it.
 
 Found a wrong fact or a dead link? Please report it; see
 [CONTRIBUTING.md](../CONTRIBUTING.md).

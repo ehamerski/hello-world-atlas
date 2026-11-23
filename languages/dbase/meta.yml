@@ -1,0 +1,36 @@
+# languages/dbase/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "dBASE"
+year: 1981
+year_note: "dBASE II, Wayne Ratliff's Vulcan renamed, introduced by Ashton-Tate in 1981; this folder targets the dBASE III Plus dialect (proprietary DOS software, not run here)"
+designers:
+  - "Wayne Ratliff"
+paradigms:
+  - "imperative"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Harbour 3.2.0 (dBASE III-compatible `.prg`)"
+    run: "prints `Hello, World!`"
+    status: "compromise"
+    note: "dBASE III Plus is proprietary DOS software and is not run here; Harbour runs the compatible code. DOSBox is documented for licensed students"
+sources:
+  - title: "Martel, J.-P. A personal History of dBASE. The dBASE Developers Bulletin, dbase.com"
+    url: "https://www.dbase.com/Knowledgebase/dbulletin/bu03hist.htm"
+  - title: "Ashton-Tate. dBASE III PLUS Product Background, 1986-07-01. Computer History Museum, catalog 102762813"
+    url: "https://archive.computerhistory.org/resources/access/text/2017/01/102762813-05-01-acc.pdf"
+  - title: "Ashton-Tate. Corporate Fact Sheet. Computer History Museum, catalog 102770527"
+    url: "https://archive.computerhistory.org/resources/access/text/2017/02/102770527-05-01-acc.pdf"
+  - title: "Harbour project home page"
+    url: "https://harbour.github.io/"
+  - title: "Harbour Reference Guide: Clipper 5.3"
+    url: "https://harbour.github.io/doc/clc53.html"
+  - title: "DOSBox (archived copy)"
+    url: "https://web.archive.org/web/20261116214648/https://www.dosbox.com/"
+# humor: one light line for the Off the record page.
+humor:
+  line: "dBASE remembers your records for you; it just never tells you how it found them."
+  dictionary:
+    - term: "dBASE"
+      definition: "a database that answers in a dot prompt, and a prompt that answers back in capital letters."

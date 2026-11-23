@@ -3,20 +3,22 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files
 # Format: https://citation-file-format.github.io/
 # No "license" key: CFF reads a list of licenses as a choice (OR), but here
-# code is MIT and prose is CC BY 4.0 (AND, by part). LICENSE explains it.
+# code is MIT and prose is CC BY 4.0 (AND, by part). README.md explains it.
 cff-version: 1.2.0
 message: >-
   If you use this repository, please cite it as below. Code is under the
-  MIT License and prose under CC BY 4.0; see the LICENSE file.
+  MIT License (LICENSE) and prose under CC BY 4.0 (LICENSE-docs).
 title: Hello World in many programming languages
 type: software
+version: 2.0.0
+date-released: 2026-11-22
 authors:
   - family-names: Hamerski
     given-names: Eduardo
 abstract: >-
   A teaching repository that writes the Hello World program in many
-  programming languages, as a command-line program, a desktop window and
-  a web app, with the history, milestones, market usage and importance of
+  programming languages, as a command-line program, a desktop window, a
+  web app and, for a few languages, a mobile app, with the history, milestones, market usage and importance of
   each language. Every fact is cited and every program has install, build
   and run scripts that explain each step.
 keywords:

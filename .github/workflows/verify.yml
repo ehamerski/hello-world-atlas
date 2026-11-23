@@ -5,7 +5,9 @@
 #   2. scripts/check-links.sh         - every relative Markdown link resolves;
 #   3. scripts/verify-all.sh on the command-line programs whose toolchain is
 #      already on the runner image (no installs, so it stays fast);
-#   4. scripts/build-site.sh          - the website builds and its links resolve;
+#   4. scripts/build-site.sh          - every language folder is complete
+#      (scripts/check-language.sh and its fixture tests), the website
+#      builds, and its links resolve;
 #   5. scripts/check-product.sh       - no work notes in the published files;
 #   6. scripts/check-prose.sh         - the published Markdown follows the
 #      style guide (Vale);
@@ -41,12 +43,13 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # gen-readme.py uses only the Python standard library.
-      - uses: actions/setup-python@v7
+      # gen-readme.py uses only the Python standard library. 3.14 is the
+      # version the python/* implementations were verified with.
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          python-version: '3.13'
+          python-version: '3.14'
 
       - name: Generated READMEs are up to date
         run: python3 scripts/gen-readme.py --check
@@ -89,21 +92,36 @@ jobs:
             exit 1
           fi
 
+      # The image has several JDKs side by side and Java 17 is the default
+      # one; java/cli needs 21 (maven.compiler.release in its pom.xml). The
+      # image publishes where each JDK lives in JAVA_HOME_<N>_X64, so put 21
+      # first on PATH for the later steps.
+      # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md#java
+      # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands#adding-a-system-path
+      - name: Select JDK 21
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_21_X64" >> "$GITHUB_ENV"
+          echo "$JAVA_HOME_21_X64/bin" >> "$GITHUB_PATH"
+
       # Command-line programs whose compilers/interpreters are on the image.
       - name: verify-all (command-line subset)
         run: scripts/verify-all.sh c/cli cpp/cli go/cli java/cli node/cli python/cli rust/cli
 
-      # Same Node.js major version as the maintainer's Mac (site/package.json
-      # "engines"); npm ci in build-site.sh uses site/package-lock.json.
-      - uses: actions/setup-node@v7
+      # Same Node.js major version as the maintainer's Mac (site/.nvmrc);
+      # npm ci in build-site.sh uses site/package-lock.json.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '26'
-      - name: Website builds
+          node-version-file: site/.nvmrc
+      # build-site.sh runs scripts/check-language.sh before it builds.
+      - name: Every language is complete, and the website builds
         run: scripts/build-site.sh
+
+      - name: check-language.sh fails on incomplete languages (fixtures)
+        run: scripts/test-check-language.sh
 
       - name: Keep the logs of failed implementations
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: verify-logs
           path: .verify/

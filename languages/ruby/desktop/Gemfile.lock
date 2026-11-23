@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    tk (0.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  tk (= 0.6.0)
+
+CHECKSUMS
+  tk (0.6.0) sha256=f75ee691956dc48f3ff2730c018808fc8c44caf6ab755cf752c84cec10ee7282
+
+BUNDLED WITH
+  4.0.20

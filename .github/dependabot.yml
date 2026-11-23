@@ -1,0 +1,259 @@
+# .github/dependabot.yml - which dependency files Dependabot keeps up to date.
+#
+# WHAT: one entry per folder that has a manifest or lockfile, for the
+#   website (npm), the workflows (github-actions, which also updates the
+#   commit SHAs the actions are pinned to) and the implementations that
+#   pin libraries. Each entry checks once a week, puts every update for
+#   that folder into one pull request, and keeps at most two open.
+# WHEN: Dependabot version updates run on GitHub Actions; while Actions is
+#   turned off for the repository this file starts nothing.
+# NOT LISTED: npm in the implementation folders (their frontends and
+#   tools are small and pinned; Dependabot alerts still cover those
+#   lockfiles), the other .NET projects (they use no NuGet package), and
+#   Clojure (deps.edn) and Haskell (cabal.project.freeze), which have no
+#   Dependabot ecosystem.
+#
+# References:
+#   Options reference: https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference
+
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: npm
+    directory: /site
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: cargo
+    directory: /languages/rust/cli
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: cargo
+    directory: /languages/rust/desktop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: cargo
+    directory: /languages/rust/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gomod
+    directory: /languages/go/cli
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gomod
+    directory: /languages/go/desktop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gomod
+    directory: /languages/go/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gomod
+    directory: /languages/go/web-vue/backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gradle
+    directory: /languages/dart/mobile-flutter/android
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gradle
+    directory: /languages/kotlin/desktop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gradle
+    directory: /languages/kotlin/mobile-android
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: gradle
+    directory: /languages/kotlin/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: maven
+    directory: /languages/java/cli
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: maven
+    directory: /languages/java/desktop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+    # JavaFX stays on the 21 line, which runs on JDK 21 LTS; newer majors
+    # need a newer JDK (JavaFX 27 is built for Java 25).
+    ignore:
+      - dependency-name: 'org.openjfx:*'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: maven
+    directory: /languages/java/desktop-swing
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: maven
+    directory: /languages/java/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: maven
+    directory: /languages/java/web-react/backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: bundler
+    directory: /languages/ruby/desktop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: bundler
+    directory: /languages/ruby/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: bundler
+    directory: /languages/ruby/web-rails
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: pub
+    directory: /languages/dart/mobile-flutter
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: mix
+    directory: /languages/elixir/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: pip
+    directory: /languages/python/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: nuget
+    directory: /languages/csharp/desktop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']
+
+  - package-ecosystem: swift
+    directory: /languages/swift/web
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 2
+    groups:
+      all:
+        patterns: ['*']

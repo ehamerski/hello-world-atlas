@@ -1,0 +1,51 @@
+# languages/elixir/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Elixir"
+year: 2012
+year_note: "initial commit on 2011-01-09; José Valim created Elixir in 2012 as a research and development project inside Plataformatec; version 0.5.0, the first release after the rewrite, on 2012-05-25; version 1.0 on 2014-09-18"
+designers:
+  - "José Valim"
+paradigms:
+  - "functional"
+  - "concurrent"
+# influenced_by: each influence cited with the exact words of its source (website Genealogy page).
+influenced_by:
+  - language: "Erlang"
+    slug: "erlang"
+    title: "Elixir is great for everything that runs on top of a socket: José Valim, creator of Elixir (interview by Evrone). HackerNoon, 2020-10-20"
+    url: "https://hackernoon.com/elixir-is-great-for-everything-that-runs-on-top-of-a-socket-jose-valim-creator-of-elixir-4m2l3zhb"
+    quote: "We inherited the whole infrastructure from Erlang."
+  - language: "Ruby"
+    title: "Elixir is great for everything that runs on top of a socket: José Valim, creator of Elixir (interview by Evrone). HackerNoon, 2020-10-20"
+    url: "https://hackernoon.com/elixir-is-great-for-everything-that-runs-on-top-of-a-socket-jose-valim-creator-of-elixir-4m2l3zhb"
+    quote: "And Ruby reflects on the syntax, the standard libraries, and how we name things."
+  - language: "Clojure"
+    title: "Elixir is great for everything that runs on top of a socket: José Valim, creator of Elixir (interview by Evrone). HackerNoon, 2020-10-20"
+    url: "https://hackernoon.com/elixir-is-great-for-everything-that-runs-on-top-of-a-socket-jose-valim-creator-of-elixir-4m2l3zhb"
+    quote: "With Clojure, there are a bunch of similar ways we approach problems, like protocols."
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Elixir (`elixir hello.exs`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+  - folder: "web"
+    kind: "web"
+    toolchain: "Mix project, Plug and Bandit from Hex"
+    run: "http://localhost:8080/"
+    status: "verified"
+sources:
+  - title: "Development & team. The Elixir team, elixir-lang.org"
+    url: "https://elixir-lang.org/development/"
+  - title: "Elixir v1.0 released. José Valim, elixir-lang.org, 2014-09-18"
+    url: "https://elixir-lang.org/blog/2014/09/18/elixir-v1-0-0-released/"
+  - title: "Elixir v0.5.0 released. José Valim, elixir-lang.org, 2012-05-25"
+    url: "https://elixir-lang.org/blog/2012/05/25/elixir-v0-5-0-released/"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "The greeting takes one line, but the web server behind it has a supervisor, just in case saying hello ever ends badly."
+  dictionary:
+    - term: "Elixir"
+      definition: "a language with Ruby's looks and Erlang's engine, which keeps a supervisor ready for every mishap."

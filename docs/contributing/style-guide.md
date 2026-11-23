@@ -21,7 +21,8 @@ is in [`glossary.yml`](glossary.yml).
 ## 1. Audience and register
 <!-- The rules below quote the words they ban, so Vale skips them. -->
 <!-- vale off -->
-- **Readers** are computer science students. Assume they can open a
+- **Readers** are students and professionals in every area of
+  information technology (IT). Assume they can open a
   terminal and read code in one language, but do not assume they know the
   language on the page.
 - **Register:** formal, technical and scientific. Write as in a textbook

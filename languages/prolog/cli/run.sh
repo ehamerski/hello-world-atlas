@@ -12,8 +12,9 @@
 #                           cli program it does exactly the same thing)
 #       SWIPL=/path/to/swipl ./run.sh   use another swipl command
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -23,6 +24,8 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, require_cmd.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# shellcheck source=../use-msys2-swipl.sh
+. ../use-msys2-swipl.sh
 
 SWIPL=${SWIPL:-swipl}
 require_cmd "$SWIPL" "SWI-Prolog runs hello.pl."

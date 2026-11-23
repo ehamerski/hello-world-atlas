@@ -152,8 +152,8 @@ Node.js has no desktop toolkit of its own, so this folder uses
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Node.js 26.8.2 (nvm), npm 12.2.1, Electron 45.2.1 (`electron-v45.2.1-darwin-x64.zip`). |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. `install-electron` downloads the `arm64` build; Electron provides "64-bit Intel and Apple Silicon / ARM binaries for macOS" [2]. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Electron provides `x64` and `arm64` Linux binaries [2]. A window needs a graphical session (X11 or Wayland); it cannot open over plain SSH. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Windows 10 or newer [2]. Install Node.js with `winget install --id OpenJS.NodeJS.LTS -e`, then in PowerShell: `npm ci`, `npx --no install-electron`, `npx electron .`. Under WSL a window needs WSLg. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Node.js: if version 22.12 or newer is missing it prints the nodejs.org steps and stops. It runs `npm ci`, then `npx --no install-electron` to download the Electron program. Electron provides `x64` and `arm64` Linux binaries [2]. A window needs a graphical session. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Node.js: if version 22.12 or newer is missing it prints `winget install --id OpenJS.NodeJS.LTS -e` and stops. It runs `npm ci`, then `npx --no install-electron` to download the Electron program. Electron needs Windows 10 or newer [2]. WSL not verified; it behaves like Linux, and a window needs WSLg or an X server. |
 
 ## Expected output
 `./run.sh` opens this window:

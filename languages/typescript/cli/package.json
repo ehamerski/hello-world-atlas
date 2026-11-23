@@ -1,0 +1,18 @@
+{
+  "name": "hello-typescript-cli",
+  "version": "1.0.0",
+  "description": "TypeScript cli: prints Hello, World!",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "node build/hello.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "typescript": "7.0.2"
+  }
+}

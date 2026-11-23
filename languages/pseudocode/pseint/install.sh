@@ -13,11 +13,12 @@
 #       archives that only need to be unpacked (see pseint-env.sh).
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install steps:
 #   https://pseint.sourceforge.net/index.php?page=descargas.php
-#   https://sourceforge.net/projects/pseint/files/20250314/
+#   https://sourceforge.net/projects/pseint/files/20250314/   (Windows: pseint-w64-20250314.zip)
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -42,15 +43,7 @@ warn "PSeInt $PSEINT_VERSION is not installed (looked for it in $PSEINT_DIR)."
 step "2/2 Install PSeInt $PSEINT_VERSION into $PSEINT_DIR"
 explain "WHY: PSeInt is distributed as an archive to unpack, not as a package."
 case "$TF_OS" in
-    macos-intel|macos-arm|linux) ;;
-    windows)
-        # The zip holds pseint/pseint.exe (the interpreter) and
-        # pseint/wxPSeInt.exe (the editor); listed on 2026-11-01.
-        explain "Download the official zip pseint-w64-$PSEINT_VERSION.zip from"
-        explain "    https://pseint.sourceforge.net/index.php?page=descargas.php&os=w32"
-        explain "unzip it (for example into C:\\pseint-$PSEINT_VERSION), then in Git Bash:"
-        explain "    PSEINT=/c/pseint-$PSEINT_VERSION/pseint/pseint.exe ./run.sh"
-        exit 1 ;;
+    macos-intel|macos-arm|linux|windows) ;;
     *)
         fail "Unknown OS. See https://pseint.sourceforge.net/ for downloads." ;;
 esac
@@ -67,15 +60,22 @@ confirm "Install PSeInt $PSEINT_VERSION into $PSEINT_DIR now?" \
 mkdir -p "$pseint_cache"
 [ -f "$pseint_cache/$PSEINT_PKG" ] || curl -fL -o "$pseint_cache/$PSEINT_PKG" "$pseint_url"
 # The checksum proves the file is exactly the published PSeInt release.
-# shasum comes with macOS; Linux has sha256sum with the same input format.
+# shasum comes with macOS; Linux and Git Bash have sha256sum, same input format.
 if has_cmd shasum; then sha_check='shasum -a 256 -c -'; else sha_check='sha256sum -c -'; fi
 echo "$PSEINT_SHA256  $pseint_cache/$PSEINT_PKG" | $sha_check \
     || fail "Checksum mismatch: delete $pseint_cache/$PSEINT_PKG and retry."
 
 rm -rf "$PSEINT_DIR"
 mkdir -p "$PSEINT_DIR"
-# macOS archive: pseint.app/...; Linux archive: pseint/...
-tar -xzf "$pseint_cache/$PSEINT_PKG" -C "$PSEINT_DIR"
+# macOS archive: pseint.app/...; Linux archive: pseint/...; Windows: a zip
+# with pseint/... Git Bash's own tar cannot read zip files, but Windows 10+
+# ships bsdtar as C:\Windows\System32\tar.exe, which can.
+# https://devblogs.microsoft.com/commandline/tar-and-curl-come-to-windows/
+case "$PSEINT_PKG" in
+    *.zip) /c/Windows/System32/tar.exe -xf "$(cygpath -m "$pseint_cache/$PSEINT_PKG")" \
+               -C "$(cygpath -m "$PSEINT_DIR")" ;;
+    *)     tar -xzf "$pseint_cache/$PSEINT_PKG" -C "$PSEINT_DIR" ;;
+esac
 
 # Read pseint-env.sh again: it now finds the unpacked interpreter.
 PSEINT=''

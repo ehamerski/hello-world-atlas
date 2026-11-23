@@ -1,0 +1,11 @@
+source: languages/fortran/meta.yml
+source_sha: 0474cdd1079a6b8edb5fa1e621465808c3c81c4f
+year_note: "equipe de Backus financiada em 1953; relatório preliminar em 1954-11-10; primeiro compilador distribuído em abril de 1957 para o IBM 704"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+humor:
+  line: "O Fortran imprime uma saudação com a paciência de uma linguagem que preferiria estar multiplicando matrizes."
+  dictionary:
+    - term: "Fortran"
+      definition: "FORmula TRANslation. Quase setenta anos depois, ainda traduz fórmulas e ainda o faz mais rápido do que o leitor espera."

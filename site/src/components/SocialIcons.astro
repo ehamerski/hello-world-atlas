@@ -1,0 +1,59 @@
+---
+// site/src/components/SocialIcons.astro - Starlight puts this component in
+// the header (wide screens) and at the foot of the menu (narrow screens).
+// The site has no social links; it holds the links to the main sections
+// instead, so every page, the Home page included, has them.
+// Overriding a component: https://starlight.astro.build/guides/overriding-components/
+import { LOCALES } from '../../i18n.mjs';
+import uiByLocale from '../generated/ui.json';
+
+const { lang, id } = Astro.locals.starlightRoute;
+const locale = LOCALES.find((l) => l.tag === lang) || LOCALES[0];
+const { strings: ui } = uiByLocale[locale.tag as keyof typeof uiByLocale];
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+// The route without its locale folder, such as "languages/python".
+const route = locale.dir && id.startsWith(`${locale.dir}/`) ? id.slice(locale.dir.length + 1) : id === locale.dir ? '' : id;
+const links = [
+  ['languages', 'nav.languages'],
+  ['compare', 'nav.compareGroup'],
+  ['about', 'nav.about'],
+].map(([section, key]) => ({
+  href: base + [locale.dir, section].filter(Boolean).join('/') + '/',
+  label: ui[key],
+  // The section the page belongs to; the page itself when it is the
+  // section's first page.
+  current: route === section ? 'page' : route.startsWith(`${section}/`) ? 'true' : undefined,
+}));
+---
+
+<nav class="header-links" aria-label={ui['header.label']}>
+  <ul>
+    {links.map((l) => <li><a href={l.href} aria-current={l.current}>{l.label}</a></li>)}
+  </ul>
+</nav>
+
+<style>
+  .header-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .header-links a {
+    display: inline-block;
+    padding-block: 0.25rem;
+    color: var(--sl-color-gray-2);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .header-links a:hover {
+    color: var(--sl-color-white);
+  }
+  .header-links a[aria-current] {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+</style>

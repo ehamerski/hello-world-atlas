@@ -1,0 +1,4 @@
+# Clojure CLI cache and compiled classes: never commit build output.
+.cpcache/
+classes/
+target/

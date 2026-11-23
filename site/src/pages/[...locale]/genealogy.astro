@@ -84,7 +84,10 @@ const urlOf = (slug: string | null) => (slug && bySlug.get(slug)?.url) || null;
 
   <figure class="figure not-content">
     <figcaption id="fig-genealogy">{ui['caption.figure']} 1. {format(ui['genealogy.graph'], { from, to })}</figcaption>
-    <div class="table-scroll">
+    <p class="scroll-hint" id="genealogy-hint">{ui['genealogy.scrollHint']}</p>
+    <!-- The box scrolls sideways; it takes the focus so a keyboard can
+         scroll it too (axe-core rule scrollable-region-focusable). -->
+    <div class="table-scroll" tabindex="0" role="region" aria-labelledby="fig-genealogy" aria-describedby="genealogy-hint">
       <svg class="chart genealogy" viewBox={`0 0 ${W} ${H}`} role="group" aria-labelledby="fig-genealogy" style={`min-width: ${W}px`}>
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

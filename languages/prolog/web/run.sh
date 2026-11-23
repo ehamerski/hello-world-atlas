@@ -11,8 +11,9 @@
 #       ./run.sh --verify   self-check used by scripts/verify-all.sh: start
 #                           the server, fetch the page once with curl, stop
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -22,6 +23,8 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, require_cmd, is_verify, wait_for_http.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# shellcheck source=../use-msys2-swipl.sh
+. ../use-msys2-swipl.sh
 
 SWIPL=${SWIPL:-swipl}
 require_cmd "$SWIPL" "SWI-Prolog runs server.pl."

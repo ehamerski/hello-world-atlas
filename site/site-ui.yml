@@ -10,18 +10,20 @@
 # Read by site/i18n.mjs.
 
 site.title: "Hello World in many languages"
+# The title shown in the header on narrow screens (below 400 px).
+site.shortTitle: "Hello World"
 site.description: "The Hello World program in many programming languages, as a command-line app, a desktop window and a web app, with the cited history of each language."
 
 # The menu (site/astro.config.mjs).
 nav.home: "Home"
 nav.startHere: "Start here"
 nav.languages: "Languages"
-nav.allLanguages: "All languages (filter)"
+nav.allLanguages: "Languages (search and filter)"
 nav.implementations: "All implementations"
 nav.timeline: "Timeline"
 nav.byLanguage: "By language"
 nav.compareGroup: "Compare"
-nav.compare: "Overview"
+nav.compare: "Comparisons"
 nav.sideBySide: "Side by side"
 nav.facts: "Measured facts"
 nav.genealogy: "Genealogy"
@@ -31,11 +33,21 @@ nav.aiEssay: "AI essay"
 nav.sources: "About the sources"
 nav.platformSupport: "Platform support"
 nav.contributing: "Contributing"
+nav.offTheRecord: "Off the record"
+
+# The links in the header of every page (src/components/SocialIcons.astro);
+# their labels are nav.languages, nav.compareGroup and nav.about.
+header.label: "Main sections"
+
+# The breadcrumb above the title of language and implementation pages
+# (src/components/PageTitle.astro).
+breadcrumb.label: "Breadcrumb"
 
 # Home banner.
 home.tagline: "One program, many languages: the Hello World program as a command-line app, a desktop window and a web app, with the history of each language."
 home.startHere: "Start here"
 home.browseLanguages: "Browse languages"
+home.compare: "Compare implementations"
 
 # Language and implementation pages. The status labels match
 # scripts/gen-readme.py, so the site and the README tables agree.
@@ -44,6 +56,12 @@ status.compromise: "🔶 compromise"
 status.not-verified: "⚠️ not verified"
 status.documented: "📄 documented only"
 language.description: "{name}: history, milestones and Hello World code."
+# The first sentence of a language page, from meta.yml. {designers} is a
+# list joined with ", " and list.and.
+language.topic: "This page covers {name}, first released in {year} and designed by {designers}."
+language.topicUndated: "This page covers {name}. It has no single year of first release: {note}."
+language.topicDesigners: "Designers: {designers}."
+list.and: " and "
 # The README heading the "Code and downloads" section is placed before.
 language.historyHeading: "History"
 code.heading: "Code and downloads"
@@ -70,13 +88,51 @@ sources.intro: "The sources each language page cites for its year and designers 
 
 # Language cards page (site/src/pages/[...locale]/languages/index.astro).
 cards.title: "Languages"
-cards.description: "Every language in this repository, filtered by paradigm, era and category."
-cards.intro: "{count} languages. Pick a paradigm, an era (the decade the language first appeared) or a category to narrow the list. Each card opens the language page with its history and code."
+cards.description: "Every language in this repository: find one by name, sort the list, and filter it by paradigm, first release and platform."
+cards.intro: "{count} languages. Find one by name, sort the list, or narrow it with the filters. Each card opens the language page with its history and code."
+cards.partial: "{count} of the {total} language pages are not translated into this language yet and are shown in English."
+cards.search: "Find a language"
+cards.searchHint: "Part of a name or of another name, for example \"script\" or \"golang\"."
+cards.sort: "Sort by"
+cards.sort.name: "Name (A–Z)"
+cards.sort.oldest: "First released (oldest first)"
+cards.sort.newest: "First released (newest first)"
+cards.sort.most: "Most implementations"
+cards.view: "Show as"
+cards.view.cards: "Cards"
+cards.view.table: "Table"
+cards.filters: "Filters"
+cards.filtersIntro: "Ticking several values in one filter adds languages to the list; ticking values in different filters narrows it. The number after a value that is not ticked is how many languages ticking it would show."
+cards.paradigmsLink: "What the paradigms mean"
 cards.paradigm: "Paradigm"
-cards.era: "Era"
-cards.category: "Category"
-cards.all: "all"
-cards.shown: "{shown} of {total} shown"
+cards.released: "First released"
+cards.platform: "Platform"
+cards.pageLanguage: "Page language"
+cards.kind.cli: "Command line"
+cards.kind.desktop: "Desktop"
+cards.kind.web: "Web server"
+cards.kind.web-frontend: "Web front end"
+cards.kind.mobile: "Mobile"
+cards.page.translated: "Translated"
+cards.page.english: "In English only"
+cards.applied: "Applied"
+cards.searchChip: "Name"
+cards.remove: "remove"
+cards.clear: "Clear all"
+cards.copy: "Copy link to this list"
+cards.copied: "Link copied."
+cards.copyFailed: "The link could not be copied; copy it from the address bar."
+cards.shown: "{shown} of {total} languages, sorted by {sort}"
+cards.empty: "No languages match these filters."
+cards.emptySearch: "No languages match \"{q}\" with these filters."
+cards.alsoCalled: "also called {name}"
+cards.tableCaption: "Languages, sorted by {sort}"
+cards.col.language: "Language"
+cards.col.released: "First released"
+cards.col.paradigms: "Paradigms"
+cards.col.platforms: "Platforms"
+cards.col.implementations: "Implementations"
+cards.inEnglish: "Page in English"
 cards.noSingleYear: "no single year"
 cards.implementation: "implementation"
 cards.implementations: "implementations"
@@ -85,8 +141,9 @@ cards.implementations: "implementations"
 caption.table: "Table"
 caption.figure: "Figure"
 
-# The footer link (site/src/components/Footer.astro).
-footer.offTheRecord: "Off the record"
+# The page shown for an address that does not exist.
+notFound.title: "Page not found"
+notFound.text: "Check the address, or use the search bar."
 
 # Off the record: the box at the end of each language page and the
 # attribution of the jokes kept in meta.yml (humor.jokes), scripts/generate.mjs.
@@ -127,7 +184,8 @@ compare.noScript: "Without JavaScript the first two implementations are shown."
 # Measured facts page (site/src/pages/[...locale]/facts.astro).
 facts.title: "Measured facts"
 facts.description: "Lines of code, comments, dependencies, build output size and run time of every Hello World implementation, measured by a script."
-facts.intro: "Every number on this page was measured by `site/scripts/measure-facts.mjs` and saved in `site/data/facts.json`. Run the script again to reproduce or update them."
+facts.intro: "The size, dependencies, build output and run time of every Hello World implementation, measured on {date}. The Method and Machine sections below say how they were measured and on which computer."
+facts.methodScript: "A script measured every number: `site/scripts/measure-facts.mjs`, which saves them in `site/data/facts.json`. Run it again to reproduce or update them."
 facts.method: "Method"
 facts.machine: "Machine"
 facts.measuredOn: "Measured on {date}."
@@ -170,3 +228,4 @@ genealogy.source: "Source"
 genealogy.quote: "What the source says"
 genealogy.outside: "outside this repository"
 genealogy.none: "No cited influence yet:"
+genealogy.scrollHint: "The diagram is wider than the page: scroll it sideways to see the later languages."

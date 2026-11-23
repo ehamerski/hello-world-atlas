@@ -1,0 +1,35 @@
+# languages/julia/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Julia"
+year: 2012
+year_note: "Julia has been in development since 2009; the public release was announced on 2012-02-14; version 1.0 followed on 2018-08-08"
+designers:
+  - "Jeff Bezanson"
+  - "Stefan Karpinski"
+  - "Viral B. Shah"
+  - "Alan Edelman"
+paradigms:
+  - "multi-paradigm"
+  - "imperative"
+  - "functional"
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "Julia 1.13.4 (official tarball, `julia --startup-file=no`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+    note: "no build step: julia compiles each function when the program first calls it"
+sources:
+  - title: "Why We Created Julia. Jeff Bezanson, Stefan Karpinski, Viral B. Shah, Alan Edelman. The Julia Project, 2012-02-14"
+    url: "https://julialang.org/blog/2012/02/why-we-created-julia/"
+  - title: "Julia: A Fresh Approach to Numerical Computing. Jeff Bezanson, Alan Edelman, Stefan Karpinski, Viral B. Shah. arXiv:1411.1607 (SIAM Review 59(1), 2017)"
+    url: "https://arxiv.org/abs/1411.1607"
+  - title: "Julia Documentation, Introduction (Julia 1.13). The Julia Project"
+    url: "https://docs.julialang.org/en/v1.13/"
+  - title: "Announcing the release of Julia 1.0. The Julia Project, 2018-08-08"
+    url: "https://julialang.org/blog/2018/08/one-point-zero/"
+# humor: one light remark for the Off the record page.
+humor:
+  line: "Julia wants the speed of C, and it compiles each function the first time you call it, so even a one-line program waits for its own compiler."

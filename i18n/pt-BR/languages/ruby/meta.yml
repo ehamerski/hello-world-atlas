@@ -1,0 +1,13 @@
+source: languages/ruby/meta.yml
+source_sha: 55c6d5467db6e4018b3d729cf68379d089d6dbca
+year_note: "concebido em 1993-02-24; Ruby 0.95 divulgado em grupos de notícias japoneses em dezembro de 1995, a primeira versão pública"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "O Ruby recebeu o nome de uma pedra de nascimento, e o tema das joias nunca acabou: uma biblioteca é uma gem, e o arquivo que as lista é um Gemfile."
+  dictionary:
+    - term: "gem"
+      definition: "uma biblioteca Ruby que, ao contrário da pedra, se instala com um único comando e em geral não custa nada."

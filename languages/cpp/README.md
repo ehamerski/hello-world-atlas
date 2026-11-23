@@ -18,9 +18,9 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Apple clang 21 + CMake 4.4, standard library only (`std::cout`) | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | Apple clang 21 + CMake 4.4 + Qt 6.12 Widgets (`qtbase`) | ✅ verified on macOS Intel |
-| web | [web/](web/) | Apple clang 21 + CMake 4.4 + cpp-httplib 0.64 (header-only) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | CMake, C++20 | ✅ |
+| desktop | [desktop/](desktop/) | Qt 6 Widgets, CMake | ✅ |
+| web | [web/](web/) | cpp-httplib, CMake | ✅ |
 
 All three are compiled as **ISO C++20** (`-std=c++20`, no compiler
 extensions, `-pedantic-errors`) and built with **CMake**. Each folder is

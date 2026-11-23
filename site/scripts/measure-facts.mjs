@@ -4,8 +4,9 @@
 // WHAT: for every folder languages/<lang>/<folder>/ it records
 //   - code and comment lines of the main source file (counted by
 //     source-code.mjs, the same rules the Anatomy sections use);
-//   - the number of source files (tracked files that are not the README,
-//     a .sh script, a lock file or a binary);
+//   - the number of source files (files git knows, tracked or new and not
+//     ignored, that are not the README, a .sh script, a lock file or a
+//     binary; generate.mjs reads the same files);
 //   - direct dependencies declared in the folder's manifests
 //     (package.json, Cargo.toml, go.mod, requirements.txt, pom.xml, *.csproj,
 //     *.cabal); toolchains and standard libraries are not counted;
@@ -24,6 +25,11 @@
 //   node site/scripts/measure-facts.mjs --static   # only the counts, no builds or runs;
 //                                                  # keeps earlier times from facts.json
 //   node site/scripts/measure-facts.mjs --only c/cli,go/cli   # re-measure some cli folders
+//                                                  # (a language folder, "go", means all of its folders)
+//   node site/scripts/measure-facts.mjs --check [--only python]
+//       measure nothing and write nothing; fail when facts.json is out of
+//       date: an implementation is missing or gone, its counts changed, or
+//       a cli implementation with a run.sh has no run time.
 // Each implementation's toolchain must be installed (its install.sh) for
 // its build output and run time to be measured; otherwise they are null
 // with the reason in "error".
@@ -34,7 +40,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
-import { GREETING, countLines, mainFile } from './source-code.mjs';
+import { GREETING, countLines, isScript, mainFile } from './source-code.mjs';
 
 const SITE = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const ROOT = path.dirname(SITE);
@@ -45,12 +51,15 @@ const args = process.argv.slice(2);
 const STATIC = args.includes('--static');
 const onlyAt = args.indexOf('--only');
 const ONLY = onlyAt >= 0 ? new Set((args[onlyAt + 1] || '').split(',').filter(Boolean)) : null;
+const CHECK = args.includes('--check');
+const selected = (id) => !ONLY || ONLY.has(id) || ONLY.has(id.split('/')[0]);
 
 const git = (...a) => execFileSync('git', a, { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean);
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
 
-// Files that are not "source": documentation, scripts, lock files, binaries.
-const NOT_SOURCE = /(^|\/)(README\.md|\.gitignore|package-lock\.json|Cargo\.lock|go\.sum|[^/]*\.lock)$|\.(sh|png|jpe?g|gif|svg|ico|icns|zip|jar|ttf|woff2?)$/i;
+// Files that are not "source": documentation, scripts (isScript in
+// source-code.mjs), lock files, binaries.
+const NOT_SOURCE = /(^|\/)(README\.md|\.gitignore|package-lock\.json|Cargo\.lock|go\.sum|[^/]*\.lock)$|\.(png|jpe?g|gif|svg|ico|icns|zip|jar|ttf|woff2?)$/i;
 
 // Direct dependencies per manifest. Each counter reads only the section
 // that lists dependencies of the program itself.
@@ -134,7 +143,7 @@ function machine() {
 }
 
 const previous = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : { impls: {} };
-const tracked = git('ls-files', 'languages');
+const tracked = git('ls-files', '--cached', '--others', '--exclude-standard', 'languages');
 const result = { measuredOn: new Date().toISOString().slice(0, 10), runs: RUNS, machine: machine(), impls: {} };
 if (STATIC || ONLY) {
   // Partial run: the times and the machine of the previous full run stay.
@@ -149,17 +158,17 @@ for (const slug of slugs) {
     const id = `${slug}/${cat.folder}`;
     const dir = `languages/${id}`;
     const names = tracked.filter((f) => f.startsWith(dir + '/')).map((f) => f.slice(dir.length + 1));
-    const file = mainFile(names, (f) => read(`${dir}/${f}`));
-    const lines = file ? countLines(read(`${dir}/${file}`), file) : null;
+    const file = mainFile(names, (f) => read(`${dir}/${f}`), slug);
+    const lines = file ? countLines(read(`${dir}/${file}`), file, slug) : null;
     const deps = names.filter(isManifest).reduce((n, f) => n + countDeps(f, read(`${dir}/${f}`)), 0);
     const facts = {
       kind: cat.kind, file, codeLines: lines && lines.code, commentLines: lines && lines.comment,
-      files: names.filter((f) => !NOT_SOURCE.test(f)).length, deps,
+      files: names.filter((f) => !NOT_SOURCE.test(f) && !isScript(f, slug)).length, deps,
       steps: scriptSteps(dir, 'build.sh') + scriptSteps(dir, 'run.sh'),
       buildBytes: null, runMs: null,
     };
     const old = previous.impls[id] || {};
-    if (cat.kind === 'cli' && !STATIC && (!ONLY || ONLY.has(id))) {
+    if (cat.kind === 'cli' && !STATIC && !CHECK && selected(id)) {
       process.stderr.write(`measuring ${id} ... `);
       const measured = measureRun(dir);
       delete facts.error;
@@ -170,6 +179,38 @@ for (const slug of slugs) {
     }
     result.impls[id] = facts;
   }
+}
+
+// --check: compare what was just counted with facts.json. The run times
+// are not measured again (that needs every toolchain and takes minutes);
+// only their presence is checked.
+if (CHECK) {
+  const COUNTS = ['kind', 'file', 'codeLines', 'commentLines', 'files', 'deps', 'steps'];
+  const problems = [];
+  for (const [id, facts] of Object.entries(result.impls)) {
+    if (!selected(id)) continue;
+    const old = previous.impls[id];
+    if (!old) { problems.push(`${id}: not in facts.json`); continue; }
+    const changed = COUNTS.filter((k) => old[k] !== facts[k]);
+    if (changed.length) {
+      problems.push(`${id}: ${changed.map((k) => `${k} is ${JSON.stringify(facts[k])}, facts.json says ${JSON.stringify(old[k])}`).join('; ')}`);
+    }
+    const hasRun = fs.existsSync(path.join(ROOT, 'languages', id, 'run.sh'));
+    if (facts.kind === 'cli' && hasRun && typeof old.runMs !== 'number') {
+      problems.push(`${id}: no run time in facts.json${old.error ? ` (${old.error})` : ''}`);
+    }
+  }
+  for (const id of Object.keys(previous.impls)) {
+    if (selected(id) && !(id in result.impls)) problems.push(`${id}: in facts.json, but not in any meta.yml`);
+  }
+  for (const p of problems) console.error(`error: ${p}`);
+  if (problems.length) {
+    console.error('Measure again: node site/scripts/measure-facts.mjs --only <lang> (or --static for the counts only)');
+    process.exit(1);
+  }
+  const n = Object.keys(result.impls).filter(selected).length;
+  console.log(`ok: facts.json is up to date for ${n} implementations`);
+  process.exit(0);
 }
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });

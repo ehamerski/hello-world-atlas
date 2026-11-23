@@ -1,0 +1,13 @@
+source: languages/go/meta.yml
+source_sha: c407e227ccbf9df7afa23606db339bf902f1f409
+year_note: "projeto iniciado em 2007-09-21; lançamento público como código aberto em 2009-11-10; Go 1 em 2012-03-28"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "O `gofmt` encerra toda discussão sobre onde ficam as chaves não aceitando perguntas."
+  dictionary:
+    - term: "Go"
+      definition: "uma linguagem em que uma a cada três linhas é `if err != nil`, para que nenhum erro passe despercebido, nem o tratamento de erros."

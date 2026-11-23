@@ -15,9 +15,9 @@ See also: [paradigms](../../docs/paradigms.md#every-language-and-its-paradigm)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | CPython 3.14 | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | CPython 3.14 + tkinter (Tcl/Tk) | ✅ verified on macOS Intel |
-| web | [web/](web/) | CPython 3.14 + Flask 3.1.3 | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | CPython | ✅ |
+| desktop | [desktop/](desktop/) | tkinter (standard library) | ✅ |
+| web | [web/](web/) | Flask | ✅ |
 
 ## History
 Guido van Rossum started Python at CWI in the Netherlands. The official

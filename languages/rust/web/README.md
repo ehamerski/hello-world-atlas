@@ -139,8 +139,15 @@ Open [`src/main.rs`](src/main.rs) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Rust 1.98.1, Axum 0.8.9, Tokio 1.54.1. The executable is 1.6 MB. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Rust with rustup and a C linker, as in [../cli](../cli/README.md#platform-notes). No other system library is needed. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Rust with rustup and the MSVC Build Tools, as in [../cli](../cli/README.md#platform-notes). The executable is `target\release\hello-web.exe`; native commands (PowerShell): `cargo build --release --locked`, then `$env:PORT=8080; .\target\release\hello-web.exe`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` downloads the rustup installer script from `https://sh.rustup.rs` [10] and runs it when Rust 1.85 or newer is missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Rust: if Rust 1.85 or newer is missing it prints `winget install --id Rustlang.Rustup -e` [13] and stops. rustup needs the Visual Studio C++ Build Tools [14]. |
+
+**The rustup script is not digest-checked.** rustup publishes SHA-256
+files for the `rustup-init` programs, but not for the `rustup-init.sh`
+script behind `https://sh.rustup.rs` [18], and that script changes with each
+rustup release. So `install.sh` saves it to
+`~/.cache/hello-world-rust/rustup-init.sh` and shows the path, so you can
+read the script before you answer `y` to run it.
 
 ## Expected output
 `./run.sh` prints the following lines and keeps running:
@@ -179,3 +186,4 @@ date: Sat, 31 Oct 2026 21:26:29 GMT
 8. Asynchronous Programming in Rust: async and await. The Rust Async Working Group. <https://rust-lang.github.io/async-book/part-guide/async-await.html> (accessed 2026-10-31)
 9. crates.io API: `axum` 0.8.9, `tokio` 1.54.1 (publish date, `rust_version`). crates.io. <https://crates.io/api/v1/crates/axum/0.8.9> and <https://crates.io/api/v1/crates/tokio/1.54.1> (accessed 2026-10-31)
 10. Stack Overflow Developer Survey 2026: Technology data (web frameworks and technologies). Stack Overflow. <https://survey.stackoverflow.co/2026/technology/data> (accessed 2026-10-31)
+18. The rustup book: Other installation methods. The Rust Project. <https://rust-lang.github.io/rustup/installation/other.html> (accessed 2026-11-19)

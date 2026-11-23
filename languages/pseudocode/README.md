@@ -23,11 +23,11 @@ Pseudocode has no desktop or web category (see
 [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version)).
 Each variant has one folder.
 
-| Variant | Folder | Region / course | How it runs | Status |
+| Variant | Folder | Region / course | Toolchain | Status |
 |---|---|---|---|---|
-| **Portugol** (VisuAlg dialect) | [portugol/](portugol/) | Brazil (Portuguese), CS1 | Delégua interpreter (Node.js) | ✅ runnable |
-| **PSeInt** | [pseint/](pseint/) | Spanish-speaking countries, CS1 | PSeInt's own interpreter | ✅ runnable |
-| **CLRS-style** textbook pseudocode | [clrs/](clrs/) | English-language algorithms courses | no interpreter exists | 📄 documented only |
+| **Portugol** (VisuAlg dialect) | [portugol/](portugol/) | Brazil (Portuguese), CS1 | Delégua interpreter (VisuAlg dialect), via npm | ✅ |
+| **PSeInt** | [pseint/](pseint/) | Spanish-speaking countries, CS1 | PSeInt | ✅ |
+| **CLRS-style** textbook pseudocode | [clrs/](clrs/) | English-language algorithms courses | none: documented only | 📄 |
 
 ## Selection method
 1. **Candidates.** Five: the Portugol family
@@ -278,7 +278,7 @@ count of Latin American universities that use PSeInt.
 11. PSeInt download statistics. SourceForge. <https://sourceforge.net/projects/pseint/files/stats/json?start_date=2000-01-01&end_date=2026-11-01> (accessed 2026-11-02)
 12. PSeInt project page. SourceForge. <https://sourceforge.net/projects/pseint/> (accessed 2026-11-02)
 13. Q&A: What makes a bestselling textbook? (Introduction to Algorithms). MIT News, 2022-02-23. <https://news.mit.edu/2022/qa-what-makes-bestselling-textbook-introduction-algorithms-0223> (accessed 2026-11-02)
-14. Cormen, T. H. `clrscode`: LaTeX package for CLRS pseudocode. Dartmouth College. <https://www.cs.dartmouth.edu/~thc/clrscode/> (accessed 2026-11-02)
+14. Cormen, T. H. `clrscode`: LaTeX package for CLRS pseudocode. Dartmouth College. <https://web.archive.org/web/20250210061943/https://www.cs.dartmouth.edu/~thc/clrscode/> (accessed 2026-11-02)
 15. 2027 - 2029 Pseudocode Guide (AS & A Level Computer Science 9618). Cambridge University Press & Assessment, 2024. <https://www.cambridgeinternational.org/Images/721401-2027-2029-pseudocode-guide.pdf> (accessed 2026-11-02)
 16. Cook, D. D. Flowgorithm: Principles for Teaching Introductory Programming Using Flowcharts. ASEE Pacific Southwest Conference 2015. <https://peer.asee.org/54443.pdf> (accessed 2026-11-02)
 17. DevinCook.Flowgorithm 4.5.0 manifest. microsoft/winget-pkgs, GitHub. <https://github.com/microsoft/winget-pkgs/tree/master/manifests/d/DevinCook/Flowgorithm/4.5.0> (accessed 2026-11-02)
@@ -293,4 +293,4 @@ count of Latin American universities that use PSeInt.
 26. Kazemitabaar, M. et al. How Novices Use LLM-Based Code Generators to Solve CS1 Coding Tasks in a Self-Paced Learning Environment. Koli Calling 2023. arXiv 2309.14049. <https://arxiv.org/pdf/2309.14049> (accessed 2026-11-02)
 27. Nguyen, S. et al. How Beginning Programmers and Code LLMs (Mis)read Each Other. CHI 2024. arXiv 2401.15232. <https://arxiv.org/abs/2401.15232v2> (accessed 2026-11-02)
 28. "Perfiles" (Profiles). PSeInt. <https://pseint.sourceforge.net/index.php?page=perfiles.php> (accessed 2026-11-02)
-29. Cormen, T. H. Using the clrscode3e Package in LaTeX 2e (manual). Dartmouth College. <https://www.cs.dartmouth.edu/~thc/clrscode/clrscode3e.pdf> (accessed 2026-11-02)
+29. Cormen, T. H. Using the clrscode3e Package in LaTeX 2e (manual). Dartmouth College. <https://web.archive.org/web/20250328084750/https://www.cs.dartmouth.edu/~thc/clrscode/clrscode3e.pdf> (accessed 2026-11-02)

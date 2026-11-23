@@ -1,0 +1,27 @@
+# languages/scala/meta.yml - facts about this language, read by
+# scripts/gen-readme.py. Schema: languages/README.md#metayml-schema.
+# year and designers are cited in README.md; the same sources are below.
+name: "Scala"
+year: 2003
+year_note: "Martin Odersky and his group at EPFL designed Scala from 2001; the first public release was in 2003; Scala 3 was announced in May 2021"
+designers:
+  - "Martin Odersky"
+paradigms:
+  - "multi-paradigm"
+  - "functional"
+  - "object-oriented"
+categories:
+  - folder: "cli"
+    kind: "cli"
+    toolchain: "JDK 21, Scala 3.10.1 (`scalac`, `scala`)"
+    run: "prints `Hello, World!`"
+    status: "verified"
+sources:
+  - title: "Scala's Prehistory. Scala project (archived site)"
+    url: "https://www.scala-lang.org/old/node/239"
+  - title: "An Overview of the Scala Programming Language, Second Edition. Martin Odersky et al., EPFL, LAMP-REPORT-2006-001"
+    url: "https://www.scala-lang.org/docu/files/ScalaOverview.pdf"
+# humor: one light line for the Off the record page and the box at the
+# end of the language page (languages/README.md#humor-keys).
+humor:
+  line: "A Scala Hello World is one line long, and the compiler still takes a moment to admire it first."

@@ -152,8 +152,8 @@ block.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | SWI-Prolog 10.0.2 from Homebrew, built from source (no Intel bottle) [2]. |
 | macOS Apple Silicon | ⚠️ not verified | `brew install swi-prolog` installs a pre-built bottle [2]. Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | See the [cli platform notes](../cli/README.md#platform-notes) for the packages. Same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install SWI-Prolog as in the [cli platform notes](../cli/README.md#platform-notes). In PowerShell or Command Prompt: `swipl server.pl` (port 8080 unless `PORT` is set). WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `swi-prolog-nox` with apt when `swipl` is missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 packages `swi-prolog-core` and `swi-prolog-packages` with `pacman` when `swipl` is missing. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 `./run.sh` (the server keeps running until Ctrl+C):

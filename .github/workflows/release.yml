@@ -2,15 +2,22 @@
 #
 # WHAT: for a tag vX.Y.Z, runs scripts/package-downloads.sh at that tag (one
 #   ZIP per implementation + SHA256SUMS, only committed files, no build
-#   output) and creates a GitHub release with them attached. The release is
-#   a draft, so a person reads it before anyone else can see it.
+#   output) and creates a GitHub release with them attached. The release
+#   notes are the section of CHANGELOG.md for that version (## [X.Y.Z]);
+#   the job fails if the section is missing or empty. The release is a
+#   draft, so a person reads it before anyone else can see it.
 #
 # WHEN: when a tag v* is pushed, or by hand with a tag name. Tags are only
-#   created for releases, so this runs rarely.
+#   created for releases, so this runs rarely. It is the only workflow that
+#   a tag starts.
+#
+# PERMISSIONS: the workflow token can only read; the one job that creates
+#   the release gets contents: write.
 #
 # References:
 #   Tag filters: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onpushbranchestagsbranches-ignoretags-ignore
 #   gh release create: https://cli.github.com/manual/gh_release_create
+#   Changelog format: https://keepachangelog.com/en/1.1.0/
 #   GITHUB_TOKEN permissions: https://docs.github.com/en/actions/reference/security/secure-use#use-the-principle-of-least-privilege
 
 name: release
@@ -26,24 +33,39 @@ on:
         type: string
 
 permissions:
-  contents: write   # create the release and upload the ZIPs
+  contents: read
 
 jobs:
   zips:
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write   # create the release and upload the ZIPs
     timeout-minutes: 10
     env:
       TAG: ${{ inputs.tag || github.ref_name }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ env.TAG }}
       - name: Package every implementation
         run: REF="$TAG" scripts/package-downloads.sh dist/downloads
+      - name: Take the release notes from CHANGELOG.md
+        run: |
+          # v2.0.0 -> the lines after "## [2.0.0]" up to the next "## [".
+          mkdir -p dist
+          awk -v head="## [${TAG#v}]" '
+            /^## \[/ { p = (index($0, head) == 1); next }
+            p
+          ' CHANGELOG.md > dist/notes.md
+          if ! grep -q '[^[:space:]]' dist/notes.md; then
+            echo "CHANGELOG.md has no section for ${TAG#v}" >&2
+            exit 1
+          fi
+          printf '\n### Downloads\nOne ZIP per implementation. Unzip, then run install.sh, build.sh, and run.sh in the folder. Check the downloads with: sha256sum -c SHA256SUMS\n' >> dist/notes.md
       - name: Create a draft release with the ZIPs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$TAG" dist/downloads/*.zip dist/downloads/SHA256SUMS \
             --draft --verify-tag --title "$TAG" \
-            --notes "One ZIP per implementation. Unzip, then run install.sh, build.sh, and run.sh in the folder. Check the downloads with: sha256sum -c SHA256SUMS"
+            --notes-file dist/notes.md

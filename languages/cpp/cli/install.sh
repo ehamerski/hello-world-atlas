@@ -12,8 +12,9 @@
 #       how a C++ project is built, and ../desktop (Qt) builds with it.
 # HOW:  ./install.sh       (run once; safe to run again)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 # Sources for the install commands:
 #   https://developer.apple.com/xcode/resources/   (Command Line Tools)
 #   https://formulae.brew.sh/formula/cmake
@@ -30,18 +31,19 @@ cd -- "$(dirname -- "$0")"
 # fix_developer_dir.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
-
-windows_hint() {
-    explain "Install MSYS2 (https://www.msys2.org/), then in the 'MSYS2 UCRT64' shell:"
-    explain "    pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake"
-    explain "and add C:\\msys64\\ucrt64\\bin to PATH. Reopen Git Bash."
-}
+# On Windows: MSYS2's UCRT64 tools and DLLs first on PATH (no effect elsewhere).
+# shellcheck source=../msys2-env.sh
+. ../msys2-env.sh
 
 step "1/2 Check whether a C++ compiler is installed"
 explain "WHY: 'c++' compiles hello.cpp. It is the traditional name of the system's"
 explain "     C++ compiler: Apple clang on macOS, usually g++ on Linux."
 fix_developer_dir
-if has_cmd c++ && c++ --version >/dev/null 2>&1; then
+if [ "$TF_OS" = windows ]; then
+    # Not just any 'c++': it must be MSYS2's g++, the compiler of its libraries.
+    msys2_ensure "g++ and the build tools" gcc cmake ninja
+    ok "C++ compiler found: $(g++ --version 2>&1 | head -n 1)"
+elif has_cmd c++ && c++ --version >/dev/null 2>&1; then
     ok "C++ compiler found: $(c++ --version 2>&1 | head -n 1)"
 else
     warn "No working C++ compiler ('c++') was found."
@@ -52,14 +54,17 @@ else
             fail "Finish Apple's installer window, then run ./install.sh again." ;;
         linux)
             install_pkg "g++ (build-essential)" sudo apt-get install -y build-essential || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
         *) fail "Unknown OS. Install g++ or clang++ with your system's package manager." ;;
     esac
 fi
 
 step "2/2 Check whether CMake is installed"
 explain "WHY: CMake reads CMakeLists.txt and generates the build files that call the compiler."
-if has_cmd cmake; then
+if [ "$TF_OS" = windows ]; then
+    # Installed with the compiler above (MSYS2's cmake and ninja); the
+    # Visual Studio CMake on a Windows runner would pick MSVC, not g++.
+    ok "CMake found: $(cmake --version | head -n 1)"
+elif has_cmd cmake; then
     ok "CMake found: $(cmake --version | head -n 1)"
 else
     warn "CMake was not found."
@@ -69,7 +74,6 @@ else
             install_pkg "CMake" brew install cmake || exit 1 ;;
         linux)
             install_pkg "CMake" sudo apt-get install -y cmake || exit 1 ;;
-        windows) windows_hint; exit 1 ;;
         *) fail "Unknown OS. Install CMake from https://cmake.org/download/." ;;
     esac
 fi

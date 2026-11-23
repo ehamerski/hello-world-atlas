@@ -60,8 +60,11 @@ standard (or the standard of its era, or its maintained successor).
 Every claim cited. -->
 
 ## Platform notes
-<!-- only macOS Intel is verified on the development machine. Keep the
-"not verified" marks unless the steps were really run on that platform. -->
+<!-- macOS Intel is verified on the development machine. Linux and Windows
+(Git Bash) say "verified in CI (<date>)" only after a run of
+.github/workflows/ci-matrix.yml passed for this folder, with that run's
+date. Keep the "not verified" marks unless the steps were really run on
+that platform. -->
 | Platform | Status | Notes |
 |---|---|---|
 | macOS Intel | ✅ verified (<date>) | <...> |

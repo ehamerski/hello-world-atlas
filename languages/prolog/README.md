@@ -51,9 +51,9 @@ logic programs.
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | SWI-Prolog 10.0.2 interpreter (`swipl hello.pl`), installed with Homebrew | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | SWI-Prolog | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop version](#why-there-is-no-desktop-version) | – |
-| web | [web/](web/) | SWI-Prolog's built-in HTTP server libraries (`library(http/thread_httpd)`, `http_dispatch`) | ✅ verified on macOS Intel |
+| web | [web/](web/) | SWI-Prolog HTTP libraries | ✅ |
 
 ## History
 Prolog was born in Marseille, from work on natural language. Alain

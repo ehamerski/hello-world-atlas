@@ -1,0 +1,2 @@
+# The local LuaRocks tree that install.sh fills (Pegasus and its dependencies).
+rocks/

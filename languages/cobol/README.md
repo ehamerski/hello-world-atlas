@@ -17,7 +17,7 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | COBOL-85, fixed format · GnuCOBOL 3.2 (`cobc -x`) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | GnuCOBOL | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version) | – |
 | web | – | not implemented, same section | – |
 

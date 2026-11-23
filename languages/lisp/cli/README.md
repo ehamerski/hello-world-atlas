@@ -162,8 +162,8 @@ Open [`hello.lisp`](hello.lisp) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-11-01) | SBCL 2.6.10 from Homebrew, built from source (no Intel bottle; builds with `ecl`) [4]. |
 | macOS Apple Silicon | ⚠️ not verified | `brew install sbcl` installs a pre-built bottle [4]. Same commands. |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | `sudo apt-get install -y sbcl`. Debian stable (trixie) has SBCL 2.5.2 [15], older than 2.6.10; the newest Linux binaries are on sbcl.org [3][5]. Same commands. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Install the SBCL 2.6.10 `.msi` for x86-64 or ARM64 from the sbcl.org download page [3], add the SBCL folder to `PATH`, and reopen Git Bash. Name the output `bin/hello-cli.exe`. WSL behaves like Linux. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` installs `sbcl` with apt when missing. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` needs MSYS2 in `C:\msys64` and installs the UCRT64 package `sbcl` with `pacman` when `sbcl` is missing. WSL not verified; it behaves like Linux. |
 
 ## Expected output
 ```text

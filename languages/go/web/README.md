@@ -119,8 +119,8 @@ Open [`main.go`](main.go) next to this list.
 |---|---|---|
 | macOS Intel | ✅ verified (2026-10-31) | Go 1.27.3. |
 | macOS Apple Silicon | ⚠️ not verified | Same commands (`brew install go`). |
-| Linux (Debian/Ubuntu) | ⚠️ not verified | Go from the official archive, as in [../cli](../cli/README.md#platform-notes). `curl` may need `sudo apt-get install curl`. |
-| Windows (Git Bash / WSL) | ⚠️ not verified | Go with `winget install --id GoLang.Go -e`. Native commands (PowerShell): `go build -o bin\hello-web.exe .`, then `.\bin\hello-web.exe`. |
+| Linux (Debian/Ubuntu) | ✅ verified in CI (2026-11-06) | GitHub Actions `ubuntu-latest` (Ubuntu 26.04, x86_64). `install.sh` does not install Go: if Go 1.22 or newer is missing it prints the go.dev archive steps [6] and stops. |
+| Windows (Git Bash / WSL) | ✅ verified in CI (2026-11-06) | GitHub Actions `windows-latest` (Windows Server 2025), Git Bash. `install.sh` does not install Go: if Go 1.22 or newer is missing it prints `winget install --id GoLang.Go -e` [12] and stops. |
 
 ## Expected output
 `./run.sh` (the server keeps running until Ctrl+C):

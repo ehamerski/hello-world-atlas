@@ -15,8 +15,8 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | ISO 7185 Standard Pascal · Free Pascal 3.2.2 (`fpc -Miso`) | ✅ verified on macOS Intel |
-| desktop | [desktop/](desktop/) | Object Pascal · Lazarus 4.8 LCL (Cocoa on macOS), built with `lazbuild` · Free Pascal 3.2.2 | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | Free Pascal (ISO 7185 mode) | ✅ |
+| desktop | [desktop/](desktop/) | Lazarus LCL (`lazbuild`) | ✅ |
 | web | – | not implemented, see [Why there is no web version](#why-there-is-no-web-version) | – |
 
 ## History

@@ -17,7 +17,7 @@ compares with the others) and [comparisons](../../docs/comparisons.md)
 ## Implementations
 | Category | Folder | Toolchain | Status |
 |---|---|---|---|
-| cli | [cli/](cli/) | Ada 2022 · GNAT 16.2 via Alire 2.1.1 (`alr build`) | ✅ verified on macOS Intel |
+| cli | [cli/](cli/) | GNAT via Alire | ✅ |
 | desktop | – | not implemented, see [Why there is no desktop or web version](#why-there-is-no-desktop-or-web-version) | – |
 | web | – | not implemented, same section | – |
 

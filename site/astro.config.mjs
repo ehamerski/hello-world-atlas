@@ -47,10 +47,25 @@ export default defineConfig({
         './src/styles/theme.css',
         './src/styles/site.css',
       ],
-      // Starlight shows no "not translated" notice on splash pages (Home);
-      // this override adds it. https://starlight.astro.build/guides/overriding-components/
-      // Footer: adds the "Off the record" link, which is in no menu.
-      components: { Hero: './src/components/Hero.astro', Footer: './src/components/Footer.astro' },
+      // Overridden components: https://starlight.astro.build/guides/overriding-components/
+      // Hero: Starlight shows no "not translated" notice on splash pages
+      // (Home); this override adds it. SiteTitle: a short title on narrow
+      // screens. SocialIcons: the header links to the main sections.
+      // PageTitle: a breadcrumb above the title of language and
+      // implementation pages.
+      components: {
+        Hero: './src/components/Hero.astro',
+        SiteTitle: './src/components/SiteTitle.astro',
+        SocialIcons: './src/components/SocialIcons.astro',
+        PageTitle: './src/components/PageTitle.astro',
+      },
+      // Fence names used in the Markdown that Shiki does not know: the same
+      // ids as for the source files in scripts/generate.mjs (QB64 BASIC and
+      // Eiffel have no Shiki grammar, so they stay plain text).
+      // https://expressive-code.com/key-features/syntax-highlighting/#langalias
+      expressiveCode: {
+        shiki: { langAlias: { nasm: 'asm', fortran: 'fortran-free-form', basic: 'txt', eiffel: 'txt' } },
+      },
       // English at the root URL, other languages under /<dir>/ (site/i18n.mjs).
       // With two or more locales Starlight shows a language picker.
       // https://starlight.astro.build/guides/i18n/
@@ -84,6 +99,7 @@ export default defineConfig({
         link('nav.platformSupport', '/platform-support/'),
         link('nav.contributing', '/contributing/'),
         link('nav.about', '/about/'),
+        link('nav.offTheRecord', '/off-the-record/'),
       ],
     }),
   ],

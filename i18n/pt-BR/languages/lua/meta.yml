@@ -1,0 +1,13 @@
+source: languages/lua/meta.yml
+source_sha: 2a3dec5d66d9949d2bf42304b99a331767822ae1
+year_note: "nascida em 1993 no Tecgraf, PUC-Rio; primeira versão pública, Lua 1.1, em julho de 1994"
+categories:
+  - folder: "cli"
+    run: "imprime `Hello, World!`"
+  - folder: "desktop"
+    run: "janela"
+humor:
+  line: "O Lua oferece uma única estrutura de dados, a tabela, e pede que ela seja o array, o registro, o módulo e a classe. A tabela nunca reclama."
+  dictionary:
+    - term: "Lua"
+      definition: "uma linguagem cujo manual afirma que as tabelas são o único mecanismo de estruturação de dados e cujos programadores respondem a toda pergunta sobre estrutura com mais uma tabela."

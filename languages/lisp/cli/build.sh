@@ -21,8 +21,9 @@
 #                            computer
 # HOW:  ./build.sh             (after ./install.sh; run again after editing)
 #
-# Platforms: macOS Intel (verified on the dev machine); macOS Apple Silicon,
-# Linux and Windows (Git Bash / WSL) are documented but NOT verified.
+# Platforms: macOS Intel (verified on the dev machine); Linux and Windows
+# (Git Bash) verified in CI; macOS Apple Silicon and WSL are documented but
+# NOT verified.
 
 # -e: stop at the first failing command; -u: using an unset variable is an error.
 set -eu
@@ -32,6 +33,8 @@ cd -- "$(dirname -- "$0")"
 # Shared helpers: step/explain/ok/fail, require_cmd.
 # shellcheck source=../../../scripts/common.sh
 . ../../../scripts/common.sh
+# shellcheck source=../use-msys2-sbcl.sh
+. ../use-msys2-sbcl.sh
 
 SBCL=${SBCL:-sbcl}
 
@@ -39,7 +42,7 @@ step "1/2 Check SBCL"
 explain "WHY: building needs sbcl; ./install.sh installs it."
 require_cmd "$SBCL" "SBCL loads hello.lisp and saves the executable."
 
-step "2/2 Load hello.lisp and save the image as bin/hello-cli"
+step "2/2 Load hello.lisp and save the image as bin/hello-cli$EXE"
 explain "WHY: save-lisp-and-die writes the running Lisp system, with MAIN as its"
 explain "     start-up function, into one executable file."
 mkdir -p bin
@@ -47,7 +50,7 @@ mkdir -p bin
 set -x
 "$SBCL" --non-interactive --no-sysinit --no-userinit \
     --load hello.lisp \
-    --eval '(sb-ext:save-lisp-and-die "bin/hello-cli" :executable t :toplevel (function main))'
+    --eval '(sb-ext:save-lisp-and-die "bin/hello-cli'"$EXE"'" :executable t :toplevel (function main))'
 { set +x; } 2>/dev/null
 
-ok "Built bin/hello-cli with $("$SBCL" --version). Next: ./run.sh"
+ok "Built bin/hello-cli$EXE with $("$SBCL" --version). Next: ./run.sh"
