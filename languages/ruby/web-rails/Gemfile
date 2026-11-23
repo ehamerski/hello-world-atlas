@@ -19,7 +19,7 @@ gem "actionpack", "= 8.1.4.1"
 # A web server and the library that starts it from config.ru (the same pair
 # as in ../web, see its Gemfile).
 gem "rackup", "= 2.3.1"
-gem "puma", "= 8.1.1"
+gem "puma", "8.1.2"
 
 # Windows has no time zone database of its own, so Rails needs this gem there
 # (the Gemfile that "rails new" writes has the same line). Other systems skip it.
