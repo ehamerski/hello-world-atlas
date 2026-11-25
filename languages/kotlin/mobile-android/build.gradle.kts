@@ -6,7 +6,7 @@ plugins {
     // The Android Gradle plugin (AGP). It builds Android apps: it compiles
     // the code, merges the manifest, and packages the APK. Version 9 has
     // built-in Kotlin support, so the Kotlin Android plugin is not needed.
-    id("com.android.application") version "9.5.1" apply false
+    id("com.android.application") version "9.5.2" apply false
 
     // The Compose compiler plugin: it rewrites the @Composable functions. Its
     // version must match the Kotlin version that the build uses.

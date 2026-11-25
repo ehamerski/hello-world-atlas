@@ -45,7 +45,7 @@ android {
 dependencies {
     // The Compose BOM (bill of materials) names one version for every Compose
     // library, so the libraries always match. The versions below come from it.
-    implementation(platform("androidx.compose:compose-bom:2026.09.00"))
+    implementation(platform("androidx.compose:compose-bom:2026.11.01"))
 
     // ui: the Compose runtime and drawing. material3: Material Design widgets.
     implementation("androidx.compose.ui:ui")
